@@ -3,122 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Garantías PARABARBEROS</title>
+    <title>Login - Garantías PARABARBEROS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
+    <style>
+        body {
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #111827, #312e81);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 font-sans antialiased text-slate-800 h-screen flex flex-col overflow-hidden">
+<body class="flex items-center justify-center h-screen font-sans antialiased text-slate-200">
 
-    <header class="bg-white border-b border-slate-200 shadow-sm z-10">
-        <div class="px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="bg-indigo-600 p-2 rounded-lg">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-slate-900 tracking-tight">Centro de Garantías</h1>
-                    <p class="text-xs text-slate-500 font-medium tracking-wide">PARABARBEROS S.A.S.</p>
-                </div>
+    <div class="w-full max-w-md p-8 m-4 bg-slate-900/60 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-700/50">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-indigo-600/20 mb-4 border border-indigo-500/30">
+                <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
             </div>
-            
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-3 border-l pl-6">
-                    <span class="text-sm font-medium text-slate-600" id="userEmail">Cargando...</span>
-                    <button id="logoutBtn" class="text-slate-400 hover:text-red-500 transition-colors" title="Cerrar Sesión">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    </button>
-                </div>
-            </div>
+            <h1 class="text-2xl font-bold text-white tracking-wide">GARANTÍAS</h1>
+            <p class="text-sm text-indigo-300 mt-1 font-medium tracking-widest">PARABARBEROS S.A.S.</p>
         </div>
-    </header>
-
-    <div class="px-6 py-4 flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-slate-800">Tablero de Gestión</h2>
-        <button onclick="document.getElementById('modalNuevoTicket').classList.remove('hidden')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-sm flex items-center gap-2 transition-all">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Nuevo Ticket
-        </button>
-    </div>
-
-    <main class="flex-1 overflow-x-auto overflow-y-hidden px-6 pb-6">
-        <div class="flex gap-6 h-full items-start min-w-max">
-            <div class="w-80 bg-slate-100/50 border border-slate-200 rounded-xl flex flex-col max-h-full">
-                <div class="p-4 border-b border-slate-200 flex justify-between items-center">
-                    <h3 class="font-bold text-slate-700 text-sm tracking-wide">PENDIENTE RECEPCIÓN</h3>
-                    <span id="count-pendiente" class="bg-slate-200 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-full">0</span>
-                </div>
-                <div class="p-3 overflow-y-auto space-y-3 flex-1" id="col-pendiente"></div>
+        
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium text-slate-400 mb-1">Correo Electrónico</label>
+                <input type="email" id="email" required class="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" placeholder="analista@parabarberos.com">
             </div>
-
-            <div class="w-80 bg-slate-100/50 border border-slate-200 rounded-xl flex flex-col max-h-full">
-                <div class="p-4 border-b border-slate-200 flex justify-between items-center">
-                    <h3 class="font-bold text-slate-700 text-sm tracking-wide">EN REVISIÓN GARANTÍAS</h3>
-                    <span id="count-revision" class="bg-slate-200 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-full">0</span>
-                </div>
-                <div class="p-3 overflow-y-auto space-y-3 flex-1" id="col-revision"></div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-slate-400 mb-1">Contraseña</label>
+                <input type="password" id="password" required class="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" placeholder="••••••••">
             </div>
-
-            <div class="w-80 bg-slate-100/50 border border-slate-200 rounded-xl flex flex-col max-h-full">
-                <div class="p-4 border-b border-slate-200 flex justify-between items-center">
-                    <h3 class="font-bold text-slate-700 text-sm tracking-wide">EN SERVICIO TÉCNICO</h3>
-                    <span id="count-tecnico" class="bg-slate-200 text-slate-600 text-xs font-bold px-2 py-0.5 rounded-full">0</span>
-                </div>
-                <div class="p-3 overflow-y-auto space-y-3 flex-1" id="col-tecnico"></div>
-            </div>
+            <div id="errorMessage" class="text-red-400 text-sm text-center font-medium h-5"></div>
             
-            </div>
-    </main>
-
-    <div id="modalNuevoTicket" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="px-6 py-4 border-b flex justify-between items-center bg-slate-50/50">
-                <h2 class="text-xl font-bold text-slate-800">Crear Ticket de Garantía</h2>
-                <button type="button" onclick="document.getElementById('modalNuevoTicket').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 bg-white p-1 rounded-full shadow-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            
-            <div class="p-6 overflow-y-auto flex-1">
-                <form id="formGarantia" class="space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="space-y-4">
-                            <h3 class="text-sm font-bold text-indigo-600 uppercase tracking-wider border-b pb-2">1. Datos del Cliente</h3>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div><label class="block text-xs font-medium mb-1">Cédula</label><input type="number" id="t_cedula" required class="w-full border-slate-300 rounded-lg text-sm"></div>
-                                <div><label class="block text-xs font-medium mb-1">Teléfono</label><input type="number" id="t_telefono" required class="w-full border-slate-300 rounded-lg text-sm"></div>
-                            </div>
-                            <div><label class="block text-xs font-medium mb-1">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border-slate-300 rounded-lg text-sm"></div>
-                            <div><label class="block text-xs font-medium mb-1">Punto de Venta / Asesor</label>
-                                <select id="t_sede" required class="w-full border-slate-300 rounded-lg text-sm">
-                                    <option value="Punto de Venta Tuluá">Punto de Venta Tuluá</option>
-                                    <option value="Punto de Venta Cali Centro">Punto de Venta Cali Centro</option>
-                                    <option value="Punto de Venta Cali Sur">Punto de Venta Cali Sur</option>
-                                    <option value="Punto de Venta Pasto">Punto de Venta Pasto</option>
-                                    <option value="Punto de Venta Medellín">Punto de Venta Medellín</option>
-                                    <option value="Punto de Venta Bogotá">Punto de Venta Bogotá</option>
-                                    <option value="Asesor Virtual">Asesor Virtual</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <h3 class="text-sm font-bold text-indigo-600 uppercase tracking-wider border-b pb-2">2. Detalle del Producto</h3>
-                            <div><label class="block text-xs font-medium mb-1">Referencia</label><input type="text" id="t_referencia" required placeholder="Ej: VGR V-880T" class="w-full border-slate-300 rounded-lg text-sm"></div>
-                            <div><label class="block text-xs font-medium mb-1">Falla Reportada</label><textarea id="t_falla" required rows="2" class="w-full border-slate-300 rounded-lg text-sm"></textarea></div>
-                            <div><label class="block text-xs font-medium mb-1">Fotos (Opcional)</label>
-                                <input type="file" id="t_fotos" multiple accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-6 flex justify-end gap-3 border-t pt-4">
-                        <button type="button" onclick="document.getElementById('modalNuevoTicket').classList.add('hidden')" class="px-4 py-2 text-sm font-semibold border rounded-lg hover:bg-slate-50">Cancelar</button>
-                        <button type="submit" id="btnSubmit" class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">Generar Ticket</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+            <button type="submit" class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-900/20 transition-all duration-200 transform hover:-translate-y-0.5">
+                Ingresar al Sistema
+            </button>
+        </form>
     </div>
 
     <script>
@@ -136,95 +63,32 @@
 
             firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
-            const db = firebase.firestore();
-            const storage = firebase.storage();
-            const ticketsRef = db.collection('tickets');
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
 
             auth.onAuthStateChanged(user => {
-                if (!user) window.location.href = 'index.html';
-                else document.getElementById('userEmail').textContent = user.email;
-            });
-
-            document.getElementById('logoutBtn').onclick = () => auth.signOut();
-
-            const generarID = () => 'GAR-' + Math.random().toString(36).substr(2, 5).toUpperCase();
-
-            document.getElementById('formGarantia').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btnSubmit = document.getElementById('btnSubmit');
-                btnSubmit.textContent = "Guardando...";
-                btnSubmit.disabled = true;
-
-                const ticketId = generarID();
-                const files = document.getElementById('t_fotos').files;
-                let fotosUrls = [];
-
-                if (files.length > 0) {
-                    for (let file of files) {
-                        const fileRef = storage.ref(`evidencias/${ticketId}/${file.name}`);
-                        await fileRef.put(file);
-                        const url = await fileRef.getDownloadURL();
-                        fotosUrls.push(url);
-                    }
+                if (user) {
+                    window.location.href = 'app.html';
                 }
-
-                const nuevoTicket = {
-                    id: ticketId,
-                    estado: 'pendiente',
-                    cedula: document.getElementById('t_cedula').value,
-                    telefono: document.getElementById('t_telefono').value,
-                    nombre: document.getElementById('t_nombre').value,
-                    sede: document.getElementById('t_sede').value,
-                    referencia: document.getElementById('t_referencia').value,
-                    falla: document.getElementById('t_falla').value,
-                    fotos: fotosUrls,
-                    creadoEn: firebase.firestore.FieldValue.serverTimestamp()
-                };
-
-                await ticketsRef.doc(ticketId).set(nuevoTicket);
-                
-                document.getElementById('formGarantia').reset();
-                document.getElementById('modalNuevoTicket').classList.add('hidden');
-                btnSubmit.textContent = "Generar Ticket";
-                btnSubmit.disabled = false;
             });
 
-            ticketsRef.orderBy('creadoEn', 'desc').onSnapshot(snapshot => {
-                const cols = { pendiente: [], revision: [], tecnico: [] };
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
                 
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    if (cols[data.estado]) cols[data.estado].push(data);
-                });
+                errorMessage.textContent = 'Verificando...';
+                errorMessage.className = 'text-indigo-300 text-sm text-center font-medium h-5';
 
-                const renderCard = (t) => `
-                    <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 hover:border-indigo-400 cursor-pointer">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">${t.id}</span>
-                        </div>
-                        <h4 class="font-semibold text-slate-800 text-sm mb-1">${t.referencia}</h4>
-                        <p class="text-xs text-slate-500 mb-3"><span class="font-semibold">${t.nombre}</span><br>${t.sede}</p>
-                        ${t.fotos && t.fotos.length > 0 ? `<div class="text-xs text-indigo-600 bg-indigo-50 p-1 rounded inline-block mb-2">📸 ${t.fotos.length} fotos</div>` : ''}
-                        
-                        <div class="mt-2 pt-2 border-t flex gap-2">
-                            ${t.estado === 'pendiente' ? `<button onclick="cambiarEstado('${t.id}', 'revision')" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded font-bold w-full hover:bg-amber-200 transition-colors">A Revisión</button>` : ''}
-                            ${t.estado === 'revision' ? `<button onclick="cambiarEstado('${t.id}', 'tecnico')" class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded font-bold w-full hover:bg-blue-200 transition-colors">A Técnico</button>` : ''}
-                            ${t.estado === 'tecnico' ? `<button onclick="cambiarEstado('${t.id}', 'revision')" class="text-xs bg-slate-200 text-slate-600 px-2 py-1 rounded font-bold w-full hover:bg-slate-300 transition-colors">Devolver</button>` : ''}
-                        </div>
-                    </div>`;
-
-                document.getElementById('col-pendiente').innerHTML = cols.pendiente.map(renderCard).join('');
-                document.getElementById('col-revision').innerHTML = cols.revision.map(renderCard).join('');
-                document.getElementById('col-tecnico').innerHTML = cols.tecnico.map(renderCard).join('');
-                
-                document.getElementById('count-pendiente').textContent = cols.pendiente.length;
-                document.getElementById('count-revision').textContent = cols.revision.length;
-                document.getElementById('count-tecnico').textContent = cols.tecnico.length;
+                auth.signInWithEmailAndPassword(email, password)
+                    .then(() => {
+                        window.location.href = 'app.html';
+                    })
+                    .catch((error) => {
+                        errorMessage.className = 'text-red-400 text-sm text-center font-medium h-5';
+                        errorMessage.textContent = 'Credenciales incorrectas. Inténtalo de nuevo.';
+                    });
             });
-
-            window.cambiarEstado = async (id, nuevoEstado) => {
-                await ticketsRef.doc(id).update({ estado: nuevoEstado });
-            };
         });
     </script>
 </body>
