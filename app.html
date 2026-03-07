@@ -401,7 +401,7 @@
             window.procesarJSON = async () => {
                 if(!jsonCargado || !Array.isArray(jsonCargado)) return;
                 const btn = document.getElementById('btnProcesarJson');
-                btn.textContent = "Procesando a máxima velocidad..."; btn.disabled = true;
+                btn.textContent = "Procesando..."; btn.disabled = true;
 
                 try {
                     const batches = [];
@@ -432,7 +432,7 @@
                     // Espera a que TODOS los bloques terminen al mismo tiempo (¡Esto lo hace instantáneo!)
                     await Promise.all(batches);
                     
-                    alert("Inventario subido correctamente en tiempo récord.");
+                    alert("Inventario actualizado correctamente.");
                     document.getElementById('btnProcesarJson').classList.add('hidden');
                     document.getElementById('json_status').innerHTML = "";
                     document.getElementById('f_json_inventario').value = ""; // Limpia el cajón
@@ -729,5 +729,6 @@
     </script>
 </body>
 </html>
+
 
 
