@@ -9,10 +9,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar { height: 6px; width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -278,7 +279,6 @@
 
 
     <script>
-        // Variables globales para gráficos Chart.js (Necesario destruirlos antes de redibujar)
         let chartProds, chartEst, chartSedes; 
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -297,8 +297,8 @@
             const db = firebase.firestore();
             const storage = firebase.storage();
             const ticketsRef = db.collection('tickets');
-            const sedesRef = db.collection('sedes'); // Directorio
-            const productosRef = db.collection('productos'); // Inventario
+            const sedesRef = db.collection('sedes');
+            const productosRef = db.collection('productos');
             const counterRef = db.collection('metadata').doc('ticketCounter');
 
             let ticketsGlobal = [];
@@ -308,46 +308,34 @@
                 { id: '1_recibir', nombre: 'RECEPCIÓN', colorChart: '#94a3b8' },
                 { id: '2_envio_st', nombre: 'ENVIADOS S.T.', colorChart: '#cbd5e1' },
                 { id: '3_diagnosticado', nombre: 'DIAGNOSTICADOS', colorChart: '#e2e8f0' },
-                { id: '4_reparado', nombre: 'REPARADOS', colorChart: '#10b981' }, // Verde para semántica de éxito
-                { id: '5_sin_reparacion', nombre: 'PÉRDIDA', colorChart: '#ef4444' }, // Rojo para semántica de fallo
+                { id: '4_reparado', nombre: 'REPARADOS', colorChart: '#10b981' }, 
+                { id: '5_sin_reparacion', nombre: 'PÉRDIDA', colorChart: '#ef4444' }, 
                 { id: '6_entregado_asesor', nombre: 'ENTREGA ASESOR', colorChart: '#334155' },
                 { id: '7_entregado_cliente', nombre: 'ENTREGADOS', colorChart: '#0f172a' }
             ];
 
-            // Iniciar sesión y limpiar nítido
             auth.onAuthStateChanged(user => {
                 if (!user) window.location.href = 'index.html';
                 else document.getElementById('userInitial').textContent = user.email.charAt(0).toUpperCase();
             });
             document.getElementById('logoutBtn').onclick = () => auth.signOut();
 
-            // ================= NAVEGACIÓN (SINGLE PAGE APP) =================
             window.switchView = (viewName) => {
-                // Ocultar todas las vistas
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-                // Quitar estilos activos del menú
                 document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-                
-                // Mostrar vista seleccionada y activar botón
                 document.getElementById('view_' + viewName).classList.remove('hidden');
                 document.getElementById('btnNav_' + viewName).classList.add('active');
-
-                // Si se abre kanban, mostrar buscador. Si no, ocultarlo.
                 if(viewName === 'kanban') document.getElementById('headerSearchBox').classList.remove('md:hidden');
                 else document.getElementById('headerSearchBox').classList.add('md:hidden');
-
-                // Si se abre analytics, redibujar gráficos para evitar bugs de tamaño
                 if(viewName === 'analytics') renderizarGraficos();
             };
 
-
-            // ================= MÓDULO: DIRECTORIO (SEDES Y ASESORES) =================
+            // DIRECTORIO
             document.getElementById('formSede').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const nombre = document.getElementById('n_sede').value.trim();
                 const btn = document.getElementById('btnCrearSede');
                 if(!nombre) return;
-                
                 btn.textContent = "Guardando..."; btn.disabled = true;
                 try {
                     await sedesRef.add({ nombre: nombre, creadoEn: firebase.firestore.FieldValue.serverTimestamp() });
@@ -356,13 +344,11 @@
                 btn.textContent = "Guardar en Directorio"; btn.disabled = false;
             });
 
-            // Escuchar sedes para lista visual y dropdown de Nuevo Ticket
             sedesRef.orderBy('nombre').onSnapshot(snapshot => {
                 const listaUl = document.getElementById('listaSedes');
                 const selectSede = document.getElementById('t_sede');
                 listaUl.innerHTML = '';
                 selectSede.innerHTML = '<option value="" disabled selected>Selecciona una opción...</option>';
-                
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     listaUl.innerHTML += `<li class="text-sm font-semibold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center">${data.nombre} <button onclick="eliminarSede('${doc.id}')" class="text-red-400 hover:text-red-600">✕</button></li>`;
@@ -376,8 +362,7 @@
                 }
             };
 
-
-            // ================= MÓDULO: INVENTARIO JSON ULTRA RÁPIDO =================
+            // INVENTARIO RÁPIDO
             let jsonCargado = null;
             document.getElementById('f_json_inventario').addEventListener('change', function(e) {
                 const file = e.target.files[0];
@@ -416,13 +401,13 @@
                             count++;
                             
                             if (count % 400 === 0) {
-                                batches.push(currentBatch.commit()); // Lanza el bloque a la nube sin esperar
-                                currentBatch = db.batch(); // Prepara el siguiente
+                                batches.push(currentBatch.commit()); 
+                                currentBatch = db.batch(); 
                             }
                         }
                     }
                     if(count % 400 !== 0) batches.push(currentBatch.commit()); 
-                    await Promise.all(batches); // Espera a que TODOS terminen
+                    await Promise.all(batches); 
                     
                     alert("Inventario subido correctamente en tiempo récord.");
                     document.getElementById('btnProcesarJson').classList.add('hidden');
@@ -432,40 +417,36 @@
                 btn.textContent = "Procesar y Subir Inventario"; btn.disabled = false;
             };
 
-            // Escuchar inventario para Tabla y Autocompletado (Súper Optimizado)
             productosRef.onSnapshot(snapshot => {
                 document.getElementById('countProductos').textContent = snapshot.size;
                 let tablaHTML = '';
                 let datalistHTML = '';
-
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     const textoMostrar = `${data.idUnico} - ${data.nombre}`;
                     tablaHTML += `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors"><td class="py-3 pl-2 font-bold">${data.idUnico}</td><td class="py-3 text-slate-600">${data.nombre}</td></tr>`;
                     datalistHTML += `<option value="${textoMostrar}">`;
                 });
-
                 document.getElementById('tablaProductos').innerHTML = tablaHTML;
                 document.getElementById('listaProductosAuto').innerHTML = datalistHTML;
             });
 
 
-            // ================= MÓDULO: KANBAN BOARD (Flujo Principal) =================
-            // Dibujar Pizarra Kanban Espaciosa (380px ancho columna)
+            // ================= MÓDULO: KANBAN BOARD (COLUMNAS GRISES AÑADIDAS) =================
             function dibujarColumnas() {
                 const board = document.getElementById('kanbanBoard');
                 board.innerHTML = ESTADOS.map(col => `
-                    <div class="w-[380px] flex-shrink-0 flex flex-col">
-                        <div class="flex justify-between items-center mb-6 px-1 shrink-0">
-                            <h3 class="text-[13px] font-black text-slate-400 uppercase tracking-widest">${col.nombre}</h3>
+                    <div class="w-[380px] flex-shrink-0 flex flex-col bg-slate-100/70 border border-slate-200 rounded-[24px] p-5 h-full max-h-full">
+                        <div class="flex justify-between items-center mb-5 shrink-0 px-1">
+                            <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-widest">${col.nombre}</h3>
+                            <svg class="w-5 h-5 text-slate-400 cursor-pointer hover:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
                         </div>
-                        <div class="space-y-5 overflow-y-auto pb-10" id="col-${col.id}"></div>
+                        <div class="space-y-4 overflow-y-auto flex-1 pb-4 pr-1" id="col-${col.id}"></div>
                     </div>
                 `).join('');
             }
             dibujarColumnas();
 
-            // Previsualización multimedia
             const handleFilePreview = (inputId, containerId) => {
                 document.getElementById(inputId).addEventListener('change', function() {
                     const container = document.getElementById(containerId);
@@ -501,7 +482,6 @@
                 const btnSubmit = document.getElementById('btnSubmit');
                 btnSubmit.textContent = "Procesando..."; btnSubmit.disabled = true;
 
-                // Validación extra Sede
                 if(!document.getElementById('t_sede').value) {
                     alert("Por favor selecciona una Sede o Asesor válido del directorio.");
                     btnSubmit.textContent = "Generar Ticket"; btnSubmit.disabled = false;
@@ -558,7 +538,7 @@
                     if (t.taller === tallerSeleccionado && coincideBusqueda && document.getElementById(`col-${t.estado}`)) {
                         const diagTexto = t.diagnostico ? t.diagnostico : 'Esperando revisión técnica detallada...';
                         document.getElementById(`col-${t.estado}`).innerHTML += `
-                            <div onclick="verDetalle('${t.id}')" class="bg-white p-7 rounded-[22px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-xl hover:border-slate-950 transition-all relative group">
+                            <div onclick="verDetalle('${t.id}')" class="bg-white p-6 rounded-[20px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-lg hover:border-slate-900 transition-all relative group">
                                 <h4 class="font-black text-slate-950 text-xl mb-4 tracking-tight">${t.id}</h4>
                                 <div class="space-y-2.5 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5">
                                     <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Ref:</span> <span class="font-extrabold text-slate-900 text-right break-words w-4/5 leading-tight">${t.referencia}</span></p>
@@ -667,19 +647,18 @@
             };
 
 
-            // ================= MÓDULO: ANALYTICS (GRÁFICOS CHART.JS) =================
+            // ================= MÓDULO: ANALYTICS =================
             function renderizarGraficos() {
                 if(ticketsGlobal.length === 0) return;
                 
                 document.getElementById('kpiTotalTickets').textContent = ticketsGlobal.length;
 
-                // 1. Productos Problemáticos (Limpia autocompletado si existe)
                 let countsProd = {};
                 ticketsGlobal.forEach(t => {
-                    let refClean = t.referencia.split(' - ')[0]; // Agrupar por ID Único
+                    let refClean = t.referencia.split(' - ')[0]; 
                     countsProd[refClean] = (countsProd[refClean] || 0) + 1; 
                 });
-                let sortProd = Object.keys(countsProd).sort((a,b) => countsProd[b] - countsProd[a]).slice(0, 5); // Top 5
+                let sortProd = Object.keys(countsProd).sort((a,b) => countsProd[b] - countsProd[a]).slice(0, 5); 
                 
                 if(chartProds) chartProds.destroy();
                 chartProds = new Chart(document.getElementById('chartProductos'), {
@@ -688,14 +667,13 @@
                     options: { 
                         responsive: true, 
                         plugins: { legend: { display: false } },
-                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } // Eje Y solo enteros
+                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } 
                     }
                 });
 
-                // 2. Orígenes Problemáticos (Sedes/Asesores)
                 let countsSedes = {};
                 ticketsGlobal.forEach(t => countsSedes[t.sede] = (countsSedes[t.sede] || 0) + 1);
-                let sortSedes = Object.keys(countsSedes).sort((a,b) => countsSedes[b] - countsSedes[a]).slice(0, 5); // Top 5
+                let sortSedes = Object.keys(countsSedes).sort((a,b) => countsSedes[b] - countsSedes[a]).slice(0, 5); 
                 
                 if(chartSedes) chartSedes.destroy();
                 chartSedes = new Chart(document.getElementById('chartSedes'), {
@@ -704,7 +682,6 @@
                     options: { responsive: true, cutout: '70%', plugins: { legend: { position: 'right' } } }
                 });
 
-                // 3. Estado General
                 let countsEst = {};
                 ticketsGlobal.forEach(t => countsEst[t.estado] = (countsEst[t.estado] || 0) + 1);
                 
