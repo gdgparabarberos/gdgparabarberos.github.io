@@ -74,19 +74,19 @@
                 <div class="px-10 pt-8 pb-4 shrink-0 flex flex-col gap-5 border-b border-slate-200 bg-white">
                     <div class="flex items-center justify-between">
                         <h2 class="text-[32px] font-black text-slate-900 tracking-tight">Tablero de Gestión</h2>
-                        <button onclick="document.getElementById('modalNuevoTicket').classList.remove('hidden')" class="bg-slate-950 hover:bg-black transition-colors text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-slate-900/10 flex items-center gap-2">
+                        <button onclick="abrirModalNuevoTicket()" class="bg-slate-950 hover:bg-black transition-colors text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-slate-900/10 flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>Nuevo Ticket
                         </button>
                     </div>
                     <div class="flex flex-wrap gap-3 items-center bg-slate-50 p-3 rounded-[16px] border border-slate-100">
                         <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-2">Filtros rápidos:</span>
                         <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-4 py-2 outline-none cursor-pointer shadow-sm">
-                            <option value="interno">SERVICIO TÉCNICO PARABARBEROS</option>
-                            <option value="proveedor">SERVICIO TÉCNICO PROVEEDOR</option>
+                            <option value="interno">TALLER PARABARBEROS</option>
+                            <option value="proveedor">TALLER PROVEEDOR</option>
                         </select>
                         <select id="filtroSedeKanban" class="bg-white border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-4 py-2 outline-none cursor-pointer shadow-sm max-w-[200px]">
                             <option value="">Todas las Sedes</option>
-                            </select>
+                        </select>
                         <input type="date" id="filtroFechaKanban" title="Filtrar por fecha de creación" class="bg-white border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-4 py-2 outline-none cursor-pointer shadow-sm">
                         <button onclick="limpiarFiltrosKanban()" class="text-xs font-bold text-slate-500 hover:text-slate-900 px-3 transition-colors ml-auto">Limpiar Filtros</button>
                     </div>
@@ -194,13 +194,20 @@
             <div class="px-10 py-6 overflow-y-auto flex-1 bg-slate-50/50">
                 <form id="formGarantia" class="space-y-8 pb-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                             <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">1. Datos Cliente</h3>
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></div>
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5">Nombre</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></div>
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></div>
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5">Sede</label><select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold bg-white focus:border-slate-900 focus:outline-none"><option value="" disabled selected>Selecciona...</option></select></div>
+                            
+                            <div>
+                                <label class="block text-xs font-black text-slate-500 mb-1.5">Fecha de Ingreso</label>
+                                <input type="date" id="t_fecha_creacion" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none cursor-pointer">
+                            </div>
                         </div>
+
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                             <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">2. Detalle Producto</h3>
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5">Referencia</label><input type="text" id="t_referencia" list="listaProductosAuto" autocomplete="off" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none" placeholder="Busca producto..."></div>
@@ -282,11 +289,11 @@
             document.addEventListener('click', (e) => { if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) userDropdown.classList.add('hidden'); });
             document.getElementById('dropdownLogoutBtn').onclick = () => auth.signOut();
 
-            // Función Formatear Fecha global
+            // FUNCIÓN FORMATEAR FECHA (Solo Fecha, sin horas ni minutos)
             function formatearFecha(timestamp) {
                 if(!timestamp) return 'Sin fecha';
                 const d = timestamp.toDate();
-                return d.toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                return d.toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric' });
             }
 
             // NAVEGACIÓN
@@ -299,6 +306,16 @@
                 else document.getElementById('headerSearchBox').classList.add('md:hidden');
                 if(viewName === 'analytics') renderizarGraficos();
                 if(viewName === 'historial') renderizarTablaHistorial();
+            };
+
+            // NUEVA FUNCION: Abrir modal y poner fecha de hoy por defecto
+            window.abrirModalNuevoTicket = () => {
+                document.getElementById('modalNuevoTicket').classList.remove('hidden');
+                
+                // Configurar la fecha actual local para el input tipo "date"
+                const offset = new Date().getTimezoneOffset() * 60000;
+                const localISODate = (new Date(Date.now() - offset)).toISOString().slice(0, 10);
+                document.getElementById('t_fecha_creacion').value = localISODate;
             };
 
             // INICIALIZAR DESPLEGABLES DEL HISTORIAL
@@ -391,11 +408,32 @@
             document.getElementById('formGarantia').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const btn = document.getElementById('btnSubmit'); btn.disabled = true;
+                
+                // LEER LA FECHA CUSTOM
+                const fechaInput = document.getElementById('t_fecha_creacion').value;
+                const fechaCustom = new Date(fechaInput + 'T12:00:00'); // Establecemos mediodía para evitar problemas de zona horaria
+
                 try {
                     let c = 0; const doc = await db.runTransaction(async t => { const ref = await t.get(counterRef); c = ref.exists ? (ref.data().count||0) : 0; t.set(counterRef, {count:c+1}, {merge:true}); return c; });
                     const id = `TICKET ${c+1}`; let urls = [];
                     for(let f of document.getElementById('t_fotos').files) { const r = storage.ref(`e/${id}/${f.name}`); await r.put(f); urls.push(await r.getDownloadURL()); }
-                    await ticketsRef.doc(id).set({ id, estado: '1_recibir', taller: document.getElementById('t_taller').value, cedula: document.getElementById('t_cedula').value, telefono: document.getElementById('t_telefono').value, nombre: document.getElementById('t_nombre').value, sede: document.getElementById('t_sede').value, referencia: document.getElementById('t_referencia').value, falla: document.getElementById('t_falla').value, diagnostico: "", fotos: urls, observacionesReparacion: "", fotosReparacion: [], creadoEn: firebase.firestore.FieldValue.serverTimestamp() });
+                    
+                    await ticketsRef.doc(id).set({ 
+                        id, 
+                        estado: '1_recibir', 
+                        taller: document.getElementById('t_taller').value, 
+                        cedula: document.getElementById('t_cedula').value, 
+                        telefono: document.getElementById('t_telefono').value, 
+                        nombre: document.getElementById('t_nombre').value, 
+                        sede: document.getElementById('t_sede').value, 
+                        referencia: document.getElementById('t_referencia').value, 
+                        falla: document.getElementById('t_falla').value, 
+                        diagnostico: "", 
+                        fotos: urls, 
+                        observacionesReparacion: "", 
+                        fotosReparacion: [], 
+                        creadoEn: firebase.firestore.Timestamp.fromDate(fechaCustom) // Usamos la fecha que elegiste
+                    });
                     document.getElementById('formGarantia').reset(); document.getElementById('preview-archivos-nuevo').innerHTML=''; document.getElementById('modalNuevoTicket').classList.add('hidden');
                 } catch(e) { alert("Error"); } finally { btn.disabled = false; }
             });
@@ -419,7 +457,7 @@
                     const passBusq = t.id.toLowerCase().includes(sBusq) || t.referencia.toLowerCase().includes(sBusq);
                     const passSede = sSede === '' || t.sede === sSede;
                     let passFec = true;
-                    if(sFec && t.creadoEn) { const fd = new Date(sFec+'T00:00:00').toLocaleDateString(); const td = t.creadoEn.toDate().toLocaleDateString(); passFec = (fd===td); }
+                    if(sFec && t.creadoEn) { const fd = new Date(sFec+'T12:00:00').toLocaleDateString(); const td = t.creadoEn.toDate().toLocaleDateString(); passFec = (fd===td); }
 
                     if (t.taller === sTaller && passBusq && passSede && passFec && document.getElementById(`col-${t.estado}`)) {
                         const icon = (t.fotos && t.fotos.some(u=>u.includes('.mp4'))) ? '🎥' : '📸';
@@ -523,4 +561,3 @@
     </script>
 </body>
 </html>
-
