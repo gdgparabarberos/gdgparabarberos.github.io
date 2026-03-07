@@ -9,11 +9,10 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        ::-webkit-scrollbar { height: 6px; width: 6px; }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -33,7 +32,7 @@
             <button onclick="switchView('directorio')" id="btnNav_directorio" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Directorio Sedes/Asesores"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></button>
             <button onclick="switchView('inventario')" id="btnNav_inventario" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Gestión de Inventario"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg></button>
         </nav>
-        <button id="logoutBtn" class="mt-auto p-3 text-slate-400 hover:text-slate-100 transition-colors" title="Cerrar Sesión"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></button>
+        <button id="logoutBtnSidebar" class="mt-auto p-3 text-slate-400 hover:text-slate-100 transition-colors" title="Cerrar Sesión"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></button>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 relative z-10 overflow-hidden">
@@ -45,8 +44,26 @@
                     <input type="text" id="searchInput" placeholder="Buscar por TICKET, Cliente o Referencia..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-slate-900 focus:bg-white transition-colors">
                 </div>
             </div>
+            
             <div class="flex items-center gap-5 text-slate-400 shrink-0">
-                <div class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-700 ml-2 shadow-sm border border-slate-200" id="userInitial">A</div>
+                <div class="relative inline-block text-left ml-2">
+                    <button id="userMenuBtn" class="w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-sm font-black text-slate-800 shadow-sm border border-slate-300 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2">
+                        <span id="userInitial">A</span>
+                    </button>
+
+                    <div id="userDropdown" class="hidden absolute right-0 z-[100] mt-2 w-64 origin-top-right rounded-[16px] bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none border border-slate-200 overflow-hidden transition-all">
+                        <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
+                            <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Sesión activa</p>
+                            <p class="text-sm font-bold text-slate-900 truncate" id="dropdownUserEmail">cargando...</p>
+                        </div>
+                        <div class="p-2">
+                            <button id="dropdownLogoutBtn" class="w-full text-left px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 hover:text-red-700 rounded-xl transition-colors flex items-center gap-3">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                Cerrar Sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -57,8 +74,8 @@
                     <h2 class="text-[32px] font-black text-slate-900 tracking-tight">Tablero de Gestión</h2>
                     <div class="flex gap-4">
                         <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-slate-100 shadow-sm cursor-pointer">
-                            <option value="interno">SERVICIO TÉCNICO PARABARBEROS</option>
-                            <option value="proveedor">SERVICIO TÉCNICO PROVEEDOR</option>
+                            <option value="interno">ST PARABARBEROS</option>
+                            <option value="proveedor">ST PROVEEDOR</option>
                         </select>
                         <button onclick="document.getElementById('modalNuevoTicket').classList.remove('hidden')" class="bg-slate-950 hover:bg-black transition-colors text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-slate-900/10 flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>Nuevo Ticket
@@ -306,7 +323,7 @@
 
             const ESTADOS = [
                 { id: '1_recibir', nombre: 'RECEPCIÓN', colorChart: '#94a3b8' },
-                { id: '2_envio_st', nombre: 'ENVIADOS SERVICIO TÉCNICO.', colorChart: '#cbd5e1' },
+                { id: '2_envio_st', nombre: 'ENVIADOS S.T.', colorChart: '#cbd5e1' },
                 { id: '3_diagnosticado', nombre: 'DIAGNOSTICADOS', colorChart: '#e2e8f0' },
                 { id: '4_reparado', nombre: 'REPARADOS', colorChart: '#10b981' }, 
                 { id: '5_sin_reparacion', nombre: 'PÉRDIDA', colorChart: '#ef4444' }, 
@@ -314,11 +331,35 @@
                 { id: '7_entregado_cliente', nombre: 'ENTREGADOS', colorChart: '#0f172a' }
             ];
 
+            // Iniciar sesión y actualizar el Menú del Avatar
             auth.onAuthStateChanged(user => {
                 if (!user) window.location.href = 'index.html';
-                else document.getElementById('userInitial').textContent = user.email.charAt(0).toUpperCase();
+                else {
+                    document.getElementById('userInitial').textContent = user.email.charAt(0).toUpperCase();
+                    document.getElementById('dropdownUserEmail').textContent = user.email; // Muestra el correo en el menú
+                }
             });
-            document.getElementById('logoutBtn').onclick = () => auth.signOut();
+            
+            // Lógica para desplegar el menú del avatar
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userDropdown = document.getElementById('userDropdown');
+
+            userMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                userDropdown.classList.toggle('hidden');
+            });
+
+            // Cierra el menú si haces clic por fuera
+            document.addEventListener('click', (e) => {
+                if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                    userDropdown.classList.add('hidden');
+                }
+            });
+
+            // Botones de cerrar sesión (Tanto el lateral como el del nuevo menú)
+            document.getElementById('logoutBtnSidebar').onclick = () => auth.signOut();
+            document.getElementById('dropdownLogoutBtn').onclick = () => auth.signOut();
+
 
             window.switchView = (viewName) => {
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
@@ -432,7 +473,7 @@
             });
 
 
-            // ================= MÓDULO: KANBAN BOARD (COLUMNAS GRISES AÑADIDAS) =================
+            // ================= MÓDULO: KANBAN BOARD =================
             function dibujarColumnas() {
                 const board = document.getElementById('kanbanBoard');
                 board.innerHTML = ESTADOS.map(col => `
@@ -584,7 +625,7 @@
                 const crearBtn = (texto, clase, sigEstado) => `<button onclick="cambiarEstado('${t.id}', '${sigEstado}')" class="px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${clase}">${texto}</button>`;
                 const sigAccionClase = "bg-slate-950 text-white hover:bg-black";
 
-                if(t.estado === '1_recibir') boxBotones.innerHTML += crearBtn('Enviar a SERVICIO TÉCNICO.', sigAccionClase, '2_envio_st');
+                if(t.estado === '1_recibir') boxBotones.innerHTML += crearBtn('Enviar a S.T.', sigAccionClase, '2_envio_st');
                 if(t.estado === '3_diagnosticado') {
                     boxBotones.innerHTML += crearBtn('Fue Reparado', 'bg-emerald-600 text-white hover:bg-emerald-700', '4_reparado'); 
                     boxBotones.innerHTML += crearBtn('Pérdida Total', 'bg-red-600 text-white hover:bg-red-700', '5_sin_reparacion'); 
@@ -700,4 +741,3 @@
     </script>
 </body>
 </html>
-
