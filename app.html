@@ -11,7 +11,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         ::-webkit-scrollbar { height: 8px; width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -19,10 +19,10 @@
         .dashed-box { background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%23CBD5E1' stroke-width='2' stroke-dasharray='8%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); border-radius: 12px; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden text-slate-800">
+<body class="flex h-screen overflow-hidden text-slate-900 bg-[#f8fafc]">
 
     <aside class="w-20 bg-[#0f172a] flex flex-col items-center py-6 border-r border-slate-800 shrink-0 z-20 shadow-2xl">
-        <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center mb-10 shadow-lg shadow-indigo-500/30">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-10 shadow-lg shadow-black/30 border border-slate-800">
             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
         </div>
         <nav class="flex flex-col gap-6 text-slate-400 w-full px-4">
@@ -40,18 +40,18 @@
                 <h1 class="text-[16px] font-black tracking-widest text-slate-900 uppercase">Parabarberos S.A.S.</h1>
                 <div class="relative hidden md:block w-96">
                     <svg class="w-5 h-5 text-slate-400 absolute left-4 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <input type="text" id="searchInput" placeholder="Buscar por TICKET, Cliente, Cédula o Referencia..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors">
+                    <input type="text" id="searchInput" placeholder="Buscar por TICKET, Cliente, Cédula o Referencia..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-slate-900 focus:bg-white transition-colors">
                 </div>
             </div>
             <div class="flex items-center gap-5 text-slate-400">
-                <div class="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center text-sm font-bold text-indigo-700 ml-2 shadow-sm border border-indigo-200" id="userInitial">A</div>
+                <div class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-700 ml-2 shadow-sm border border-slate-200" id="userInitial">A</div>
             </div>
         </header>
 
         <div class="px-10 py-8 flex items-center justify-between shrink-0">
             <h2 class="text-[32px] font-black text-slate-900 tracking-tight">Dashboard</h2>
             <div class="flex gap-4">
-                <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-indigo-100 shadow-sm cursor-pointer">
+                <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-slate-100 shadow-sm cursor-pointer">
                     <option value="interno">ST PARABARBEROS</option>
                     <option value="proveedor">ST PROVEEDOR</option>
                 </select>
@@ -80,12 +80,12 @@
                 <form id="formGarantia" class="space-y-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                            <h3 class="text-xs font-bold text-indigo-600 uppercase tracking-widest border-b border-slate-100 pb-2">Datos del Cliente</h3>
-                            <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"></div>
-                            <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"></div>
-                            <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"></div>
-                            <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Sede / Asesor</label>
-                                <select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 bg-white focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Datos del Cliente</h3>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Sede / Asesor</label>
+                                <select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 bg-white focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
                                     <option value="Punto de Venta Tuluá">Punto de Venta Tuluá</option>
                                     <option value="Punto de Venta Cali Centro">Punto de Venta Cali Centro</option>
                                     <option value="Punto de Venta Medellín">Punto de Venta Medellín</option>
@@ -95,17 +95,17 @@
                         </div>
 
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                            <h3 class="text-xs font-bold text-indigo-600 uppercase tracking-widest border-b border-slate-100 pb-2">Detalle del Producto</h3>
-                            <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Referencia Producto</label><input type="text" id="t_referencia" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"></div>
-                            <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Falla Reportada</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"></textarea></div>
-                            <div><label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Taller Asignado</label>
-                                <select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-800 bg-slate-50 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Detalle del Producto</h3>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Referencia Producto</label><input type="text" id="t_referencia" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Falla Reportada</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></textarea></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Taller Asignado</label>
+                                <select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-800 bg-slate-50 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
                                     <option value="interno">Servicio Técnico PARABARBEROS</option>
                                     <option value="proveedor">Servicio Técnico del Proveedor</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase">Fotos (Opcional)</label>
+                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Fotos (Opcional)</label>
                                 <div class="dashed-box bg-slate-50 hover:bg-slate-100 transition-colors relative h-20 flex flex-col items-center justify-center cursor-pointer">
                                     <span class="text-sm text-slate-500 font-semibold">Haz clic o arrastra fotos aquí</span>
                                     <input type="file" id="t_fotos" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
@@ -116,7 +116,7 @@
 
                     <div class="flex justify-end gap-4 pt-4">
                         <button type="button" onclick="document.getElementById('modalNuevoTicket').classList.add('hidden')" class="px-6 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-xl transition-colors">Cancelar</button>
-                        <button type="submit" id="btnSubmit" class="px-8 py-3 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors shadow-lg shadow-indigo-600/30">Generar Ticket</button>
+                        <button type="submit" id="btnSubmit" class="px-8 py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl transition-colors shadow-lg shadow-slate-900/10">Generar Ticket</button>
                     </div>
                 </form>
             </div>
@@ -125,9 +125,9 @@
 
 
     <div id="modalDetalle" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-all">
-        <div class="bg-white rounded-[24px] shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative">
+        <div class="bg-white rounded-[24px] shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-slate-100">
             
-            <div class="px-10 py-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
+            <div class="px-10 py-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0 shadow-sm">
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Detalle de Gestión</p>
                     <h2 class="text-3xl font-black text-slate-900" id="det_id">GAR-000</h2>
@@ -135,60 +135,60 @@
                 <div class="flex items-center gap-4">
                     <div id="det_actions_top" class="flex gap-3">
                         </div>
-                    <button onclick="document.getElementById('modalDetalle').classList.add('hidden')" class="text-slate-400 hover:text-red-500 bg-white p-2 rounded-full shadow-sm border border-slate-200 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                    <button onclick="document.getElementById('modalDetalle').classList.add('hidden')" class="text-slate-400 hover:text-red-500 bg-white p-2.5 rounded-full shadow-sm border border-slate-200 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 </div>
             </div>
             
-            <div class="flex-1 overflow-y-auto p-10 bg-white">
+            <div class="flex-1 overflow-y-auto p-10 md:p-14 bg-white">
                 
-                <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4">Información del Caso</h3>
+                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Información Completa del Caso</h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                     
-                    <div class="border border-slate-200 rounded-2xl p-6 bg-slate-50 space-y-4">
+                    <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
                         <div class="flex flex-col">
-                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-1">Nombre del Cliente</span>
-                            <div class="text-base font-bold text-slate-800 break-words" id="det_nombre">-</div>
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Nombre del Cliente</span>
+                            <div class="text-base font-bold text-slate-950 break-words" id="det_nombre">-</div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-5">
                             <div class="flex flex-col">
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-1">Cédula</span>
-                                <div class="text-sm font-bold text-slate-700 break-words" id="det_cedula">-</div>
+                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Cédula</span>
+                                <div class="text-sm font-bold text-slate-800 break-words" id="det_cedula">-</div>
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-1">Teléfono</span>
-                                <div class="text-sm font-bold text-slate-700 break-words" id="det_telefono">-</div>
+                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Teléfono</span>
+                                <div class="text-sm font-bold text-slate-800 break-words" id="det_telefono">-</div>
                             </div>
                         </div>
-                        <div class="flex flex-col border-t border-slate-200 pt-4">
-                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-1">Punto de Venta / Asesor</span>
-                            <div class="text-sm font-bold text-slate-700 break-words" id="det_sede">-</div>
+                        <div class="flex flex-col border-t border-slate-200 pt-5">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Punto de Venta / Asesor</span>
+                            <div class="text-sm font-bold text-slate-800 break-words" id="det_sede">-</div>
                         </div>
                     </div>
 
-                    <div class="border border-slate-200 rounded-2xl p-6 bg-slate-50 space-y-4">
+                    <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
                         <div class="flex flex-col">
-                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-1">Referencia del Equipo</span>
-                            <div class="text-lg font-black text-indigo-700 break-words" id="det_referencia">-</div>
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Referencia del Equipo</span>
+                            <div class="text-lg font-black text-black break-words" id="det_referencia">-</div>
                         </div>
-                        <div class="flex flex-col border-t border-slate-200 pt-4">
-                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-1">Descripción de la Falla</span>
-                            <div class="text-sm font-medium text-slate-700 break-words whitespace-pre-wrap" id="det_falla">-</div>
+                        <div class="flex flex-col border-t border-slate-200 pt-5">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Descripción de la Falla Reportada</span>
+                            <div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed" id="det_falla">-</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="mb-10">
-                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4">Dictamen Técnico</h3>
-                    <textarea id="txtDiagnostico" rows="4" class="w-full border border-slate-300 rounded-2xl p-5 text-sm font-medium text-slate-800 focus:outline-none focus:border-indigo-500 shadow-sm transition-colors" placeholder="Escribe aquí el informe de servicio técnico..."></textarea>
-                    <div id="btnSaveDiagDiv" class="hidden mt-4 flex justify-end">
-                        <button onclick="guardarInformeTecnico()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg shadow-indigo-600/30 transition-colors">Guardar Informe y Marcar Diagnosticado</button>
+                <div class="mb-12">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-5">Dictamen de Servicio Técnico</h3>
+                    <textarea id="txtDiagnostico" rows="4" class="w-full border border-slate-300 rounded-2xl p-6 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm transition-colors leading-relaxed" placeholder="Escribe aquí el informe de servicio técnico detallado..."></textarea>
+                    <div id="btnSaveDiagDiv" class="hidden mt-5 flex justify-end">
+                        <button onclick="guardarInformeTecnico()" class="bg-slate-950 hover:bg-black text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg shadow-slate-900/10 transition-colors">Guardar Informe y Marcar Diagnosticado</button>
                     </div>
                 </div>
 
                 <div id="det_galeria" class="hidden">
-                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4">Evidencias Fotográficas</h3>
-                    <div class="flex flex-wrap gap-4" id="det_fotos_div">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-5">Evidencias Fotográficas</h3>
+                    <div class="flex flex-wrap gap-5" id="det_fotos_div">
                         </div>
                 </div>
 
@@ -219,7 +219,7 @@
             let ticketsGlobal = [];
             let currentTicketIdAbierto = null;
 
-            // DEFINICIÓN DE COLUMNAS 
+            // DEFINICIÓN DE COLUMNAS minimalistas
             const ESTADOS = [
                 { id: '1_recibir', nombre: 'RECEPCIÓN' },
                 { id: '2_envio_st', nombre: 'ENVIADOS A S.T.' },
@@ -230,27 +230,28 @@
                 { id: '7_entregado_cliente', nombre: 'ENTREGADOS' }
             ];
 
+            // Iniciar sesión y limpiar nítido
             auth.onAuthStateChanged(user => {
                 if (!user) window.location.href = 'index.html';
                 else document.getElementById('userInitial').textContent = user.email.charAt(0).toUpperCase();
             });
             document.getElementById('logoutBtn').onclick = () => auth.signOut();
 
-            // Dibujar Pizarra Kanban - Ancho incrementado a 380px para que no se apriete
+            // Dibujar Pizarra Kanban Espaciosa (380px ancho columna)
             function dibujarColumnas() {
                 const board = document.getElementById('kanbanBoard');
                 board.innerHTML = ESTADOS.map(col => `
                     <div class="w-[380px] flex-shrink-0 flex flex-col">
-                        <div class="flex justify-between items-center mb-5 px-1">
+                        <div class="flex justify-between items-center mb-6 px-1 shrink-0">
                             <h3 class="text-[13px] font-black text-slate-400 uppercase tracking-widest">${col.nombre}</h3>
                         </div>
-                        <div class="space-y-4 overflow-y-auto pb-10" id="col-${col.id}"></div>
+                        <div class="space-y-5 overflow-y-auto pb-10" id="col-${col.id}"></div>
                     </div>
                 `).join('');
             }
             dibujarColumnas();
 
-            // Generador de ID (TICKET 1, TICKET 2...)
+            // Generador de ID secuencial (TICKET 1, 2...)
             async function getNextTicketId() {
                 return await db.runTransaction(async (transaction) => {
                     const doc = await transaction.get(counterRef);
@@ -299,15 +300,15 @@
                     document.getElementById('formGarantia').reset();
                     document.getElementById('modalNuevoTicket').classList.add('hidden');
                 } catch (error) {
-                    alert("Ocurrió un error al guardar el ticket. Revisa que tu Firestore esté en Modo de Prueba.");
+                    alert("Ocurrió un error. Revisa que Firestore esté habilitado en Modo de Prueba.");
                 } finally {
                     btnSubmit.textContent = "Generar Ticket"; btnSubmit.disabled = false;
                 }
             });
 
-            // ESCUCHAR DATOS, BUSCADOR Y PINTAR TABLERO
+            // ESCUCHAR DATOS, BUSCADOR Y PINTAR TABLERO minimalista
             document.getElementById('filtroTaller').addEventListener('change', renderizarTarjetas);
-            document.getElementById('searchInput').addEventListener('input', renderizarTarjetas); // Activa el buscador
+            document.getElementById('searchInput').addEventListener('input', renderizarTarjetas);
 
             ticketsRef.orderBy('creadoEn', 'desc').onSnapshot(snapshot => {
                 ticketsGlobal = [];
@@ -317,12 +318,12 @@
 
             function renderizarTarjetas() {
                 const tallerSeleccionado = document.getElementById('filtroTaller').value;
-                const searchVal = document.getElementById('searchInput').value.toLowerCase(); // Lo que se escribe en el buscador
+                const searchVal = document.getElementById('searchInput').value.toLowerCase();
                 
                 ESTADOS.forEach(c => document.getElementById(`col-${c.id}`).innerHTML = '');
 
                 ticketsGlobal.forEach(t => {
-                    // Lógica del buscador: Si está vacío muestra todo. Si tiene texto, busca coincidencias.
+                    // Lógica del buscador nítido
                     const coincideBusqueda = t.id.toLowerCase().includes(searchVal) || 
                                              t.referencia.toLowerCase().includes(searchVal) || 
                                              t.nombre.toLowerCase().includes(searchVal) || 
@@ -334,27 +335,27 @@
                 });
             }
 
-            // DISEÑO DE TARJETA (Más nítida y espaciosa)
+            // DISEÑO DE TARJETA nítida y monocromática (Imagen 0 - Morado cambiado por Negro)
             function crearTarjetaHTML(t) {
-                const diagTexto = t.diagnostico ? t.diagnostico : 'Esperando revisión técnica...';
+                const diagTexto = t.diagnostico ? t.diagnostico : 'Esperando revisión técnica detallada...';
                 return `
-                    <div onclick="verDetalle('${t.id}')" class="bg-white p-6 rounded-[20px] shadow-sm border border-slate-200 cursor-pointer hover:shadow-lg hover:border-indigo-300 transition-all relative group">
-                        <h4 class="font-black text-slate-900 text-xl mb-4 tracking-tight">${t.id}</h4>
-                        <div class="space-y-2 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5">
-                            <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Ref:</span> <span class="font-bold text-slate-800 text-right break-words w-4/5">${t.referencia}</span></p>
-                            <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Sede:</span> <span class="font-semibold text-slate-700 text-right break-words w-4/5">${t.sede}</span></p>
+                    <div onclick="verDetalle('${t.id}')" class="bg-white p-7 rounded-[22px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-xl hover:border-slate-900 transition-all relative group">
+                        <h4 class="font-black text-slate-950 text-xl mb-4 tracking-tight">${t.id}</h4>
+                        <div class="space-y-2.5 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5">
+                            <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Ref:</span> <span class="font-extrabold text-slate-900 text-right break-words w-4/5 leading-tight">${t.referencia}</span></p>
+                            <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Sede:</span> <span class="font-semibold text-slate-800 text-right break-words w-4/5">${t.sede}</span></p>
                         </div>
-                        <p class="text-[12px] text-slate-500 font-medium italic line-clamp-2">${diagTexto}</p>
+                        <p class="text-[12px] text-slate-500 font-medium italic line-clamp-2 leading-relaxed">${diagTexto}</p>
                     </div>`;
             }
 
-            // MODAL DETALLE (La vista de trabajo gigante arreglada)
+            // MODAL DETALLE nítido y espacioso (Imagen 2 - Morado cambiado por Negro)
             window.verDetalle = (id) => {
                 const t = ticketsGlobal.find(x => x.id === id);
                 if(!t) return;
                 currentTicketIdAbierto = id;
 
-                // Llenar datos fijos (Ya no se cortan)
+                // Llenar datos fijos amplios
                 document.getElementById('det_id').textContent = t.id;
                 document.getElementById('det_cedula').textContent = t.cedula;
                 document.getElementById('det_telefono').textContent = t.telefono;
@@ -363,24 +364,24 @@
                 document.getElementById('det_referencia').textContent = t.referencia;
                 document.getElementById('det_falla').textContent = t.falla;
 
-                // Controlar Caja de Diagnóstico
+                // Controlar Caja de Diagnóstico nítida
                 const txtDiag = document.getElementById('txtDiagnostico');
                 const btnSaveDiag = document.getElementById('btnSaveDiagDiv');
                 txtDiag.value = t.diagnostico || "";
                 
                 if(t.estado === '2_envio_st') {
                     txtDiag.readOnly = false;
-                    txtDiag.classList.add('bg-white', 'border-indigo-200');
+                    txtDiag.classList.add('bg-white', 'border-slate-300', 'text-slate-900');
                     txtDiag.classList.remove('bg-slate-50', 'text-slate-500', 'border-slate-200');
                     btnSaveDiag.classList.remove('hidden');
                 } else {
                     txtDiag.readOnly = true;
                     txtDiag.classList.add('bg-slate-50', 'text-slate-500', 'border-slate-200');
-                    txtDiag.classList.remove('bg-white', 'border-indigo-200');
+                    txtDiag.classList.remove('bg-white', 'border-slate-300', 'text-slate-900');
                     btnSaveDiag.classList.add('hidden');
                 }
 
-                // Generar Botones Dinámicos
+                // Generar Botones Dinámicos negros
                 const boxBotones = document.getElementById('det_actions_top');
                 boxBotones.innerHTML = '';
                 
@@ -388,21 +389,23 @@
                     return `<button onclick="cambiarEstado('${t.id}', '${sigEstado}')" class="px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${clase}">${texto}</button>`;
                 };
 
+                const sigAccionClase = "bg-slate-950 text-white hover:bg-black"; // Botones principales negros nítidos
+
                 if(t.estado === '1_recibir') {
-                    boxBotones.innerHTML += crearBtn('Enviar a S.T.', 'bg-[#0f172a] text-white hover:bg-black', 'enviar', '2_envio_st');
+                    boxBotones.innerHTML += crearBtn('Enviar a S.T.', sigAccionClase, 'enviar', '2_envio_st');
                 }
                 if(t.estado === '3_diagnosticado') {
                     boxBotones.innerHTML += crearBtn('Marcar Reparado', 'bg-emerald-600 text-white hover:bg-emerald-700', 'reparar', '4_reparado');
                     boxBotones.innerHTML += crearBtn('Pérdida Total', 'bg-red-600 text-white hover:bg-red-700', 'perdida', '5_sin_reparacion');
                 }
                 if(t.estado === '4_reparado' || t.estado === '5_sin_reparacion') {
-                    boxBotones.innerHTML += crearBtn('Entregar a Asesor', 'bg-[#0f172a] text-white hover:bg-black', 'asesor', '6_entregado_asesor');
+                    boxBotones.innerHTML += crearBtn('Entregar a Asesor', sigAccionClase, 'asesor', '6_entregado_asesor');
                 }
                 if(t.estado === '6_entregado_asesor') {
-                    boxBotones.innerHTML += crearBtn('Cerrar Ticket (Entregado)', 'bg-indigo-600 text-white hover:bg-indigo-700', 'cliente', '7_entregado_cliente');
+                    boxBotones.innerHTML += crearBtn('Cerrar Ticket (Entregado)', sigAccionClase, 'cliente', '7_entregado_cliente');
                 }
 
-                // Fotos
+                // Fotos minimalistas
                 const boxFotos = document.getElementById('det_galeria');
                 const divFotos = document.getElementById('det_fotos_div');
                 divFotos.innerHTML = "";
@@ -418,7 +421,7 @@
                 document.getElementById('modalDetalle').classList.remove('hidden');
             };
 
-            // ACCIONES DE BASE DE DATOS
+            // ACCIONES DE BASE DE DATOS minimalistas
             window.cambiarEstado = async (id, nuevoEstado) => {
                 await ticketsRef.doc(id).update({ estado: nuevoEstado });
                 document.getElementById('modalDetalle').classList.add('hidden'); 
@@ -426,7 +429,7 @@
 
             window.guardarInformeTecnico = async () => {
                 const texto = document.getElementById('txtDiagnostico').value;
-                if(!texto) return alert("Por favor, escribe el informe técnico antes de guardar.");
+                if(!texto) return alert("Por favor, escribe el informe técnico detallado antes de guardar.");
                 
                 await ticketsRef.doc(currentTicketIdAbierto).update({ 
                     diagnostico: texto,
