@@ -196,48 +196,141 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">1. Datos Cliente</h3>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Nombre</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Sede</label><select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold bg-white focus:border-slate-900 focus:outline-none"><option value="" disabled selected>Selecciona...</option></select></div>
-                            
+                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Datos del Cliente</h3>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Sede / Asesor</label>
+                                <select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold bg-white focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
+                                    <option value="" disabled selected>Selecciona...</option></select></div>
                             <div>
-                                <label class="block text-xs font-black text-slate-500 mb-1.5">Fecha de Ingreso</label>
+                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Fecha de Ingreso</label>
                                 <input type="date" id="t_fecha_creacion" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none cursor-pointer">
                             </div>
                         </div>
 
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">2. Detalle Producto</h3>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Referencia</label><input type="text" id="t_referencia" list="listaProductosAuto" autocomplete="off" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none" placeholder="Busca producto..."></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Falla</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></textarea></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Taller</label><select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold bg-slate-50 focus:border-slate-900 focus:outline-none"><option value="interno">PARABARBEROS</option><option value="proveedor">PROVEEDOR</option></select></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Archivos</label><div class="dashed-box bg-slate-50 relative h-16 flex items-center justify-center cursor-pointer"><span class="text-sm font-semibold text-slate-500">Arrastrar fotos/videos</span><input type="file" id="t_fotos" multiple accept="image/*,video/*" class="absolute inset-0 opacity-0 cursor-pointer"></div><div id="preview-archivos-nuevo" class="mt-2 flex flex-col gap-2"></div></div>
+                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Detalle del Producto</h3>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Referencia (Busca por ID/Nombre)</label><input type="text" id="t_referencia" list="listaProductosAuto" autocomplete="off" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors" placeholder="Busca producto..."></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Falla Reportada</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></textarea></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Taller Asignado</label><select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold bg-slate-50 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer"><option value="interno">PARABARBEROS</option><option value="proveedor">PROVEEDOR</option></select></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Fotos/Videos (Opcional)</label><div class="dashed-box bg-slate-50 relative h-16 flex items-center justify-center cursor-pointer"><span class="text-sm font-semibold text-slate-500 pointer-events-none">Arrastrar fotos/videos aquí</span><input type="file" id="t_fotos" multiple accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"></div><div id="preview-archivos-nuevo" class="mt-2 flex flex-col gap-2"></div></div>
                         </div>
                     </div>
-                    <div class="flex justify-end pt-4"><button type="submit" id="btnSubmit" class="px-8 py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl">Generar Ticket</button></div>
+                    <div class="flex justify-end pt-4"><button type="submit" id="btnSubmit" class="px-8 py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl shadow-lg">Generar Ticket</button></div>
                 </form>
             </div>
         </div>
     </div>
 
+
     <div id="modalDetalle" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-all">
         <div class="bg-white rounded-[24px] shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-slate-100">
-            <div class="px-10 py-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0"><h2 class="text-3xl font-black text-slate-900" id="det_id">GAR-000</h2><div class="flex gap-4"><div id="det_actions_top" class="flex gap-3"></div><button onclick="document.getElementById('modalDetalle').classList.add('hidden')" class="text-slate-400 bg-white p-2.5 rounded-full border shadow-sm hover:text-red-500">X</button></div></div>
-            <div class="flex-1 overflow-y-auto p-10 bg-white">
-                <div class="grid grid-cols-2 gap-8 mb-8">
-                    <div class="border p-6 rounded-2xl bg-slate-50/50 shadow-sm"><span class="text-[11px] font-black text-slate-400 block mb-1">CLIENTE</span><div class="font-bold text-slate-950" id="det_nombre"></div><div class="mt-3 text-sm font-bold" id="det_cedula"></div><div class="mt-1 text-sm font-bold" id="det_telefono"></div><div class="mt-3 pt-3 border-t text-sm font-bold" id="det_sede"></div></div>
-                    <div class="border p-6 rounded-2xl bg-slate-50/50 shadow-sm"><span class="text-[11px] font-black text-slate-400 block mb-1">EQUIPO</span><div class="text-lg font-black" id="det_referencia"></div><div class="mt-3 pt-3 border-t text-sm font-medium" id="det_falla"></div></div>
+            
+            <div class="px-10 py-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0 shadow-sm">
+                <div>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Detalle de Gestión</p>
+                    <h2 class="text-3xl font-black text-slate-900" id="det_id">GAR-000</h2>
                 </div>
-                <div id="det_galeria" class="hidden mb-8 border p-6 rounded-2xl bg-slate-50/50"><h3 class="text-sm font-black text-slate-900 mb-4 border-b pb-2">Evidencias Recibidas</h3><div class="flex flex-wrap gap-4" id="det_fotos_div"></div></div>
-                <div class="mb-8"><h3 class="text-sm font-black text-slate-900 mb-4">Dictamen Técnico</h3><textarea id="txtDiagnostico" rows="4" class="w-full border rounded-2xl p-5 text-sm font-medium focus:border-slate-950 outline-none"></textarea><div id="btnSaveDiagDiv" class="hidden mt-4 flex justify-end"><button onclick="guardarInformeTecnico()" class="bg-slate-950 text-white font-bold px-6 py-2.5 rounded-xl">Guardar y Marcar Diagnosticado</button></div></div>
+                <div class="flex items-center gap-4">
+                    <div id="det_actions_top" class="flex gap-3">
+                        </div>
+                    <button onclick="document.getElementById('modalDetalle').classList.add('hidden')" class="text-slate-400 hover:text-red-500 bg-white p-2.5 rounded-full shadow-sm border border-slate-200 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-10 md:p-14 bg-white">
                 
-                <div id="form_post_reparacion" class="hidden mt-8 border-t pt-8"><div class="bg-slate-50/50 p-6 rounded-2xl border space-y-4"><label class="text-xs font-black text-slate-600">OBSERVACIONES FINALES</label><textarea id="txtObservacionesReparacion" rows="3" class="w-full border rounded-xl p-4 text-sm font-medium focus:border-slate-950 outline-none"></textarea><label class="text-xs font-black text-slate-600 block mt-4">EVIDENCIAS FINALES</label><div class="dashed-box h-16 flex items-center justify-center cursor-pointer bg-white relative"><span class="text-sm font-semibold text-slate-500">Arrastrar fotos/videos</span><input type="file" id="f_fotos_reparacion" multiple class="absolute inset-0 opacity-0 cursor-pointer"></div><div id="preview-archivos-reparacion" class="mt-2 flex flex-col gap-2"></div><div class="flex justify-end mt-4"><button onclick="guardarPostReparacion()" id="btnGuardarPostReparacion" class="bg-slate-950 text-white font-bold px-6 py-2.5 rounded-xl">Guardar Evidencia y Entregar</button></div></div></div>
-                <div id="view_post_reparacion" class="hidden mt-8 border-t pt-8"><div class="border p-6 rounded-2xl bg-slate-50/50"><span class="text-[11px] font-black text-slate-400 block mb-2">OBSERVACIONES TÉCNICO</span><div class="text-sm font-medium bg-white p-4 rounded-xl border" id="det_obs_reparacion"></div><div id="det_galeria_reparacion" class="hidden mt-4"><span class="text-[11px] font-black text-slate-400 block mb-2">ARCHIVOS FINALES</span><div class="flex flex-wrap gap-4" id="det_fotos_reparacion_div"></div></div></div></div>
+                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Información Completa del Caso</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Nombre del Cliente</span>
+                            <div class="text-base font-bold text-slate-950 break-words" id="det_nombre">-</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-5">
+                            <div class="flex flex-col">
+                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Cédula</span>
+                                <div class="text-sm font-bold text-slate-800 break-words" id="det_cedula">-</div>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Teléfono</span>
+                                <div class="text-sm font-bold text-slate-800 break-words" id="det_telefono">-</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col border-t border-slate-200 pt-5">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Punto de Venta / Asesor</span>
+                            <div class="text-sm font-bold text-slate-800 break-words" id="det_sede">-</div>
+                        </div>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Referencia del Equipo</span>
+                            <div class="text-lg font-black text-black break-words" id="det_referencia">-</div>
+                        </div>
+                        <div class="flex flex-col border-t border-slate-200 pt-5">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Descripción de la Falla Reportada</span>
+                            <div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed" id="det_falla">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="det_galeria" class="hidden mb-12 border border-slate-200 p-7 rounded-2xl bg-slate-50/50 shadow-sm">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6 border-b border-slate-200 pb-3">Evidencias Fotográficas/Video de Recepción</h3>
+                    <div class="flex flex-wrap gap-5" id="det_fotos_div">
+                        </div>
+                </div>
+
+                <div class="mb-12">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-5">Dictamen de Servicio Técnico</h3>
+                    <textarea id="txtDiagnostico" rows="4" class="w-full border border-slate-300 rounded-2xl p-6 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm transition-colors leading-relaxed" placeholder="Escribe aquí el informe de servicio técnico detallado..."></textarea>
+                    <div id="btnSaveDiagDiv" class="hidden mt-5 flex justify-end">
+                        <button onclick="guardarInformeTecnico()" class="bg-slate-950 hover:bg-black text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg transition-colors">Guardar Informe y Marcar Diagnosticado</button>
+                    </div>
+                </div>
+
+                <div id="form_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10 pb-6">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Registro Obligatorio de Entrega (Técnico)</h3>
+                    <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                        <div>
+                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase tracking-wide">Observaciones Finales: ¿Cómo quedó la máquina?</label>
+                            <textarea id="txtObservacionesReparacion" rows="3" class="w-full border border-slate-300 rounded-xl p-5 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm leading-relaxed" placeholder="Ej: Máquina calibrada, lubricada y funcionando sin ruidos extraños..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase tracking-wide">Evidencias Finales de Funcionamiento (Fotos/Videos)</label>
+                            <div class="dashed-box bg-white hover:bg-slate-100 transition-colors relative h-16 flex flex-col items-center justify-center cursor-pointer">
+                                <span class="text-sm text-slate-500 font-semibold pointer-events-none">Haz clic o arrastra fotos/videos finales aquí</span>
+                                <input type="file" id="f_fotos_reparacion" multiple accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            </div>
+                            <div id="preview-archivos-reparacion" class="mt-3 flex flex-col gap-2"></div>
+                        </div>
+                        <div class="flex justify-end pt-2">
+                            <button onclick="guardarPostReparacion()" id="btnGuardarPostReparacion" class="bg-slate-950 hover:bg-black text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg transition-colors">Guardar Evidencia Final y Entregar a Asesor</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10 pb-6">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Evidencias Post-Reparación y Entrega</h3>
+                    <div class="border border-slate-200 rounded-2xl p-8 bg-slate-50/50 space-y-6 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Observaciones Finales del Técnico</span>
+                            <div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed bg-white p-5 rounded-xl border border-slate-100 shadow-inner" id="det_obs_reparacion">-</div>
+                        </div>
+                        <div id="det_galeria_reparacion" class="hidden mt-6 border-t border-slate-100 pt-6">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-4 block">Archivos Adjuntos Finales</span>
+                            <div class="flex flex-wrap gap-5" id="det_fotos_reparacion_div">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
+
 
     <script>
         let chartProds, chartEst, chartSedes; 
@@ -308,11 +401,9 @@
                 if(viewName === 'historial') renderizarTablaHistorial();
             };
 
-            // NUEVA FUNCION: Abrir modal y poner fecha de hoy por defecto
+            // ABRIR MODAL Y PONER FECHA ACTUAL
             window.abrirModalNuevoTicket = () => {
                 document.getElementById('modalNuevoTicket').classList.remove('hidden');
-                
-                // Configurar la fecha actual local para el input tipo "date"
                 const offset = new Date().getTimezoneOffset() * 60000;
                 const localISODate = (new Date(Date.now() - offset)).toISOString().slice(0, 10);
                 document.getElementById('t_fecha_creacion').value = localISODate;
@@ -395,23 +486,69 @@
 
 
             // ================= MÓDULO: KANBAN BOARD =================
-            document.getElementById('kanbanBoard').innerHTML = ESTADOS.map(col => `<div class="w-[380px] flex-shrink-0 flex flex-col bg-slate-100 border border-slate-200 rounded-[24px] p-5 h-full"><h3 class="text-[13px] font-black text-slate-950 uppercase tracking-widest mb-5 shrink-0 pl-1">${col.nombre} •••</h3><div class="space-y-4 overflow-y-auto flex-1 pr-1" id="col-${col.id}"></div></div>`).join('');
+            function dibujarColumnas() {
+                const board = document.getElementById('kanbanBoard');
+                board.innerHTML = ESTADOS.map(col => `
+                    <div class="w-[380px] flex-shrink-0 flex flex-col bg-slate-100 border border-slate-200 rounded-[24px] p-5 h-full">
+                        <h3 class="text-[13px] font-black text-slate-950 uppercase tracking-widest mb-5 shrink-0 pl-1">${col.nombre} •••</h3>
+                        <div class="space-y-4 overflow-y-auto flex-1 pr-1" id="col-${col.id}"></div>
+                    </div>
+                `).join('');
+            }
+            dibujarColumnas();
 
-            const hFP = (id, cid) => document.getElementById(id).addEventListener('change', function() {
-                const c = document.getElementById(cid); c.innerHTML = ''; 
-                Array.from(this.files).forEach(f => c.innerHTML += `<div class="text-[12px] bg-slate-900 text-slate-100 px-3 py-2 rounded-lg font-bold truncate">${f.type.startsWith('video/')?'🎥':'📷'} ${f.name}</div>`);
-            });
-            hFP('t_fotos', 'preview-archivos-nuevo'); hFP('f_fotos_reparacion', 'preview-archivos-reparacion');
+            // PREVISUALIZADOR Y RENDERIZADOR MULTIMEDIA ARREGLADO
+            const handleFilePreview = (inputId, containerId) => {
+                document.getElementById(inputId).addEventListener('change', function() {
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = ''; 
+                    if (this.files && this.files.length > 0) {
+                        Array.from(this.files).forEach(file => {
+                            const isVideo = file.type.startsWith('video/');
+                            container.innerHTML += `
+                                <div class="text-[12px] bg-slate-900 text-slate-100 px-4 py-2.5 rounded-xl font-semibold flex items-center gap-3 border border-slate-700 shadow-md">
+                                    <span class="text-lg">${isVideo ? '🎥' : '📷'}</span>
+                                    <div class="flex flex-col truncate">
+                                        <span class="truncate font-bold">${file.name}</span>
+                                        <span class="text-[10px] text-slate-400 tracking-wide uppercase">${isVideo?'Video':'Imagen'}</span>
+                                    </div>
+                                </div>`;
+                        });
+                    }
+                });
+            };
+            handleFilePreview('t_fotos', 'preview-archivos-nuevo');
+            handleFilePreview('f_fotos_reparacion', 'preview-archivos-reparacion');
 
-            const crearMediaHTML = (url) => url.toLowerCase().match(/\.(mp4|mov|webm)$|video%2F/) ? `<a href="${url}" target="_blank" class="w-32 h-32 rounded-2xl bg-slate-950 overflow-hidden relative flex items-center justify-center shrink-0"><span class="absolute text-3xl">▶️</span><video src="${url}" class="w-full h-full object-cover opacity-50"></video></a>` : `<a href="${url}" target="_blank" class="w-32 h-32 rounded-2xl bg-cover bg-center shrink-0" style="background-image: url('${url}')"></a>`;
+            const crearMediaHTML = (url) => {
+                const isVideo = url.toLowerCase().includes('.mp4') || url.toLowerCase().includes('.mov') || url.toLowerCase().includes('.webm') || url.includes('video%2F');
+                if (isVideo) {
+                    return `
+                        <a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-950 border border-slate-700 overflow-hidden relative hover:opacity-80 transition-opacity shadow-md flex items-center justify-center group">
+                            <span class="absolute text-4xl z-10 group-hover:scale-110 transition-transform">▶️</span>
+                            <video src="${url}" class="w-full h-full object-cover opacity-60" muted autoplay loop></video>
+                        </a>`;
+                } else {
+                    return `
+                        <a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-100 border border-slate-200 bg-cover bg-center hover:opacity-80 transition-opacity shadow-sm flex items-center justify-center" style="background-image: url('${url}')"></a>`;
+                }
+            };
+
+            async function getNextTicketId() {
+                return await db.runTransaction(async (transaction) => {
+                    const doc = await transaction.get(counterRef);
+                    let current = doc.exists ? (doc.data().count || 0) : 0;
+                    transaction.set(counterRef, { count: current + 1 }, { merge: true });
+                    return `TICKET ${current + 1}`;
+                });
+            }
 
             document.getElementById('formGarantia').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const btn = document.getElementById('btnSubmit'); btn.disabled = true;
                 
-                // LEER LA FECHA CUSTOM
                 const fechaInput = document.getElementById('t_fecha_creacion').value;
-                const fechaCustom = new Date(fechaInput + 'T12:00:00'); // Establecemos mediodía para evitar problemas de zona horaria
+                const fechaCustom = new Date(fechaInput + 'T12:00:00'); 
 
                 try {
                     let c = 0; const doc = await db.runTransaction(async t => { const ref = await t.get(counterRef); c = ref.exists ? (ref.data().count||0) : 0; t.set(counterRef, {count:c+1}, {merge:true}); return c; });
@@ -432,7 +569,7 @@
                         fotos: urls, 
                         observacionesReparacion: "", 
                         fotosReparacion: [], 
-                        creadoEn: firebase.firestore.Timestamp.fromDate(fechaCustom) // Usamos la fecha que elegiste
+                        creadoEn: firebase.firestore.Timestamp.fromDate(fechaCustom) 
                     });
                     document.getElementById('formGarantia').reset(); document.getElementById('preview-archivos-nuevo').innerHTML=''; document.getElementById('modalNuevoTicket').classList.add('hidden');
                 } catch(e) { alert("Error"); } finally { btn.disabled = false; }
@@ -454,14 +591,25 @@
                 ESTADOS.forEach(c => document.getElementById(`col-${c.id}`).innerHTML = '');
 
                 ticketsGlobal.forEach(t => {
-                    const passBusq = t.id.toLowerCase().includes(sBusq) || t.referencia.toLowerCase().includes(sBusq);
+                    const passBusq = t.id.toLowerCase().includes(sBusq) || t.referencia.toLowerCase().includes(sBusq) || t.nombre.toLowerCase().includes(sBusq) || t.cedula.includes(sBusq);
                     const passSede = sSede === '' || t.sede === sSede;
                     let passFec = true;
                     if(sFec && t.creadoEn) { const fd = new Date(sFec+'T12:00:00').toLocaleDateString(); const td = t.creadoEn.toDate().toLocaleDateString(); passFec = (fd===td); }
 
                     if (t.taller === sTaller && passBusq && passSede && passFec && document.getElementById(`col-${t.estado}`)) {
-                        const icon = (t.fotos && t.fotos.some(u=>u.includes('.mp4'))) ? '🎥' : '📸';
-                        document.getElementById(`col-${t.estado}`).innerHTML += `<div onclick="verDetalle('${t.id}')" class="bg-white p-6 rounded-[20px] border shadow-sm cursor-pointer hover:shadow-lg"><h4 class="font-black text-xl mb-3">${t.id}</h4><div class="text-[13px] text-slate-600 mb-3 border-b pb-3 relative"><p class="font-bold truncate text-slate-900">${t.referencia}</p><p class="truncate">${t.sede}</p>${t.fotos?.length>0?`<span class="absolute bottom-1 right-0 text-[10px] bg-slate-100 px-2 rounded-full font-bold">${icon} ${t.fotos.length}</span>`:''}</div><p class="text-[11px] font-medium text-slate-400 italic truncate">${t.diagnostico||'Esperando revisión...'}</p></div>`;
+                        const tieneVideo = t.fotos && t.fotos.some(url => url.toLowerCase().includes('.mp4') || url.toLowerCase().includes('.mov'));
+                        const mediaCountText = (tieneVideo ? '🎥 ' : '📸 ') + (t.fotos ? t.fotos.length : 0);
+
+                        document.getElementById(`col-${t.estado}`).innerHTML += `
+                            <div onclick="verDetalle('${t.id}')" class="bg-white p-7 rounded-[22px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-xl hover:border-slate-950 transition-all relative group">
+                                <h4 class="font-black text-slate-950 text-xl mb-4 tracking-tight">${t.id}</h4>
+                                <div class="space-y-2.5 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5 relative">
+                                    <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Ref:</span> <span class="font-extrabold text-slate-900 text-right break-words w-4/5 leading-tight">${t.referencia}</span></p>
+                                    <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Sede:</span> <span class="font-semibold text-slate-800 text-right break-words w-4/5">${t.sede}</span></p>
+                                    ${t.fotos && t.fotos.length > 0 ? `<div class="absolute -bottom-3 right-0 text-[10px] font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200 shadow-inner">${mediaCountText}</div>` : ''}
+                                </div>
+                                <p class="text-[12px] text-slate-500 font-medium italic line-clamp-2 leading-relaxed">${t.diagnostico || 'Esperando revisión técnica detallada...'}</p>
+                            </div>`;
                     }
                 });
             }
@@ -514,37 +662,107 @@
                 doc.save('Historial_Garantias.pdf');
             };
 
-            // MODAL ACCIONES
+            // MODAL ACCIONES Y VISTA DETALLE
             window.verDetalle = (id) => {
-                const t = ticketsGlobal.find(x => x.id === id); if(!t) return; currentTicketIdAbierto = id;
-                document.getElementById('det_id').textContent = t.id; document.getElementById('det_cedula').textContent = t.cedula; document.getElementById('det_telefono').textContent = t.telefono; document.getElementById('det_nombre').textContent = t.nombre; document.getElementById('det_sede').textContent = t.sede; document.getElementById('det_referencia').textContent = t.referencia; document.getElementById('det_falla').textContent = t.falla;
+                const t = ticketsGlobal.find(x => x.id === id); 
+                if(!t) return; 
+                currentTicketIdAbierto = id;
+                
+                document.getElementById('det_id').textContent = t.id; 
+                document.getElementById('det_cedula').textContent = t.cedula; 
+                document.getElementById('det_telefono').textContent = t.telefono; 
+                document.getElementById('det_nombre').textContent = t.nombre; 
+                document.getElementById('det_sede').textContent = t.sede; 
+                document.getElementById('det_referencia').textContent = t.referencia; 
+                document.getElementById('det_falla').textContent = t.falla;
                 
                 const txtD = document.getElementById('txtDiagnostico'), btnD = document.getElementById('btnSaveDiagDiv');
                 txtD.value = t.diagnostico||"";
-                if(t.estado === '2_envio_st'){ txtD.readOnly=false; txtD.className="w-full border rounded-2xl p-5 text-sm font-medium focus:border-slate-950 bg-white"; btnD.classList.remove('hidden'); }
-                else { txtD.readOnly=true; txtD.className="w-full border rounded-2xl p-5 text-sm font-medium bg-slate-50 text-slate-500"; btnD.classList.add('hidden'); }
+                if(t.estado === '2_envio_st'){ 
+                    txtD.readOnly=false; 
+                    txtD.className="w-full border border-slate-300 rounded-2xl p-6 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm transition-colors leading-relaxed bg-white"; 
+                    btnD.classList.remove('hidden'); 
+                } else { 
+                    txtD.readOnly=true; 
+                    txtD.className="w-full border border-slate-200 rounded-2xl p-6 text-sm font-medium text-slate-500 bg-slate-50 shadow-sm leading-relaxed"; 
+                    btnD.classList.add('hidden'); 
+                }
 
-                const bTop = document.getElementById('det_actions_top'); bTop.innerHTML = '';
-                const cB = (txt, cls, st) => `<button onclick="cambiarEstado('${t.id}', '${st}')" class="px-5 py-2 rounded-xl text-sm font-bold shadow-sm ${cls}">${txt}</button>`;
-                if(t.estado==='1_recibir') bTop.innerHTML+=cB('Enviar a S.T.','bg-slate-950 text-white','2_envio_st');
-                if(t.estado==='3_diagnosticado') { bTop.innerHTML+=cB('Reparado','bg-emerald-600 text-white','4_reparado'); bTop.innerHTML+=cB('Pérdida','bg-red-600 text-white','5_sin_reparacion'); }
-                if(t.estado==='5_sin_reparacion') bTop.innerHTML+=cB('Entregar a Asesor','bg-slate-950 text-white','6_entregado_asesor');
-                if(t.estado==='6_entregado_asesor') bTop.innerHTML+=cB('Cerrar Ticket','bg-slate-950 text-white','7_entregado_cliente');
+                const bTop = document.getElementById('det_actions_top'); 
+                bTop.innerHTML = '';
+                const cB = (txt, cls, st) => `<button onclick="cambiarEstado('${t.id}', '${st}')" class="px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${cls}">${txt}</button>`;
+                const btnDark = "bg-slate-950 text-white hover:bg-black";
 
-                const divF = document.getElementById('det_fotos_div'); divF.innerHTML="";
-                if(t.fotos?.length) { t.fotos.forEach(u=>divF.innerHTML+=crearMediaHTML(u)); document.getElementById('det_galeria').classList.remove('hidden'); } else document.getElementById('det_galeria').classList.add('hidden');
+                if(t.estado==='1_recibir') bTop.innerHTML+=cB('Enviar a S.T.', btnDark, '2_envio_st');
+                if(t.estado==='3_diagnosticado') { 
+                    bTop.innerHTML+=cB('Fue Reparado','bg-emerald-600 text-white hover:bg-emerald-700','4_reparado'); 
+                    
+                    // BOTÓN CERRAR CASO PERDIDO CORREGIDO (Salta a ENTREGADOS)
+                    bTop.innerHTML+=cB('Cerrar Ticket (Caso Perdido)','bg-red-600 text-white hover:bg-red-700','7_entregado_cliente'); 
+                }
+                if(t.estado==='4_reparado') {
+                    // No hay botón acá porque exige llenar el form de abajo
+                }
+                if(t.estado==='6_entregado_asesor') bTop.innerHTML+=cB('Cerrar Ticket (Entregado)', btnDark, '7_entregado_cliente');
 
-                const fP = document.getElementById('form_post_reparacion'), vP = document.getElementById('view_post_reparacion');
-                fP.classList.add('hidden'); vP.classList.add('hidden'); document.getElementById('txtObservacionesReparacion').value=''; document.getElementById('preview-archivos-reparacion').innerHTML='';
-                if(t.estado==='4_reparado') fP.classList.remove('hidden');
-                else if(t.observacionesReparacion) { document.getElementById('det_obs_reparacion').textContent = t.observacionesReparacion; const dFR = document.getElementById('det_fotos_reparacion_div'); dFR.innerHTML=""; if(t.fotosReparacion?.length) { t.fotosReparacion.forEach(u=>dFR.innerHTML+=crearMediaHTML(u)); document.getElementById('det_galeria_reparacion').classList.remove('hidden'); } else document.getElementById('det_galeria_reparacion').classList.add('hidden'); vP.classList.remove('hidden'); }
+                // RENDERIZAR GALERÍAS ARREGLADO
+                const divFotos = document.getElementById('det_fotos_div');
+                divFotos.innerHTML = "";
+                if(t.fotos && t.fotos.length > 0) {
+                    t.fotos.forEach(url => {
+                        divFotos.innerHTML += crearMediaHTML(url);
+                    });
+                    document.getElementById('det_galeria').classList.remove('hidden');
+                } else {
+                    document.getElementById('det_galeria').classList.add('hidden');
+                }
+
+                const formPostRep = document.getElementById('form_post_reparacion');
+                const viewPostRep = document.getElementById('view_post_reparacion');
+                
+                formPostRep.classList.add('hidden'); 
+                viewPostRep.classList.add('hidden'); 
+                document.getElementById('txtObservacionesReparacion').value=''; 
+                document.getElementById('preview-archivos-reparacion').innerHTML='';
+                
+                if(t.estado==='4_reparado') {
+                    formPostRep.classList.remove('hidden');
+                }
+                else if(t.observacionesReparacion) { 
+                    document.getElementById('det_obs_reparacion').textContent = t.observacionesReparacion; 
+                    const divFotosRep = document.getElementById('det_fotos_reparacion_div'); 
+                    divFotosRep.innerHTML=""; 
+                    if(t.fotosReparacion && t.fotosReparacion.length > 0) { 
+                        t.fotosReparacion.forEach(url => divFotosRep.innerHTML += crearMediaHTML(url)); 
+                        document.getElementById('det_galeria_reparacion').classList.remove('hidden'); 
+                    } else {
+                        document.getElementById('det_galeria_reparacion').classList.add('hidden'); 
+                    }
+                    viewPostRep.classList.remove('hidden'); 
+                }
                 
                 document.getElementById('modalDetalle').classList.remove('hidden');
             };
 
             window.cambiarEstado = async (id, st) => { await ticketsRef.doc(id).update({estado:st}); document.getElementById('modalDetalle').classList.add('hidden'); };
             window.guardarInformeTecnico = async () => { const t=document.getElementById('txtDiagnostico').value; if(!t)return; await ticketsRef.doc(currentTicketIdAbierto).update({diagnostico:t,estado:'3_diagnosticado'}); document.getElementById('modalDetalle').classList.add('hidden'); };
-            window.guardarPostReparacion = async () => { const txt=document.getElementById('txtObservacionesReparacion').value; if(!txt)return; document.getElementById('btnGuardarPostReparacion').disabled=true; let u=[]; for(let f of document.getElementById('f_fotos_reparacion').files){const r=storage.ref(`ep/${currentTicketIdAbierto}/${f.name}`); await r.put(f); u.push(await r.getDownloadURL());} await ticketsRef.doc(currentTicketIdAbierto).update({observacionesReparacion:txt, fotosReparacion:u, estado:'6_entregado_asesor'}); document.getElementById('modalDetalle').classList.add('hidden'); document.getElementById('btnGuardarPostReparacion').disabled=false; };
+            window.guardarPostReparacion = async () => { 
+                const txt = document.getElementById('txtObservacionesReparacion').value; 
+                if(!txt) return alert("Ingresa las observaciones finales."); 
+                const btn = document.getElementById('btnGuardarPostReparacion');
+                btn.textContent = "Guardando..."; btn.disabled=true; 
+                let urls = []; 
+                try {
+                    for(let f of document.getElementById('f_fotos_reparacion').files){
+                        const r = storage.ref(`ep/${currentTicketIdAbierto}/${f.name}`); 
+                        await r.put(f); 
+                        urls.push(await r.getDownloadURL());
+                    } 
+                    await ticketsRef.doc(currentTicketIdAbierto).update({observacionesReparacion:txt, fotosReparacion:urls, estado:'6_entregado_asesor'}); 
+                    document.getElementById('modalDetalle').classList.add('hidden'); 
+                } catch(e) { alert("Error al guardar evidencias finales."); }
+                btn.textContent = "Guardar Evidencia Final y Entregar a Asesor"; btn.disabled=false; 
+            };
 
             // ANALYTICS
             function renderizarGraficos() {
