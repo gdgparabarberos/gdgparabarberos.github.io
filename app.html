@@ -57,8 +57,8 @@
                     <h2 class="text-[32px] font-black text-slate-900 tracking-tight">Tablero de Gestión</h2>
                     <div class="flex gap-4">
                         <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-slate-100 shadow-sm cursor-pointer">
-                            <option value="interno">ST PARABARBEROS</option>
-                            <option value="proveedor">ST PROVEEDOR</option>
+                            <option value="interno">SERVICIO TÉCNICO PARABARBEROS</option>
+                            <option value="proveedor">SERVICIO TÉCNICO PROVEEDOR</option>
                         </select>
                         <button onclick="document.getElementById('modalNuevoTicket').classList.remove('hidden')" class="bg-slate-950 hover:bg-black transition-colors text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-slate-900/10 flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>Nuevo Ticket
@@ -306,7 +306,7 @@
 
             const ESTADOS = [
                 { id: '1_recibir', nombre: 'RECEPCIÓN', colorChart: '#94a3b8' },
-                { id: '2_envio_st', nombre: 'ENVIADOS S.T.', colorChart: '#cbd5e1' },
+                { id: '2_envio_st', nombre: 'ENVIADOS SERVICIO TÉCNICO.', colorChart: '#cbd5e1' },
                 { id: '3_diagnosticado', nombre: 'DIAGNOSTICADOS', colorChart: '#e2e8f0' },
                 { id: '4_reparado', nombre: 'REPARADOS', colorChart: '#10b981' }, 
                 { id: '5_sin_reparacion', nombre: 'PÉRDIDA', colorChart: '#ef4444' }, 
@@ -584,7 +584,7 @@
                 const crearBtn = (texto, clase, sigEstado) => `<button onclick="cambiarEstado('${t.id}', '${sigEstado}')" class="px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${clase}">${texto}</button>`;
                 const sigAccionClase = "bg-slate-950 text-white hover:bg-black";
 
-                if(t.estado === '1_recibir') boxBotones.innerHTML += crearBtn('Enviar a S.T.', sigAccionClase, '2_envio_st');
+                if(t.estado === '1_recibir') boxBotones.innerHTML += crearBtn('Enviar a SERVICIO TÉCNICO.', sigAccionClase, '2_envio_st');
                 if(t.estado === '3_diagnosticado') {
                     boxBotones.innerHTML += crearBtn('Fue Reparado', 'bg-emerald-600 text-white hover:bg-emerald-700', '4_reparado'); 
                     boxBotones.innerHTML += crearBtn('Pérdida Total', 'bg-red-600 text-white hover:bg-red-700', '5_sin_reparacion'); 
@@ -700,3 +700,4 @@
     </script>
 </body>
 </html>
+
