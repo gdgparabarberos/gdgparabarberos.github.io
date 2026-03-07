@@ -33,8 +33,7 @@
         <button id="logoutBtn" class="mt-auto p-3 text-slate-400 hover:text-red-400 transition-colors" title="Cerrar Sesión"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></button>
     </aside>
 
-    <main class="flex-1 flex flex-col min-w-0 bg-[#f8fafc] relative z-10">
-        
+    <main class="flex-1 flex flex-col min-w-0 relative z-10">
         <header class="h-[76px] bg-white px-8 flex items-center justify-between border-b border-slate-200 shrink-0 shadow-sm">
             <div class="flex items-center gap-10">
                 <h1 class="text-[16px] font-black tracking-widest text-slate-900 uppercase">Parabarberos S.A.S.</h1>
@@ -63,8 +62,7 @@
         </div>
 
         <div class="flex-1 overflow-x-auto overflow-y-hidden px-10 pb-8">
-            <div class="flex gap-6 h-full items-start min-w-max pb-4" id="kanbanBoard">
-                </div>
+            <div class="flex gap-6 h-full items-start min-w-max pb-4" id="kanbanBoard"></div>
         </div>
     </main>
 
@@ -81,11 +79,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                             <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Datos del Cliente</h3>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></div>
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Sede / Asesor</label>
-                                <select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 bg-white focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
+                                <select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 bg-white focus:border-slate-900 focus:outline-none cursor-pointer">
                                     <option value="Punto de Venta Tuluá">Punto de Venta Tuluá</option>
                                     <option value="Punto de Venta Cali Centro">Punto de Venta Cali Centro</option>
                                     <option value="Punto de Venta Medellín">Punto de Venta Medellín</option>
@@ -96,20 +94,21 @@
 
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                             <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Detalle del Producto</h3>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Referencia Producto</label><input type="text" id="t_referencia" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Falla Reportada</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></textarea></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Referencia Producto</label><input type="text" id="t_referencia" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Falla Reportada</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></textarea></div>
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Taller Asignado</label>
-                                <select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-800 bg-slate-50 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
+                                <select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-800 bg-slate-50 focus:border-slate-900 focus:outline-none cursor-pointer">
                                     <option value="interno">Servicio Técnico PARABARBEROS</option>
                                     <option value="proveedor">Servicio Técnico del Proveedor</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Fotos (Opcional)</label>
-                                <div class="dashed-box bg-slate-50 hover:bg-slate-100 transition-colors relative h-20 flex flex-col items-center justify-center cursor-pointer">
-                                    <span class="text-sm text-slate-500 font-semibold">Haz clic o arrastra fotos aquí</span>
-                                    <input type="file" id="t_fotos" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Fotos/Videos (Opcional)</label>
+                                <div class="dashed-box bg-slate-50 hover:bg-slate-100 transition-colors relative h-16 flex flex-col items-center justify-center cursor-pointer">
+                                    <span class="text-sm text-slate-500 font-semibold pointer-events-none">Haz clic o arrastra archivos aquí</span>
+                                    <input type="file" id="t_fotos" multiple accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                                 </div>
+                                <div id="preview-archivos-nuevo" class="mt-3 flex flex-col gap-2"></div>
                             </div>
                         </div>
                     </div>
@@ -133,52 +132,36 @@
                     <h2 class="text-3xl font-black text-slate-900" id="det_id">GAR-000</h2>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div id="det_actions_top" class="flex gap-3">
-                        </div>
+                    <div id="det_actions_top" class="flex gap-3"></div>
                     <button onclick="document.getElementById('modalDetalle').classList.add('hidden')" class="text-slate-400 hover:text-red-500 bg-white p-2.5 rounded-full shadow-sm border border-slate-200 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 </div>
             </div>
             
             <div class="flex-1 overflow-y-auto p-10 md:p-14 bg-white">
-                
                 <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Información Completa del Caso</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                    
                     <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
-                        <div class="flex flex-col">
-                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Nombre del Cliente</span>
-                            <div class="text-base font-bold text-slate-950 break-words" id="det_nombre">-</div>
-                        </div>
+                        <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Nombre del Cliente</span><div class="text-base font-bold text-slate-950 break-words" id="det_nombre">-</div></div>
                         <div class="grid grid-cols-2 gap-5">
-                            <div class="flex flex-col">
-                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Cédula</span>
-                                <div class="text-sm font-bold text-slate-800 break-words" id="det_cedula">-</div>
-                            </div>
-                            <div class="flex flex-col">
-                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Teléfono</span>
-                                <div class="text-sm font-bold text-slate-800 break-words" id="det_telefono">-</div>
-                            </div>
+                            <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Cédula</span><div class="text-sm font-bold text-slate-800 break-words" id="det_cedula">-</div></div>
+                            <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Teléfono</span><div class="text-sm font-bold text-slate-800 break-words" id="det_telefono">-</div></div>
                         </div>
-                        <div class="flex flex-col border-t border-slate-200 pt-5">
-                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Punto de Venta / Asesor</span>
-                            <div class="text-sm font-bold text-slate-800 break-words" id="det_sede">-</div>
-                        </div>
+                        <div class="flex flex-col border-t border-slate-200 pt-5"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Punto de Venta / Asesor</span><div class="text-sm font-bold text-slate-800 break-words" id="det_sede">-</div></div>
                     </div>
 
                     <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
-                        <div class="flex flex-col">
-                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Referencia del Equipo</span>
-                            <div class="text-lg font-black text-black break-words" id="det_referencia">-</div>
-                        </div>
-                        <div class="flex flex-col border-t border-slate-200 pt-5">
-                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Descripción de la Falla Reportada</span>
-                            <div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed" id="det_falla">-</div>
-                        </div>
+                        <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Referencia del Equipo</span><div class="text-lg font-black text-black break-words" id="det_referencia">-</div></div>
+                        <div class="flex flex-col border-t border-slate-200 pt-5"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Falla Reportada</span><div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed" id="det_falla">-</div></div>
                     </div>
                 </div>
 
-                <div class="mb-12">
+                <div id="det_galeria" class="hidden mb-12">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-5">Evidencias Fotográficas al Recibir</h3>
+                    <div class="flex flex-wrap gap-5" id="det_fotos_div"></div>
+                </div>
+
+                <div class="mb-4">
                     <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-5">Dictamen de Servicio Técnico</h3>
                     <textarea id="txtDiagnostico" rows="4" class="w-full border border-slate-300 rounded-2xl p-6 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm transition-colors leading-relaxed" placeholder="Escribe aquí el informe de servicio técnico detallado..."></textarea>
                     <div id="btnSaveDiagDiv" class="hidden mt-5 flex justify-end">
@@ -186,10 +169,39 @@
                     </div>
                 </div>
 
-                <div id="det_galeria" class="hidden">
-                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-5">Evidencias Fotográficas</h3>
-                    <div class="flex flex-wrap gap-5" id="det_fotos_div">
+                <div id="form_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10">
+                    <h3 class="text-sm font-black text-emerald-700 uppercase tracking-widest mb-6 border-l-4 border-emerald-500 pl-3">Registro Obligatorio de Entrega</h3>
+                    <div class="bg-emerald-50/50 p-7 rounded-2xl border border-emerald-100 space-y-6">
+                        <div>
+                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase">Observaciones: ¿Cómo quedó la máquina?</label>
+                            <textarea id="txtObservacionesReparacion" rows="3" class="w-full border border-slate-300 rounded-xl p-5 text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500 shadow-sm leading-relaxed" placeholder="Ej: Máquina calibrada, lubricada y funcionando sin ruidos extraños..."></textarea>
                         </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase">Evidencias Finales (Fotos/Videos)</label>
+                            <div class="dashed-box bg-white hover:bg-slate-50 transition-colors relative h-16 flex flex-col items-center justify-center cursor-pointer">
+                                <span class="text-sm text-slate-500 font-semibold pointer-events-none">Haz clic o arrastra fotos/videos finales aquí</span>
+                                <input type="file" id="f_fotos_reparacion" multiple accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            </div>
+                            <div id="preview-archivos-reparacion" class="mt-3 flex flex-col gap-2"></div>
+                        </div>
+                        <div class="flex justify-end pt-2">
+                            <button onclick="guardarPostReparacion()" id="btnGuardarPostReparacion" class="bg-slate-950 hover:bg-black text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg transition-colors">Guardar Evidencia y Entregar a Asesor</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Evidencias Post-Reparación</h3>
+                    <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Observaciones Finales</span>
+                            <div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed" id="det_obs_reparacion">-</div>
+                        </div>
+                        <div id="det_galeria_reparacion" class="hidden mt-4">
+                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-3 block">Archivos Adjuntos</span>
+                            <div class="flex flex-wrap gap-5" id="det_fotos_reparacion_div"></div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -219,7 +231,6 @@
             let ticketsGlobal = [];
             let currentTicketIdAbierto = null;
 
-            // DEFINICIÓN DE COLUMNAS minimalistas
             const ESTADOS = [
                 { id: '1_recibir', nombre: 'RECEPCIÓN' },
                 { id: '2_envio_st', nombre: 'ENVIADOS A S.T.' },
@@ -230,36 +241,56 @@
                 { id: '7_entregado_cliente', nombre: 'ENTREGADOS' }
             ];
 
-            // Iniciar sesión y limpiar nítido
             auth.onAuthStateChanged(user => {
                 if (!user) window.location.href = 'index.html';
                 else document.getElementById('userInitial').textContent = user.email.charAt(0).toUpperCase();
             });
             document.getElementById('logoutBtn').onclick = () => auth.signOut();
 
-            // Dibujar Pizarra Kanban Espaciosa (380px ancho columna)
             function dibujarColumnas() {
                 const board = document.getElementById('kanbanBoard');
                 board.innerHTML = ESTADOS.map(col => `
                     <div class="w-[380px] flex-shrink-0 flex flex-col">
-                        <div class="flex justify-between items-center mb-6 px-1 shrink-0">
-                            <h3 class="text-[13px] font-black text-slate-400 uppercase tracking-widest">${col.nombre}</h3>
-                        </div>
+                        <div class="flex justify-between items-center mb-6 px-1 shrink-0"><h3 class="text-[13px] font-black text-slate-400 uppercase tracking-widest">${col.nombre}</h3></div>
                         <div class="space-y-5 overflow-y-auto pb-10" id="col-${col.id}"></div>
                     </div>
                 `).join('');
             }
             dibujarColumnas();
 
-            // Generador de ID secuencial (TICKET 1, 2...)
+            // PREVISUALIZACIÓN DE ARCHIVOS SELECCIONADOS
+            const handleFilePreview = (inputId, containerId) => {
+                document.getElementById(inputId).addEventListener('change', function() {
+                    const container = document.getElementById(containerId);
+                    container.innerHTML = '';
+                    Array.from(this.files).forEach(file => {
+                        let icon = file.type.startsWith('video') ? '🎥' : '📷';
+                        container.innerHTML += `<div class="text-[11px] bg-slate-100 text-slate-700 px-3 py-2 rounded-lg font-bold truncate border border-slate-200">${icon} ${file.name}</div>`;
+                    });
+                });
+            };
+            handleFilePreview('t_fotos', 'preview-archivos-nuevo');
+            handleFilePreview('f_fotos_reparacion', 'preview-archivos-reparacion');
+
+            // CREADOR DE TARJETAS MULTIMEDIA (Fotos vs Videos)
+            const crearMediaHTML = (url) => {
+                const isVideo = url.toLowerCase().includes('.mp4') || url.toLowerCase().includes('.mov') || url.toLowerCase().includes('.webm');
+                if (isVideo) {
+                    return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-900 border border-slate-200 overflow-hidden relative hover:opacity-80 transition-opacity shadow-sm flex items-center justify-center">
+                                <span class="absolute text-4xl">▶️</span>
+                                <video src="${url}" class="w-full h-full object-cover opacity-50"></video>
+                            </a>`;
+                } else {
+                    return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-100 border border-slate-200 bg-cover bg-center hover:opacity-80 transition-opacity shadow-sm" style="background-image: url('${url}')"></a>`;
+                }
+            };
+
             async function getNextTicketId() {
                 return await db.runTransaction(async (transaction) => {
                     const doc = await transaction.get(counterRef);
-                    let current = 0;
-                    if (doc.exists) current = doc.data().count || 0;
-                    const next = current + 1;
-                    transaction.set(counterRef, { count: next }, { merge: true });
-                    return `TICKET ${next}`;
+                    let current = doc.exists ? (doc.data().count || 0) : 0;
+                    transaction.set(counterRef, { count: current + 1 }, { merge: true });
+                    return `TICKET ${current + 1}`;
                 });
             }
 
@@ -283,21 +314,17 @@
                     }
 
                     await ticketsRef.doc(ticketId).set({
-                        id: ticketId,
-                        estado: '1_recibir',
-                        taller: document.getElementById('t_taller').value,
-                        cedula: document.getElementById('t_cedula').value,
-                        telefono: document.getElementById('t_telefono').value,
-                        nombre: document.getElementById('t_nombre').value,
-                        sede: document.getElementById('t_sede').value,
-                        referencia: document.getElementById('t_referencia').value,
-                        falla: document.getElementById('t_falla').value,
-                        diagnostico: "",
-                        fotos: fotosUrls,
+                        id: ticketId, estado: '1_recibir', taller: document.getElementById('t_taller').value,
+                        cedula: document.getElementById('t_cedula').value, telefono: document.getElementById('t_telefono').value,
+                        nombre: document.getElementById('t_nombre').value, sede: document.getElementById('t_sede').value,
+                        referencia: document.getElementById('t_referencia').value, falla: document.getElementById('t_falla').value,
+                        diagnostico: "", fotos: fotosUrls,
+                        observacionesReparacion: "", fotosReparacion: [], // Nuevos campos preparados
                         creadoEn: firebase.firestore.FieldValue.serverTimestamp()
                     });
                     
                     document.getElementById('formGarantia').reset();
+                    document.getElementById('preview-archivos-nuevo').innerHTML = ''; // Limpiar lista visual
                     document.getElementById('modalNuevoTicket').classList.add('hidden');
                 } catch (error) {
                     alert("Ocurrió un error. Revisa que Firestore esté habilitado en Modo de Prueba.");
@@ -306,7 +333,7 @@
                 }
             });
 
-            // ESCUCHAR DATOS, BUSCADOR Y PINTAR TABLERO minimalista
+            // TABLERO
             document.getElementById('filtroTaller').addEventListener('change', renderizarTarjetas);
             document.getElementById('searchInput').addEventListener('input', renderizarTarjetas);
 
@@ -319,43 +346,32 @@
             function renderizarTarjetas() {
                 const tallerSeleccionado = document.getElementById('filtroTaller').value;
                 const searchVal = document.getElementById('searchInput').value.toLowerCase();
-                
                 ESTADOS.forEach(c => document.getElementById(`col-${c.id}`).innerHTML = '');
 
                 ticketsGlobal.forEach(t => {
-                    // Lógica del buscador nítido
-                    const coincideBusqueda = t.id.toLowerCase().includes(searchVal) || 
-                                             t.referencia.toLowerCase().includes(searchVal) || 
-                                             t.nombre.toLowerCase().includes(searchVal) || 
-                                             t.cedula.includes(searchVal);
-
+                    const coincideBusqueda = t.id.toLowerCase().includes(searchVal) || t.referencia.toLowerCase().includes(searchVal) || t.nombre.toLowerCase().includes(searchVal) || t.cedula.includes(searchVal);
                     if (t.taller === tallerSeleccionado && coincideBusqueda && document.getElementById(`col-${t.estado}`)) {
-                        document.getElementById(`col-${t.estado}`).innerHTML += crearTarjetaHTML(t);
+                        const diagTexto = t.diagnostico ? t.diagnostico : 'Esperando revisión técnica detallada...';
+                        document.getElementById(`col-${t.estado}`).innerHTML += `
+                            <div onclick="verDetalle('${t.id}')" class="bg-white p-7 rounded-[22px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-xl hover:border-slate-900 transition-all relative group">
+                                <h4 class="font-black text-slate-950 text-xl mb-4 tracking-tight">${t.id}</h4>
+                                <div class="space-y-2.5 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5">
+                                    <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Ref:</span> <span class="font-extrabold text-slate-900 text-right break-words w-4/5 leading-tight">${t.referencia}</span></p>
+                                    <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Sede:</span> <span class="font-semibold text-slate-800 text-right break-words w-4/5">${t.sede}</span></p>
+                                </div>
+                                <p class="text-[12px] text-slate-500 font-medium italic line-clamp-2 leading-relaxed">${diagTexto}</p>
+                            </div>`;
                     }
                 });
             }
 
-            // DISEÑO DE TARJETA nítida y monocromática (Imagen 0 - Morado cambiado por Negro)
-            function crearTarjetaHTML(t) {
-                const diagTexto = t.diagnostico ? t.diagnostico : 'Esperando revisión técnica detallada...';
-                return `
-                    <div onclick="verDetalle('${t.id}')" class="bg-white p-7 rounded-[22px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-xl hover:border-slate-900 transition-all relative group">
-                        <h4 class="font-black text-slate-950 text-xl mb-4 tracking-tight">${t.id}</h4>
-                        <div class="space-y-2.5 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5">
-                            <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Ref:</span> <span class="font-extrabold text-slate-900 text-right break-words w-4/5 leading-tight">${t.referencia}</span></p>
-                            <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Sede:</span> <span class="font-semibold text-slate-800 text-right break-words w-4/5">${t.sede}</span></p>
-                        </div>
-                        <p class="text-[12px] text-slate-500 font-medium italic line-clamp-2 leading-relaxed">${diagTexto}</p>
-                    </div>`;
-            }
-
-            // MODAL DETALLE nítido y espacioso (Imagen 2 - Morado cambiado por Negro)
+            // VISTA DETALLE Y GESTIÓN
             window.verDetalle = (id) => {
                 const t = ticketsGlobal.find(x => x.id === id);
                 if(!t) return;
                 currentTicketIdAbierto = id;
 
-                // Llenar datos fijos amplios
+                // 1. Datos fijos
                 document.getElementById('det_id').textContent = t.id;
                 document.getElementById('det_cedula').textContent = t.cedula;
                 document.getElementById('det_telefono').textContent = t.telefono;
@@ -364,7 +380,7 @@
                 document.getElementById('det_referencia').textContent = t.referencia;
                 document.getElementById('det_falla').textContent = t.falla;
 
-                // Controlar Caja de Diagnóstico nítida
+                // 2. Diagnóstico Técnico
                 const txtDiag = document.getElementById('txtDiagnostico');
                 const btnSaveDiag = document.getElementById('btnSaveDiagDiv');
                 txtDiag.value = t.diagnostico || "";
@@ -381,47 +397,60 @@
                     btnSaveDiag.classList.add('hidden');
                 }
 
-                // Generar Botones Dinámicos negros
+                // 3. Botones Superiores Dinámicos
                 const boxBotones = document.getElementById('det_actions_top');
                 boxBotones.innerHTML = '';
-                
-                const crearBtn = (texto, clase, accion, sigEstado) => {
-                    return `<button onclick="cambiarEstado('${t.id}', '${sigEstado}')" class="px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${clase}">${texto}</button>`;
-                };
+                const crearBtn = (texto, clase, sigEstado) => `<button onclick="cambiarEstado('${t.id}', '${sigEstado}')" class="px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${clase}">${texto}</button>`;
+                const btnDark = "bg-slate-950 text-white hover:bg-black";
 
-                const sigAccionClase = "bg-slate-950 text-white hover:bg-black"; // Botones principales negros nítidos
-
-                if(t.estado === '1_recibir') {
-                    boxBotones.innerHTML += crearBtn('Enviar a S.T.', sigAccionClase, 'enviar', '2_envio_st');
-                }
+                if(t.estado === '1_recibir') boxBotones.innerHTML += crearBtn('Enviar a S.T.', btnDark, '2_envio_st');
                 if(t.estado === '3_diagnosticado') {
-                    boxBotones.innerHTML += crearBtn('Marcar Reparado', 'bg-emerald-600 text-white hover:bg-emerald-700', 'reparar', '4_reparado');
-                    boxBotones.innerHTML += crearBtn('Pérdida Total', 'bg-red-600 text-white hover:bg-red-700', 'perdida', '5_sin_reparacion');
+                    boxBotones.innerHTML += crearBtn('Marcar Reparado', 'bg-emerald-600 text-white hover:bg-emerald-700', '4_reparado');
+                    boxBotones.innerHTML += crearBtn('Pérdida Total', 'bg-red-600 text-white hover:bg-red-700', '5_sin_reparacion');
                 }
-                if(t.estado === '4_reparado' || t.estado === '5_sin_reparacion') {
-                    boxBotones.innerHTML += crearBtn('Entregar a Asesor', sigAccionClase, 'asesor', '6_entregado_asesor');
-                }
-                if(t.estado === '6_entregado_asesor') {
-                    boxBotones.innerHTML += crearBtn('Cerrar Ticket (Entregado)', sigAccionClase, 'cliente', '7_entregado_cliente');
-                }
+                // Nota: Si está en 4_reparado, NO hay botón superior, debe llenar el form de abajo.
+                if(t.estado === '5_sin_reparacion') boxBotones.innerHTML += crearBtn('Entregar a Asesor', btnDark, '6_entregado_asesor');
+                if(t.estado === '6_entregado_asesor') boxBotones.innerHTML += crearBtn('Cerrar Ticket (Entregado)', btnDark, '7_entregado_cliente');
 
-                // Fotos minimalistas
-                const boxFotos = document.getElementById('det_galeria');
+                // 4. Galerías Iniciales (Detecta Video y Foto)
                 const divFotos = document.getElementById('det_fotos_div');
                 divFotos.innerHTML = "";
                 if(t.fotos && t.fotos.length > 0) {
-                    t.fotos.forEach(url => {
-                        divFotos.innerHTML += `<a href="${url}" target="_blank" class="shrink-0"><div class="w-32 h-32 rounded-2xl bg-slate-100 border border-slate-200 bg-cover bg-center hover:opacity-80 transition-opacity shadow-sm" style="background-image: url('${url}')"></div></a>`;
-                    });
-                    boxFotos.classList.remove('hidden');
-                } else {
-                    boxFotos.classList.add('hidden');
+                    t.fotos.forEach(url => divFotos.innerHTML += crearMediaHTML(url));
+                    document.getElementById('det_galeria').classList.remove('hidden');
+                } else document.getElementById('det_galeria').classList.add('hidden');
+
+                // 5. CONTROL POST-REPARACIÓN
+                const formPostRep = document.getElementById('form_post_reparacion');
+                const viewPostRep = document.getElementById('view_post_reparacion');
+                
+                // Reiniciar ambas vistas por defecto
+                formPostRep.classList.add('hidden');
+                viewPostRep.classList.add('hidden');
+                document.getElementById('txtObservacionesReparacion').value = '';
+                document.getElementById('preview-archivos-reparacion').innerHTML = '';
+
+                // Si está en reparado, le obligamos a llenar el formulario para pasarlo a Entregado Asesor
+                if (t.estado === '4_reparado') {
+                    formPostRep.classList.remove('hidden');
+                } 
+                // Si ya avanzó más allá de reparado (y tiene observaciones), mostramos la lectura
+                else if (t.observacionesReparacion) {
+                    document.getElementById('det_obs_reparacion').textContent = t.observacionesReparacion;
+                    const divFotosRep = document.getElementById('det_fotos_reparacion_div');
+                    divFotosRep.innerHTML = "";
+                    if(t.fotosReparacion && t.fotosReparacion.length > 0) {
+                        t.fotosReparacion.forEach(url => divFotosRep.innerHTML += crearMediaHTML(url));
+                        document.getElementById('det_galeria_reparacion').classList.remove('hidden');
+                    } else document.getElementById('det_galeria_reparacion').classList.add('hidden');
+                    
+                    viewPostRep.classList.remove('hidden');
                 }
 
                 document.getElementById('modalDetalle').classList.remove('hidden');
             };
 
-            // ACCIONES DE BASE DE DATOS minimalistas
+            // ACCIONES DB
             window.cambiarEstado = async (id, nuevoEstado) => {
                 await ticketsRef.doc(id).update({ estado: nuevoEstado });
                 document.getElementById('modalDetalle').classList.add('hidden'); 
@@ -430,12 +459,42 @@
             window.guardarInformeTecnico = async () => {
                 const texto = document.getElementById('txtDiagnostico').value;
                 if(!texto) return alert("Por favor, escribe el informe técnico detallado antes de guardar.");
-                
-                await ticketsRef.doc(currentTicketIdAbierto).update({ 
-                    diagnostico: texto,
-                    estado: '3_diagnosticado'
-                });
+                await ticketsRef.doc(currentTicketIdAbierto).update({ diagnostico: texto, estado: '3_diagnosticado' });
                 document.getElementById('modalDetalle').classList.add('hidden'); 
+            };
+
+            // NUEVA FUNCIÓN: GUARDAR EVIDENCIAS FINALES Y AVANZAR
+            window.guardarPostReparacion = async () => {
+                const btn = document.getElementById('btnGuardarPostReparacion');
+                const txt = document.getElementById('txtObservacionesReparacion').value;
+                const files = document.getElementById('f_fotos_reparacion').files;
+
+                if(!txt) return alert("Por favor, ingresa las observaciones detalladas de cómo quedó la máquina.");
+                
+                btn.textContent = "Procesando..."; btn.disabled = true;
+
+                try {
+                    let fotosUrls = [];
+                    if (files.length > 0) {
+                        for (let file of files) {
+                            const fileRef = storage.ref(`evidencias_post_reparacion/${currentTicketIdAbierto}/${file.name}`);
+                            await fileRef.put(file);
+                            fotosUrls.push(await fileRef.getDownloadURL());
+                        }
+                    }
+
+                    await ticketsRef.doc(currentTicketIdAbierto).update({ 
+                        observacionesReparacion: txt,
+                        fotosReparacion: fotosUrls,
+                        estado: '6_entregado_asesor' // Lo avanza directo a la siguiente columna
+                    });
+                    
+                    document.getElementById('modalDetalle').classList.add('hidden'); 
+                } catch (error) {
+                    alert("Ocurrió un error al guardar las evidencias finales.");
+                } finally {
+                    btn.textContent = "Guardar Evidencia y Entregar a Asesor"; btn.disabled = false;
+                }
             };
 
         });
