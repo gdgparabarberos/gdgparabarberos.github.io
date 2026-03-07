@@ -9,7 +9,12 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         ::-webkit-scrollbar { height: 8px; width: 8px; }
@@ -27,12 +32,12 @@
             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
         </div>
         <nav class="flex flex-col gap-6 text-slate-400 w-full px-4" id="mainNav">
-            <button onclick="switchView('kanban')" id="btnNav_kanban" class="nav-btn active p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Tablero de Gestión"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></button>
-            <button onclick="switchView('analytics')" id="btnNav_analytics" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Métricas y Gráficos"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg></button>
-            <button onclick="switchView('directorio')" id="btnNav_directorio" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Directorio Sedes/Asesores"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></button>
-            <button onclick="switchView('inventario')" id="btnNav_inventario" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Gestión de Inventario"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg></button>
+            <button onclick="switchView('kanban')" id="btnNav_kanban" class="nav-btn active p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Tablero Kanban"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></button>
+            <button onclick="switchView('analytics')" id="btnNav_analytics" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Métricas"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg></button>
+            <button onclick="switchView('directorio')" id="btnNav_directorio" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Directorio Sedes"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></button>
+            <button onclick="switchView('inventario')" id="btnNav_inventario" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Inventario"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg></button>
+            <button onclick="switchView('historial')" id="btnNav_historial" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Historial y Exportación"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg></button>
         </nav>
-        <button id="logoutBtnSidebar" class="mt-auto p-3 text-slate-400 hover:text-slate-100 transition-colors" title="Cerrar Sesión"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></button>
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 relative z-10 overflow-hidden">
@@ -41,26 +46,22 @@
                 <h1 class="text-[16px] font-black tracking-widest text-slate-900 uppercase shrink-0">Parabarberos S.A.S.</h1>
                 <div class="relative hidden md:block w-96 shrink" id="headerSearchBox">
                     <svg class="w-5 h-5 text-slate-400 absolute left-4 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <input type="text" id="searchInput" placeholder="Buscar por TICKET, Cliente o Referencia..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-slate-900 focus:bg-white transition-colors">
+                    <input type="text" id="searchInput" placeholder="Buscar producto o ticket en Kanban..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-slate-900 focus:bg-white transition-colors">
                 </div>
             </div>
             
             <div class="flex items-center gap-5 text-slate-400 shrink-0">
                 <div class="relative inline-block text-left ml-2">
-                    <button id="userMenuBtn" class="w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-sm font-black text-slate-800 shadow-sm border border-slate-300 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2">
+                    <button id="userMenuBtn" class="w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-sm font-black text-slate-800 shadow-sm border border-slate-300 transition-colors focus:outline-none">
                         <span id="userInitial">A</span>
                     </button>
-
-                    <div id="userDropdown" class="hidden absolute right-0 z-[100] mt-2 w-64 origin-top-right rounded-[16px] bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none border border-slate-200 overflow-hidden transition-all">
+                    <div id="userDropdown" class="hidden absolute right-0 z-[100] mt-2 w-64 rounded-[16px] bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none border border-slate-200 overflow-hidden transition-all">
                         <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
                             <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">Sesión activa</p>
                             <p class="text-sm font-bold text-slate-900 truncate" id="dropdownUserEmail">cargando...</p>
                         </div>
                         <div class="p-2">
-                            <button id="dropdownLogoutBtn" class="w-full text-left px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 hover:text-red-700 rounded-xl transition-colors flex items-center gap-3">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                                Cerrar Sesión
-                            </button>
+                            <button id="dropdownLogoutBtn" class="w-full text-left px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 hover:text-red-700 rounded-xl transition-colors flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>Cerrar Sesión</button>
                         </div>
                     </div>
                 </div>
@@ -70,43 +71,80 @@
         <div class="flex-1 relative overflow-y-auto bg-[#f8fafc]" id="app-container">
 
             <div id="view_kanban" class="view-section h-full flex flex-col">
-                <div class="px-10 py-8 flex items-center justify-between shrink-0">
-                    <h2 class="text-[32px] font-black text-slate-900 tracking-tight">Tablero de Gestión</h2>
-                    <div class="flex gap-4">
-                        <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-slate-100 shadow-sm cursor-pointer">
-                            <option value="interno">ST PARABARBEROS</option>
-                            <option value="proveedor">ST PROVEEDOR</option>
-                        </select>
+                <div class="px-10 pt-8 pb-4 shrink-0 flex flex-col gap-5 border-b border-slate-200 bg-white">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-[32px] font-black text-slate-900 tracking-tight">Tablero de Gestión</h2>
                         <button onclick="document.getElementById('modalNuevoTicket').classList.remove('hidden')" class="bg-slate-950 hover:bg-black transition-colors text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-slate-900/10 flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>Nuevo Ticket
                         </button>
                     </div>
+                    <div class="flex flex-wrap gap-3 items-center bg-slate-50 p-3 rounded-[16px] border border-slate-100">
+                        <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-2">Filtros rápidos:</span>
+                        <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-4 py-2 outline-none cursor-pointer shadow-sm">
+                            <option value="interno">TALLER PARABARBEROS</option>
+                            <option value="proveedor">TALLER PROVEEDOR</option>
+                        </select>
+                        <select id="filtroSedeKanban" class="bg-white border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-4 py-2 outline-none cursor-pointer shadow-sm max-w-[200px]">
+                            <option value="">Todas las Sedes</option>
+                            </select>
+                        <input type="date" id="filtroFechaKanban" title="Filtrar por fecha de creación" class="bg-white border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-4 py-2 outline-none cursor-pointer shadow-sm">
+                        <button onclick="limpiarFiltrosKanban()" class="text-xs font-bold text-slate-500 hover:text-slate-900 px-3 transition-colors ml-auto">Limpiar Filtros</button>
+                    </div>
                 </div>
-                <div class="flex-1 overflow-x-auto overflow-y-hidden px-10 pb-8">
+                
+                <div class="flex-1 overflow-x-auto overflow-y-hidden px-10 py-6">
                     <div class="flex gap-6 h-full items-start min-w-max pb-4" id="kanbanBoard"></div>
+                </div>
+            </div>
+
+            <div id="view_historial" class="view-section hidden flex flex-col min-h-full">
+                <div class="px-10 py-8 shrink-0 bg-white border-b border-slate-200 flex flex-col gap-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-[32px] font-black text-slate-900 tracking-tight">Historial de Tickets</h2>
+                            <p class="text-sm font-medium text-slate-500 mt-1">Consulta, filtra y exporta toda la trazabilidad operativa.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="exportarExcel()" class="bg-slate-950 hover:bg-black transition-colors text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-slate-900/10 flex items-center gap-2">📄 Exportar a Excel</button>
+                            <button onclick="exportarPDF()" class="bg-white hover:bg-slate-50 border border-slate-300 transition-colors text-slate-900 text-sm font-bold px-5 py-2.5 rounded-xl shadow-sm flex items-center gap-2">📕 Exportar a PDF</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 bg-slate-50 p-5 rounded-[20px] border border-slate-100">
+                        <div><label class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1.5">Buscar ID/Producto</label><input type="text" id="h_search" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold focus:border-slate-900 outline-none"></div>
+                        <div><label class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1.5">Origen / Asesor</label><select id="h_sede" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold focus:border-slate-900 outline-none"><option value="">Todos</option></select></div>
+                        <div><label class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1.5">Estado del Ticket</label><select id="h_estado" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold focus:border-slate-900 outline-none"><option value="">Todos los Estados</option></select></div>
+                        <div><label class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1.5">Fecha Desde</label><input type="date" id="h_fecha_ini" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold outline-none cursor-pointer"></div>
+                        <div><label class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1.5">Fecha Hasta</label><input type="date" id="h_fecha_fin" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold outline-none cursor-pointer"></div>
+                    </div>
+                </div>
+
+                <div class="flex-1 p-10 overflow-auto">
+                    <div class="bg-white rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
+                        <table class="w-full text-left border-collapse" id="tablaHistorialExportar">
+                            <thead class="bg-slate-950 text-white text-[11px] font-black uppercase tracking-widest">
+                                <tr>
+                                    <th class="p-4 pl-6">ID Ticket</th>
+                                    <th class="p-4">Fecha Creación</th>
+                                    <th class="p-4">Producto (Referencia)</th>
+                                    <th class="p-4">Origen / Sede</th>
+                                    <th class="p-4">Estado Actual</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyHistorial" class="text-sm font-medium text-slate-800 divide-y divide-slate-100">
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <div id="view_analytics" class="view-section hidden p-10 min-h-full">
                 <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Métricas y Rendimiento</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm">
-                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Equipos con Más Garantías</h3>
-                        <canvas id="chartProductos"></canvas>
-                    </div>
-                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm">
-                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Estado General de Casos</h3>
-                        <div class="h-64 flex justify-center"><canvas id="chartEstados"></canvas></div>
-                    </div>
-                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm">
-                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Orígenes de Garantías (Sedes/Asesores)</h3>
-                        <canvas id="chartSedes"></canvas>
-                    </div>
-                    <div class="bg-slate-950 p-8 rounded-[24px] shadow-lg flex flex-col justify-center text-center">
-                        <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Total Histórico Procesado</h3>
-                        <p class="text-6xl font-black text-white" id="kpiTotalTickets">0</p>
-                        <p class="text-slate-400 mt-2 font-medium">Tickets de Garantía</p>
-                    </div>
+                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm"><h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Equipos con Más Garantías</h3><canvas id="chartProductos"></canvas></div>
+                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm"><h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Estado General de Casos</h3><div class="h-64 flex justify-center"><canvas id="chartEstados"></canvas></div></div>
+                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm"><h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Orígenes de Garantías</h3><canvas id="chartSedes"></canvas></div>
+                    <div class="bg-slate-950 p-8 rounded-[24px] shadow-lg flex flex-col justify-center text-center"><h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Total Histórico Procesado</h3><p class="text-6xl font-black text-white" id="kpiTotalTickets">0</p><p class="text-slate-400 mt-2 font-medium">Tickets de Garantía</p></div>
                 </div>
             </div>
 
@@ -114,12 +152,9 @@
                 <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Directorio Operativo</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                     <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm h-fit">
-                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Agregar Origen (Sede o Asesor)</h3>
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Agregar Origen</h3>
                         <form id="formSede" class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Nombre del Punto o Asesor</label>
-                                <input type="text" id="n_sede" required placeholder="Ej: Punto de Venta Sur o Carlos Perez" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors">
-                            </div>
+                            <div><input type="text" id="n_sede" required placeholder="Ej: Punto de Venta Sur o Carlos Perez" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
                             <button type="submit" id="btnCrearSede" class="w-full py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl shadow-md transition-colors">Guardar en Directorio</button>
                         </form>
                         <hr class="my-8 border-slate-100">
@@ -133,28 +168,14 @@
                 <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Catálogo de Productos</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm md:col-span-1 h-fit">
-                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4">Actualizar Catálogo (JSON)</h3>
-                        <p class="text-xs text-slate-500 mb-6 leading-relaxed">Sube un archivo .json con la lista de tus productos.</p>
-                        <div class="dashed-box bg-slate-50 hover:bg-slate-100 transition-colors relative h-24 flex flex-col items-center justify-center cursor-pointer mb-4">
-                            <span class="text-sm text-slate-500 font-semibold pointer-events-none">Arrastra archivo JSON aquí</span>
-                            <input type="file" id="f_json_inventario" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                        </div>
-                        <button onclick="procesarJSON()" id="btnProcesarJson" class="w-full py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl shadow-md transition-colors hidden">Procesar y Subir Inventario</button>
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4">Subir JSON</h3>
+                        <div class="dashed-box bg-slate-50 hover:bg-slate-100 transition-colors relative h-24 flex flex-col items-center justify-center cursor-pointer mb-4"><span class="text-sm text-slate-500 font-semibold pointer-events-none">Arrastra JSON aquí</span><input type="file" id="f_json_inventario" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"></div>
+                        <button onclick="procesarJSON()" id="btnProcesarJson" class="w-full py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl shadow-md transition-colors hidden">Subir Inventario</button>
                         <div id="json_status" class="mt-3 text-xs font-bold text-slate-600 text-center"></div>
                     </div>
                     <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm md:col-span-2">
-                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Productos Registrados (<span id="countProductos">0</span>)</h3>
-                        <div class="overflow-y-auto max-h-[500px]">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="border-b border-slate-200 text-xs font-black text-slate-400 uppercase tracking-widest">
-                                        <th class="pb-3 pl-2">ID Único</th>
-                                        <th class="pb-3">Nombre del Producto</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaProductos" class="text-sm font-semibold text-slate-800"></tbody>
-                            </table>
-                        </div>
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Registrados (<span id="countProductos">0</span>)</h3>
+                        <div class="overflow-y-auto max-h-[500px]"><table class="w-full text-left border-collapse"><thead><tr class="border-b border-slate-200 text-xs font-black text-slate-400 uppercase tracking-widest"><th class="pb-3 pl-2">ID</th><th class="pb-3">Nombre</th></tr></thead><tbody id="tablaProductos" class="text-sm font-semibold text-slate-800"></tbody></table></div>
                     </div>
                 </div>
             </div>
@@ -169,131 +190,47 @@
             <div class="px-10 pt-8 pb-4 relative border-b border-slate-100 shrink-0">
                 <button onclick="document.getElementById('modalNuevoTicket').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition-colors"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 <h2 class="text-2xl font-black text-slate-900">Crear Ticket de Garantía</h2>
-                <p class="text-sm text-slate-500 mt-1 font-medium">Ingresa los datos del equipo a recibir.</p>
             </div>
-            
             <div class="px-10 py-6 overflow-y-auto flex-1 bg-slate-50/50">
                 <form id="formGarantia" class="space-y-8 pb-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Datos del Cliente</h3>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Sede / Asesor</label>
-                                <select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 bg-white focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
-                                    <option value="" disabled selected>Selecciona una opción...</option>
-                                </select>
-                            </div>
+                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">1. Datos Cliente</h3>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Nombre</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Sede</label><select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold bg-white focus:border-slate-900 focus:outline-none"><option value="" disabled selected>Selecciona...</option></select></div>
                         </div>
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Detalle del Producto</h3>
-                            <div>
-                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Referencia (Busca por ID o Nombre)</label>
-                                <input type="text" id="t_referencia" list="listaProductosAuto" autocomplete="off" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors" placeholder="Empieza a escribir...">
-                            </div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Falla Reportada</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></textarea></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Taller Asignado</label>
-                                <select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-800 bg-slate-50 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
-                                    <option value="interno">Servicio Técnico PARABARBEROS</option>
-                                    <option value="proveedor">Servicio Técnico del Proveedor</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Fotos/Videos (Opcional)</label>
-                                <div class="dashed-box bg-slate-50 hover:bg-slate-100 transition-colors relative h-16 flex flex-col items-center justify-center cursor-pointer">
-                                    <span class="text-sm text-slate-500 font-semibold pointer-events-none">Haz clic o arrastra fotos aquí</span>
-                                    <input type="file" id="t_fotos" multiple accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                                </div>
-                                <div id="preview-archivos-nuevo" class="mt-3 flex flex-col gap-2"></div>
-                            </div>
+                            <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">2. Detalle Producto</h3>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Referencia</label><input type="text" id="t_referencia" list="listaProductosAuto" autocomplete="off" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none" placeholder="Busca producto..."></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Falla</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none"></textarea></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Taller</label><select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold bg-slate-50 focus:border-slate-900 focus:outline-none"><option value="interno">PARABARBEROS</option><option value="proveedor">PROVEEDOR</option></select></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5">Archivos</label><div class="dashed-box bg-slate-50 relative h-16 flex items-center justify-center cursor-pointer"><span class="text-sm font-semibold text-slate-500">Arrastrar fotos/videos</span><input type="file" id="t_fotos" multiple accept="image/*,video/*" class="absolute inset-0 opacity-0 cursor-pointer"></div><div id="preview-archivos-nuevo" class="mt-2 flex flex-col gap-2"></div></div>
                         </div>
                     </div>
-                    <div class="flex justify-end gap-4 pt-4 shrink-0">
-                        <button type="button" onclick="document.getElementById('modalNuevoTicket').classList.add('hidden')" class="px-6 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-xl transition-colors">Cancelar</button>
-                        <button type="submit" id="btnSubmit" class="px-8 py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl transition-colors shadow-lg shadow-slate-900/10">Generar Ticket</button>
-                    </div>
+                    <div class="flex justify-end pt-4"><button type="submit" id="btnSubmit" class="px-8 py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl">Generar Ticket</button></div>
                 </form>
             </div>
         </div>
     </div>
 
-
     <div id="modalDetalle" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-all">
         <div class="bg-white rounded-[24px] shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-slate-100">
-            <div class="px-10 py-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0 shadow-sm">
-                <div>
-                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Detalle de Gestión</p>
-                    <h2 class="text-3xl font-black text-slate-900" id="det_id">GAR-000</h2>
+            <div class="px-10 py-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0"><h2 class="text-3xl font-black text-slate-900" id="det_id">GAR-000</h2><div class="flex gap-4"><div id="det_actions_top" class="flex gap-3"></div><button onclick="document.getElementById('modalDetalle').classList.add('hidden')" class="text-slate-400 bg-white p-2.5 rounded-full border shadow-sm hover:text-red-500">X</button></div></div>
+            <div class="flex-1 overflow-y-auto p-10 bg-white">
+                <div class="grid grid-cols-2 gap-8 mb-8">
+                    <div class="border p-6 rounded-2xl bg-slate-50/50 shadow-sm"><span class="text-[11px] font-black text-slate-400 block mb-1">CLIENTE</span><div class="font-bold text-slate-950" id="det_nombre"></div><div class="mt-3 text-sm font-bold" id="det_cedula"></div><div class="mt-1 text-sm font-bold" id="det_telefono"></div><div class="mt-3 pt-3 border-t text-sm font-bold" id="det_sede"></div></div>
+                    <div class="border p-6 rounded-2xl bg-slate-50/50 shadow-sm"><span class="text-[11px] font-black text-slate-400 block mb-1">EQUIPO</span><div class="text-lg font-black" id="det_referencia"></div><div class="mt-3 pt-3 border-t text-sm font-medium" id="det_falla"></div></div>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div id="det_actions_top" class="flex gap-3"></div>
-                    <button onclick="document.getElementById('modalDetalle').classList.add('hidden')" class="text-slate-400 hover:text-red-500 bg-white p-2.5 rounded-full shadow-sm border border-slate-200 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-                </div>
-            </div>
-            
-            <div class="flex-1 overflow-y-auto p-10 md:p-14 bg-white">
-                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Información Completa del Caso</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                    <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
-                        <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Nombre del Cliente</span><div class="text-base font-bold text-slate-950 break-words" id="det_nombre">-</div></div>
-                        <div class="grid grid-cols-2 gap-5">
-                            <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Cédula</span><div class="text-sm font-bold text-slate-800 break-words" id="det_cedula">-</div></div>
-                            <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Teléfono</span><div class="text-sm font-bold text-slate-800 break-words" id="det_telefono">-</div></div>
-                        </div>
-                        <div class="flex flex-col border-t border-slate-200 pt-5"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Punto de Venta / Asesor</span><div class="text-sm font-bold text-slate-800 break-words" id="det_sede">-</div></div>
-                    </div>
-                    <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
-                        <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Referencia del Equipo</span><div class="text-lg font-black text-black break-words" id="det_referencia">-</div></div>
-                        <div class="flex flex-col border-t border-slate-200 pt-5"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Falla Reportada</span><div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed" id="det_falla">-</div></div>
-                    </div>
-                </div>
-
-                <div id="det_galeria" class="hidden mb-12 border border-slate-200 p-7 rounded-2xl bg-slate-50/50 shadow-sm">
-                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6 border-b border-slate-200 pb-3">Evidencias de Recepción</h3>
-                    <div class="flex flex-wrap gap-5" id="det_fotos_div"></div>
-                </div>
-
-                <div class="mb-12">
-                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-5">Dictamen de Servicio Técnico</h3>
-                    <textarea id="txtDiagnostico" rows="4" class="w-full border border-slate-300 rounded-2xl p-6 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm transition-colors leading-relaxed" placeholder="Escribe aquí el informe de servicio técnico detallado..."></textarea>
-                    <div id="btnSaveDiagDiv" class="hidden mt-5 flex justify-end">
-                        <button onclick="guardarInformeTecnico()" class="bg-slate-950 hover:bg-black text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg shadow-slate-900/10 transition-colors">Guardar Informe y Marcar Diagnosticado</button>
-                    </div>
-                </div>
-
-                <div id="form_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10 pb-6">
-                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Registro Obligatorio de Entrega (Técnico)</h3>
-                    <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                        <div>
-                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase tracking-wide">Observaciones Finales: ¿Cómo quedó la máquina?</label>
-                            <textarea id="txtObservacionesReparacion" rows="3" class="w-full border border-slate-300 rounded-xl p-5 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm leading-relaxed" placeholder="Ej: Máquina calibrada y funcionando sin ruidos..."></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase tracking-wide">Evidencias Finales de Funcionamiento</label>
-                            <div class="dashed-box bg-white hover:bg-slate-100 transition-colors relative h-16 flex flex-col items-center justify-center cursor-pointer">
-                                <span class="text-sm text-slate-500 font-semibold pointer-events-none">Haz clic o arrastra fotos/videos finales aquí</span>
-                                <input type="file" id="f_fotos_reparacion" multiple accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                            </div>
-                            <div id="preview-archivos-reparacion" class="mt-3 flex flex-col gap-2"></div>
-                        </div>
-                        <div class="flex justify-end pt-2">
-                            <button onclick="guardarPostReparacion()" id="btnGuardarPostReparacion" class="bg-slate-950 hover:bg-black text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg transition-colors">Guardar Evidencia Final y Entregar</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="view_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10 pb-6">
-                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Evidencias Post-Reparación y Entrega</h3>
-                    <div class="border border-slate-200 rounded-2xl p-8 bg-slate-50/50 space-y-6 shadow-sm">
-                        <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Observaciones Finales del Técnico</span><div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed bg-white p-5 rounded-xl border border-slate-100 shadow-inner" id="det_obs_reparacion">-</div></div>
-                        <div id="det_galeria_reparacion" class="hidden mt-6 border-t border-slate-100 pt-6"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-4 block">Archivos Adjuntos Finales</span><div class="flex flex-wrap gap-5" id="det_fotos_reparacion_div"></div></div>
-                    </div>
-                </div>
+                <div id="det_galeria" class="hidden mb-8 border p-6 rounded-2xl bg-slate-50/50"><h3 class="text-sm font-black text-slate-900 mb-4 border-b pb-2">Evidencias Recibidas</h3><div class="flex flex-wrap gap-4" id="det_fotos_div"></div></div>
+                <div class="mb-8"><h3 class="text-sm font-black text-slate-900 mb-4">Dictamen Técnico</h3><textarea id="txtDiagnostico" rows="4" class="w-full border rounded-2xl p-5 text-sm font-medium focus:border-slate-950 outline-none"></textarea><div id="btnSaveDiagDiv" class="hidden mt-4 flex justify-end"><button onclick="guardarInformeTecnico()" class="bg-slate-950 text-white font-bold px-6 py-2.5 rounded-xl">Guardar y Marcar Diagnosticado</button></div></div>
+                
+                <div id="form_post_reparacion" class="hidden mt-8 border-t pt-8"><div class="bg-slate-50/50 p-6 rounded-2xl border space-y-4"><label class="text-xs font-black text-slate-600">OBSERVACIONES FINALES</label><textarea id="txtObservacionesReparacion" rows="3" class="w-full border rounded-xl p-4 text-sm font-medium focus:border-slate-950 outline-none"></textarea><label class="text-xs font-black text-slate-600 block mt-4">EVIDENCIAS FINALES</label><div class="dashed-box h-16 flex items-center justify-center cursor-pointer bg-white relative"><span class="text-sm font-semibold text-slate-500">Arrastrar fotos/videos</span><input type="file" id="f_fotos_reparacion" multiple class="absolute inset-0 opacity-0 cursor-pointer"></div><div id="preview-archivos-reparacion" class="mt-2 flex flex-col gap-2"></div><div class="flex justify-end mt-4"><button onclick="guardarPostReparacion()" id="btnGuardarPostReparacion" class="bg-slate-950 text-white font-bold px-6 py-2.5 rounded-xl">Guardar Evidencia y Entregar</button></div></div></div>
+                <div id="view_post_reparacion" class="hidden mt-8 border-t pt-8"><div class="border p-6 rounded-2xl bg-slate-50/50"><span class="text-[11px] font-black text-slate-400 block mb-2">OBSERVACIONES TÉCNICO</span><div class="text-sm font-medium bg-white p-4 rounded-xl border" id="det_obs_reparacion"></div><div id="det_galeria_reparacion" class="hidden mt-4"><span class="text-[11px] font-black text-slate-400 block mb-2">ARCHIVOS FINALES</span><div class="flex flex-wrap gap-4" id="det_fotos_reparacion_div"></div></div></div></div>
             </div>
         </div>
     </div>
-
 
     <script>
         let chartProds, chartEst, chartSedes; 
@@ -331,36 +268,28 @@
                 { id: '7_entregado_cliente', nombre: 'ENTREGADOS', colorChart: '#0f172a' }
             ];
 
-            // Iniciar sesión y actualizar el Menú del Avatar
+            // SESIÓN & MENÚ AVATAR
             auth.onAuthStateChanged(user => {
                 if (!user) window.location.href = 'index.html';
                 else {
                     document.getElementById('userInitial').textContent = user.email.charAt(0).toUpperCase();
-                    document.getElementById('dropdownUserEmail').textContent = user.email; // Muestra el correo en el menú
+                    document.getElementById('dropdownUserEmail').textContent = user.email; 
                 }
             });
-            
-            // Lógica para desplegar el menú del avatar
             const userMenuBtn = document.getElementById('userMenuBtn');
             const userDropdown = document.getElementById('userDropdown');
-
-            userMenuBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); 
-                userDropdown.classList.toggle('hidden');
-            });
-
-            // Cierra el menú si haces clic por fuera
-            document.addEventListener('click', (e) => {
-                if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
-                    userDropdown.classList.add('hidden');
-                }
-            });
-
-            // Botones de cerrar sesión (Tanto el lateral como el del nuevo menú)
-            document.getElementById('logoutBtnSidebar').onclick = () => auth.signOut();
+            userMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); userDropdown.classList.toggle('hidden'); });
+            document.addEventListener('click', (e) => { if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) userDropdown.classList.add('hidden'); });
             document.getElementById('dropdownLogoutBtn').onclick = () => auth.signOut();
 
+            // Función Formatear Fecha global
+            function formatearFecha(timestamp) {
+                if(!timestamp) return 'Sin fecha';
+                const d = timestamp.toDate();
+                return d.toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            }
 
+            // NAVEGACIÓN
             window.switchView = (viewName) => {
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
                 document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
@@ -369,104 +298,79 @@
                 if(viewName === 'kanban') document.getElementById('headerSearchBox').classList.remove('md:hidden');
                 else document.getElementById('headerSearchBox').classList.add('md:hidden');
                 if(viewName === 'analytics') renderizarGraficos();
+                if(viewName === 'historial') renderizarTablaHistorial();
             };
+
+            // INICIALIZAR DESPLEGABLES DEL HISTORIAL
+            const selectHEstado = document.getElementById('h_estado');
+            ESTADOS.forEach(e => selectHEstado.innerHTML += `<option value="${e.id}">${e.nombre}</option>`);
 
             // DIRECTORIO
             document.getElementById('formSede').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const nombre = document.getElementById('n_sede').value.trim();
                 const btn = document.getElementById('btnCrearSede');
-                if(!nombre) return;
-                btn.textContent = "Guardando..."; btn.disabled = true;
-                try {
-                    await sedesRef.add({ nombre: nombre, creadoEn: firebase.firestore.FieldValue.serverTimestamp() });
-                    document.getElementById('formSede').reset();
-                } catch(error) { alert("Error al guardar."); }
-                btn.textContent = "Guardar en Directorio"; btn.disabled = false;
+                btn.disabled = true;
+                await sedesRef.add({ nombre: document.getElementById('n_sede').value.trim(), creadoEn: firebase.firestore.FieldValue.serverTimestamp() });
+                document.getElementById('formSede').reset();
+                btn.disabled = false;
             });
 
             sedesRef.orderBy('nombre').onSnapshot(snapshot => {
                 const listaUl = document.getElementById('listaSedes');
-                const selectSede = document.getElementById('t_sede');
+                const sKanban = document.getElementById('filtroSedeKanban');
+                const sNuevo = document.getElementById('t_sede');
+                const sHistorial = document.getElementById('h_sede');
+                
                 listaUl.innerHTML = '';
-                selectSede.innerHTML = '<option value="" disabled selected>Selecciona una opción...</option>';
+                sNuevo.innerHTML = '<option value="" disabled selected>Selecciona una opción...</option>';
+                sKanban.innerHTML = '<option value="">Todas las Sedes</option>';
+                sHistorial.innerHTML = '<option value="">Todas las Sedes</option>';
+
                 snapshot.forEach(doc => {
-                    const data = doc.data();
-                    listaUl.innerHTML += `<li class="text-sm font-semibold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center">${data.nombre} <button onclick="eliminarSede('${doc.id}')" class="text-red-400 hover:text-red-600">✕</button></li>`;
-                    selectSede.innerHTML += `<option value="${data.nombre}">${data.nombre}</option>`;
+                    const d = doc.data().nombre;
+                    listaUl.innerHTML += `<li class="text-sm font-semibold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center">${d} <button onclick="sedesRef.doc('${doc.id}').delete()" class="text-red-400">✕</button></li>`;
+                    const opt = `<option value="${d}">${d}</option>`;
+                    sNuevo.innerHTML += opt; sKanban.innerHTML += opt; sHistorial.innerHTML += opt;
                 });
             });
 
-            window.eliminarSede = async (id) => {
-                if(confirm("¿Seguro que deseas eliminar este registro del directorio?")) {
-                    await sedesRef.doc(id).delete();
-                }
-            };
-
-            // INVENTARIO RÁPIDO
+            // INVENTARIO
             let jsonCargado = null;
             document.getElementById('f_json_inventario').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     try {
                         jsonCargado = JSON.parse(e.target.result);
-                        document.getElementById('json_status').innerHTML = `✅ Archivo leído. Contiene <span class="text-slate-900 font-black">${jsonCargado.length}</span> productos.`;
                         document.getElementById('btnProcesarJson').classList.remove('hidden');
-                    } catch(err) {
-                        document.getElementById('json_status').innerHTML = "❌ Error: El archivo no es un JSON válido.";
-                        document.getElementById('btnProcesarJson').classList.add('hidden');
-                    }
+                        document.getElementById('json_status').textContent = `JSON Válido. ${jsonCargado.length} productos.`;
+                    } catch(err) { alert("Error JSON"); }
                 };
-                reader.readAsText(file);
+                reader.readAsText(e.target.files[0]);
             });
 
             window.procesarJSON = async () => {
-                if(!jsonCargado || !Array.isArray(jsonCargado)) return;
-                const btn = document.getElementById('btnProcesarJson');
-                btn.textContent = "Procesando a máxima velocidad..."; btn.disabled = true;
-
-                try {
-                    const batches = [];
-                    let currentBatch = db.batch();
-                    let count = 0;
-
-                    for (let item of jsonCargado) {
-                        const idUnico = item.idUnico || item.id || item.referencia || item.codigo;
-                        const nombre = item.nombre || item.descripcion || item.producto;
-                        
-                        if(idUnico && nombre) {
-                            let docRef = productosRef.doc(String(idUnico));
-                            currentBatch.set(docRef, { idUnico: String(idUnico), nombre: String(nombre) });
-                            count++;
-                            
-                            if (count % 400 === 0) {
-                                batches.push(currentBatch.commit()); 
-                                currentBatch = db.batch(); 
-                            }
-                        }
+                const btn = document.getElementById('btnProcesarJson'); btn.textContent = "Procesando..."; btn.disabled = true;
+                const batches = []; let currentBatch = db.batch(); let count = 0;
+                for (let item of jsonCargado) {
+                    const idUnico = item.idUnico || item.id || item.referencia || item.codigo;
+                    const nombre = item.nombre || item.descripcion || item.producto;
+                    if(idUnico && nombre) {
+                        currentBatch.set(productosRef.doc(String(idUnico)), { idUnico: String(idUnico), nombre: String(nombre) });
+                        if (++count % 400 === 0) { batches.push(currentBatch.commit()); currentBatch = db.batch(); }
                     }
-                    if(count % 400 !== 0) batches.push(currentBatch.commit()); 
-                    await Promise.all(batches); 
-                    
-                    alert("Inventario subido correctamente en tiempo récord.");
-                    document.getElementById('btnProcesarJson').classList.add('hidden');
-                    document.getElementById('json_status').innerHTML = "";
-                    document.getElementById('f_json_inventario').value = ""; 
-                } catch(err) { alert("Error subiendo a base de datos."); }
-                btn.textContent = "Procesar y Subir Inventario"; btn.disabled = false;
+                }
+                batches.push(currentBatch.commit()); 
+                await Promise.all(batches); 
+                alert("Inventario subido!"); btn.textContent = "Subir Inventario"; btn.disabled = false; document.getElementById('f_json_inventario').value = "";
             };
 
             productosRef.onSnapshot(snapshot => {
                 document.getElementById('countProductos').textContent = snapshot.size;
-                let tablaHTML = '';
-                let datalistHTML = '';
+                let tablaHTML = '', datalistHTML = '';
                 snapshot.forEach(doc => {
-                    const data = doc.data();
-                    const textoMostrar = `${data.idUnico} - ${data.nombre}`;
-                    tablaHTML += `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors"><td class="py-3 pl-2 font-bold">${data.idUnico}</td><td class="py-3 text-slate-600">${data.nombre}</td></tr>`;
-                    datalistHTML += `<option value="${textoMostrar}">`;
+                    const d = doc.data();
+                    tablaHTML += `<tr class="border-b"><td class="py-3 pl-2 font-bold">${d.idUnico}</td><td class="py-3 text-slate-600">${d.nombre}</td></tr>`;
+                    datalistHTML += `<option value="${d.idUnico} - ${d.nombre}">`;
                 });
                 document.getElementById('tablaProductos').innerHTML = tablaHTML;
                 document.getElementById('listaProductosAuto').innerHTML = datalistHTML;
@@ -474,269 +378,147 @@
 
 
             // ================= MÓDULO: KANBAN BOARD =================
-            function dibujarColumnas() {
-                const board = document.getElementById('kanbanBoard');
-                board.innerHTML = ESTADOS.map(col => `
-                    <div class="w-[380px] flex-shrink-0 flex flex-col bg-slate-100/70 border border-slate-200 rounded-[24px] p-5 h-full max-h-full">
-                        <div class="flex justify-between items-center mb-5 shrink-0 px-1">
-                            <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-widest">${col.nombre}</h3>
-                            <svg class="w-5 h-5 text-slate-400 cursor-pointer hover:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
-                        </div>
-                        <div class="space-y-4 overflow-y-auto flex-1 pb-4 pr-1" id="col-${col.id}"></div>
-                    </div>
-                `).join('');
-            }
-            dibujarColumnas();
+            document.getElementById('kanbanBoard').innerHTML = ESTADOS.map(col => `<div class="w-[380px] flex-shrink-0 flex flex-col bg-slate-100 border border-slate-200 rounded-[24px] p-5 h-full"><h3 class="text-[13px] font-black text-slate-950 uppercase tracking-widest mb-5 shrink-0 pl-1">${col.nombre} •••</h3><div class="space-y-4 overflow-y-auto flex-1 pr-1" id="col-${col.id}"></div></div>`).join('');
 
-            const handleFilePreview = (inputId, containerId) => {
-                document.getElementById(inputId).addEventListener('change', function() {
-                    const container = document.getElementById(containerId);
-                    container.innerHTML = ''; 
-                    if (this.files && this.files.length > 0) {
-                        Array.from(this.files).forEach(file => {
-                            const isVideo = file.type.startsWith('video/');
-                            container.innerHTML += `<div class="text-[12px] bg-slate-900 text-slate-100 px-4 py-2.5 rounded-xl font-semibold flex items-center gap-3 border border-slate-700"><span class="text-lg">${isVideo ? '🎥' : '📷'}</span><div class="flex flex-col truncate"><span class="truncate font-bold">${file.name}</span><span class="text-[10px] text-slate-400 tracking-wide uppercase">${isVideo?'Video':'Imagen'}</span></div></div>`;
-                        });
-                    }
-                });
-            };
-            handleFilePreview('t_fotos', 'preview-archivos-nuevo');
-            handleFilePreview('f_fotos_reparacion', 'preview-archivos-reparacion');
+            const hFP = (id, cid) => document.getElementById(id).addEventListener('change', function() {
+                const c = document.getElementById(cid); c.innerHTML = ''; 
+                Array.from(this.files).forEach(f => c.innerHTML += `<div class="text-[12px] bg-slate-900 text-slate-100 px-3 py-2 rounded-lg font-bold truncate">${f.type.startsWith('video/')?'🎥':'📷'} ${f.name}</div>`);
+            });
+            hFP('t_fotos', 'preview-archivos-nuevo'); hFP('f_fotos_reparacion', 'preview-archivos-reparacion');
 
-            const crearMediaHTML = (url) => {
-                const isVideo = url.toLowerCase().includes('.mp4') || url.toLowerCase().includes('.mov') || url.toLowerCase().includes('.webm') || url.includes('video%2F');
-                if (isVideo) return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-950 border border-slate-700 overflow-hidden relative hover:opacity-80 transition-opacity shadow-md flex items-center justify-center group"><span class="absolute text-4xl z-10 group-hover:scale-110 transition-transform">▶️</span><video src="${url}" class="w-full h-full object-cover opacity-60" muted autoplay loop></video></a>`;
-                else return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-100 border border-slate-200 bg-cover bg-center hover:opacity-80 transition-opacity shadow-sm flex items-center justify-center" style="background-image: url('${url}')"></a>`;
-            };
-
-            async function getNextTicketId() {
-                return await db.runTransaction(async (transaction) => {
-                    const doc = await transaction.get(counterRef);
-                    let current = doc.exists ? (doc.data().count || 0) : 0;
-                    transaction.set(counterRef, { count: current + 1 }, { merge: true });
-                    return `TICKET ${current + 1}`;
-                });
-            }
+            const crearMediaHTML = (url) => url.toLowerCase().match(/\.(mp4|mov|webm)$|video%2F/) ? `<a href="${url}" target="_blank" class="w-32 h-32 rounded-2xl bg-slate-950 overflow-hidden relative flex items-center justify-center shrink-0"><span class="absolute text-3xl">▶️</span><video src="${url}" class="w-full h-full object-cover opacity-50"></video></a>` : `<a href="${url}" target="_blank" class="w-32 h-32 rounded-2xl bg-cover bg-center shrink-0" style="background-image: url('${url}')"></a>`;
 
             document.getElementById('formGarantia').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const btnSubmit = document.getElementById('btnSubmit');
-                btnSubmit.textContent = "Procesando..."; btnSubmit.disabled = true;
-
-                if(!document.getElementById('t_sede').value) {
-                    alert("Por favor selecciona una Sede o Asesor válido del directorio.");
-                    btnSubmit.textContent = "Generar Ticket"; btnSubmit.disabled = false;
-                    return;
-                }
-
+                const btn = document.getElementById('btnSubmit'); btn.disabled = true;
                 try {
-                    const ticketId = await getNextTicketId();
-                    const files = document.getElementById('t_fotos').files;
-                    let fotosUrls = [];
-
-                    if (files.length > 0) {
-                        for (let file of files) {
-                            const fileRef = storage.ref(`evidencias/${ticketId}/${file.name}`);
-                            await fileRef.put(file);
-                            fotosUrls.push(await fileRef.getDownloadURL());
-                        }
-                    }
-
-                    await ticketsRef.doc(ticketId).set({
-                        id: ticketId, estado: '1_recibir', taller: document.getElementById('t_taller').value,
-                        cedula: document.getElementById('t_cedula').value, telefono: document.getElementById('t_telefono').value,
-                        nombre: document.getElementById('t_nombre').value, sede: document.getElementById('t_sede').value,
-                        referencia: document.getElementById('t_referencia').value, falla: document.getElementById('t_falla').value,
-                        diagnostico: "", fotos: fotosUrls,
-                        observacionesReparacion: "", fotosReparacion: [], 
-                        creadoEn: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    
-                    document.getElementById('formGarantia').reset();
-                    document.getElementById('preview-archivos-nuevo').innerHTML = ''; 
-                    document.getElementById('modalNuevoTicket').classList.add('hidden');
-                } catch (error) { alert("Error al guardar."); } 
-                finally { btnSubmit.textContent = "Generar Ticket"; btnSubmit.disabled = false; }
+                    let c = 0; const doc = await db.runTransaction(async t => { const ref = await t.get(counterRef); c = ref.exists ? (ref.data().count||0) : 0; t.set(counterRef, {count:c+1}, {merge:true}); return c; });
+                    const id = `TICKET ${c+1}`; let urls = [];
+                    for(let f of document.getElementById('t_fotos').files) { const r = storage.ref(`e/${id}/${f.name}`); await r.put(f); urls.push(await r.getDownloadURL()); }
+                    await ticketsRef.doc(id).set({ id, estado: '1_recibir', taller: document.getElementById('t_taller').value, cedula: document.getElementById('t_cedula').value, telefono: document.getElementById('t_telefono').value, nombre: document.getElementById('t_nombre').value, sede: document.getElementById('t_sede').value, referencia: document.getElementById('t_referencia').value, falla: document.getElementById('t_falla').value, diagnostico: "", fotos: urls, observacionesReparacion: "", fotosReparacion: [], creadoEn: firebase.firestore.FieldValue.serverTimestamp() });
+                    document.getElementById('formGarantia').reset(); document.getElementById('preview-archivos-nuevo').innerHTML=''; document.getElementById('modalNuevoTicket').classList.add('hidden');
+                } catch(e) { alert("Error"); } finally { btn.disabled = false; }
             });
 
-            document.getElementById('filtroTaller').addEventListener('change', renderizarTarjetas);
-            document.getElementById('searchInput').addEventListener('input', renderizarTarjetas);
+            // FILTROS KANBAN
+            ['filtroTaller', 'filtroSedeKanban', 'filtroFechaKanban', 'searchInput'].forEach(id => document.getElementById(id).addEventListener('input', renderizarTarjetas));
+            window.limpiarFiltrosKanban = () => { document.getElementById('filtroSedeKanban').value = ''; document.getElementById('filtroFechaKanban').value = ''; document.getElementById('searchInput').value = ''; renderizarTarjetas(); };
 
             ticketsRef.orderBy('creadoEn', 'desc').onSnapshot(snapshot => {
-                ticketsGlobal = [];
-                snapshot.forEach(doc => ticketsGlobal.push(doc.data()));
+                ticketsGlobal = []; snapshot.forEach(doc => ticketsGlobal.push(doc.data()));
                 renderizarTarjetas();
                 if(!document.getElementById('view_analytics').classList.contains('hidden')) renderizarGraficos(); 
+                if(!document.getElementById('view_historial').classList.contains('hidden')) renderizarTablaHistorial(); 
             });
 
             function renderizarTarjetas() {
-                const tallerSeleccionado = document.getElementById('filtroTaller').value;
-                const searchVal = document.getElementById('searchInput').value.toLowerCase();
+                const sTaller = document.getElementById('filtroTaller').value, sBusq = document.getElementById('searchInput').value.toLowerCase(), sSede = document.getElementById('filtroSedeKanban').value, sFec = document.getElementById('filtroFechaKanban').value;
                 ESTADOS.forEach(c => document.getElementById(`col-${c.id}`).innerHTML = '');
 
                 ticketsGlobal.forEach(t => {
-                    const coincideBusqueda = t.id.toLowerCase().includes(searchVal) || t.referencia.toLowerCase().includes(searchVal) || t.nombre.toLowerCase().includes(searchVal) || t.cedula.includes(searchVal);
-                    if (t.taller === tallerSeleccionado && coincideBusqueda && document.getElementById(`col-${t.estado}`)) {
-                        const diagTexto = t.diagnostico ? t.diagnostico : 'Esperando revisión técnica detallada...';
-                        document.getElementById(`col-${t.estado}`).innerHTML += `
-                            <div onclick="verDetalle('${t.id}')" class="bg-white p-6 rounded-[20px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-lg hover:border-slate-900 transition-all relative group">
-                                <h4 class="font-black text-slate-950 text-xl mb-4 tracking-tight">${t.id}</h4>
-                                <div class="space-y-2.5 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5">
-                                    <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Ref:</span> <span class="font-extrabold text-slate-900 text-right break-words w-4/5 leading-tight">${t.referencia}</span></p>
-                                    <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Sede:</span> <span class="font-semibold text-slate-800 text-right break-words w-4/5">${t.sede}</span></p>
-                                </div>
-                                <p class="text-[12px] text-slate-500 font-medium italic line-clamp-2 leading-relaxed">${diagTexto}</p>
-                            </div>`;
+                    const passBusq = t.id.toLowerCase().includes(sBusq) || t.referencia.toLowerCase().includes(sBusq);
+                    const passSede = sSede === '' || t.sede === sSede;
+                    let passFec = true;
+                    if(sFec && t.creadoEn) { const fd = new Date(sFec+'T00:00:00').toLocaleDateString(); const td = t.creadoEn.toDate().toLocaleDateString(); passFec = (fd===td); }
+
+                    if (t.taller === sTaller && passBusq && passSede && passFec && document.getElementById(`col-${t.estado}`)) {
+                        const icon = (t.fotos && t.fotos.some(u=>u.includes('.mp4'))) ? '🎥' : '📸';
+                        document.getElementById(`col-${t.estado}`).innerHTML += `<div onclick="verDetalle('${t.id}')" class="bg-white p-6 rounded-[20px] border shadow-sm cursor-pointer hover:shadow-lg"><h4 class="font-black text-xl mb-3">${t.id}</h4><div class="text-[13px] text-slate-600 mb-3 border-b pb-3 relative"><p class="font-bold truncate text-slate-900">${t.referencia}</p><p class="truncate">${t.sede}</p>${t.fotos?.length>0?`<span class="absolute bottom-1 right-0 text-[10px] bg-slate-100 px-2 rounded-full font-bold">${icon} ${t.fotos.length}</span>`:''}</div><p class="text-[11px] font-medium text-slate-400 italic truncate">${t.diagnostico||'Esperando revisión...'}</p></div>`;
                     }
                 });
             }
 
+            // ================= MÓDULO: HISTORIAL TABLA =================
+            ['h_search', 'h_sede', 'h_estado', 'h_fecha_ini', 'h_fecha_fin'].forEach(id => document.getElementById(id).addEventListener('input', renderizarTablaHistorial));
+            
+            function renderizarTablaHistorial() {
+                const s = document.getElementById('h_search').value.toLowerCase();
+                const sede = document.getElementById('h_sede').value;
+                const est = document.getElementById('h_estado').value;
+                const fIni = document.getElementById('h_fecha_ini').value;
+                const fFin = document.getElementById('h_fecha_fin').value;
+
+                let html = '';
+                ticketsGlobal.forEach(t => {
+                    let pS = s==='' || t.id.toLowerCase().includes(s) || t.referencia.toLowerCase().includes(s);
+                    let pSede = sede==='' || t.sede === sede;
+                    let pEst = est==='' || t.estado === est;
+                    let pF = true;
+                    if((fIni||fFin) && t.creadoEn) {
+                        const d = t.creadoEn.toDate(); d.setHours(0,0,0,0);
+                        if(fIni && d < new Date(fIni+'T00:00:00')) pF=false;
+                        if(fFin && d > new Date(fFin+'T00:00:00')) pF=false;
+                    }
+
+                    if(pS && pSede && pEst && pF) {
+                        const nEst = ESTADOS.find(e=>e.id===t.estado)?.nombre || t.estado;
+                        html += `<tr class="hover:bg-slate-50 cursor-pointer transition-colors" onclick="verDetalle('${t.id}')">
+                            <td class="p-4 pl-6 font-black text-slate-900">${t.id}</td>
+                            <td class="p-4 text-slate-500">${formatearFecha(t.creadoEn)}</td>
+                            <td class="p-4 font-bold text-slate-800">${t.referencia.split(' - ')[0]}</td>
+                            <td class="p-4 text-slate-600">${t.sede}</td>
+                            <td class="p-4"><span class="bg-slate-100 text-slate-800 text-[10px] font-black px-3 py-1 rounded-full uppercase">${nEst}</span></td>
+                        </tr>`;
+                    }
+                });
+                document.getElementById('tbodyHistorial').innerHTML = html;
+            }
+
+            // Exportaciones
+            window.exportarExcel = () => {
+                const wb = XLSX.utils.table_to_book(document.getElementById('tablaHistorialExportar'), {sheet:"Tickets"});
+                XLSX.writeFile(wb, "Historial_Garantias.xlsx");
+            };
+            window.exportarPDF = () => {
+                const { jsPDF } = window.jspdf; const doc = new jsPDF();
+                doc.setFontSize(16); doc.text("Historial de Tickets - PARABARBEROS", 14, 15);
+                doc.autoTable({ html: '#tablaHistorialExportar', startY: 20, theme: 'grid', headStyles: { fillColor: [15, 23, 42] } });
+                doc.save('Historial_Garantias.pdf');
+            };
+
+            // MODAL ACCIONES
             window.verDetalle = (id) => {
-                const t = ticketsGlobal.find(x => x.id === id);
-                if(!t) return;
-                currentTicketIdAbierto = id;
-
-                document.getElementById('det_id').textContent = t.id;
-                document.getElementById('det_cedula').textContent = t.cedula;
-                document.getElementById('det_telefono').textContent = t.telefono;
-                document.getElementById('det_nombre').textContent = t.nombre;
-                document.getElementById('det_sede').textContent = t.sede;
-                document.getElementById('det_referencia').textContent = t.referencia;
-                document.getElementById('det_falla').textContent = t.falla;
-
-                const txtDiag = document.getElementById('txtDiagnostico');
-                const btnSaveDiag = document.getElementById('btnSaveDiagDiv');
-                txtDiag.value = t.diagnostico || "";
+                const t = ticketsGlobal.find(x => x.id === id); if(!t) return; currentTicketIdAbierto = id;
+                document.getElementById('det_id').textContent = t.id; document.getElementById('det_cedula').textContent = t.cedula; document.getElementById('det_telefono').textContent = t.telefono; document.getElementById('det_nombre').textContent = t.nombre; document.getElementById('det_sede').textContent = t.sede; document.getElementById('det_referencia').textContent = t.referencia; document.getElementById('det_falla').textContent = t.falla;
                 
-                if(t.estado === '2_envio_st') {
-                    txtDiag.readOnly = false;
-                    txtDiag.classList.add('bg-white', 'border-slate-300', 'text-slate-900');
-                    txtDiag.classList.remove('bg-slate-50', 'text-slate-500', 'border-slate-200');
-                    btnSaveDiag.classList.remove('hidden');
-                } else {
-                    txtDiag.readOnly = true;
-                    txtDiag.classList.add('bg-slate-50', 'text-slate-500', 'border-slate-200');
-                    txtDiag.classList.remove('bg-white', 'border-slate-300', 'text-slate-900');
-                    btnSaveDiag.classList.add('hidden');
-                }
+                const txtD = document.getElementById('txtDiagnostico'), btnD = document.getElementById('btnSaveDiagDiv');
+                txtD.value = t.diagnostico||"";
+                if(t.estado === '2_envio_st'){ txtD.readOnly=false; txtD.className="w-full border rounded-2xl p-5 text-sm font-medium focus:border-slate-950 bg-white"; btnD.classList.remove('hidden'); }
+                else { txtD.readOnly=true; txtD.className="w-full border rounded-2xl p-5 text-sm font-medium bg-slate-50 text-slate-500"; btnD.classList.add('hidden'); }
 
-                const boxBotones = document.getElementById('det_actions_top');
-                boxBotones.innerHTML = '';
-                const crearBtn = (texto, clase, sigEstado) => `<button onclick="cambiarEstado('${t.id}', '${sigEstado}')" class="px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${clase}">${texto}</button>`;
-                const sigAccionClase = "bg-slate-950 text-white hover:bg-black";
+                const bTop = document.getElementById('det_actions_top'); bTop.innerHTML = '';
+                const cB = (txt, cls, st) => `<button onclick="cambiarEstado('${t.id}', '${st}')" class="px-5 py-2 rounded-xl text-sm font-bold shadow-sm ${cls}">${txt}</button>`;
+                if(t.estado==='1_recibir') bTop.innerHTML+=cB('Enviar a S.T.','bg-slate-950 text-white','2_envio_st');
+                if(t.estado==='3_diagnosticado') { bTop.innerHTML+=cB('Reparado','bg-emerald-600 text-white','4_reparado'); bTop.innerHTML+=cB('Pérdida','bg-red-600 text-white','5_sin_reparacion'); }
+                if(t.estado==='5_sin_reparacion') bTop.innerHTML+=cB('Entregar a Asesor','bg-slate-950 text-white','6_entregado_asesor');
+                if(t.estado==='6_entregado_asesor') bTop.innerHTML+=cB('Cerrar Ticket','bg-slate-950 text-white','7_entregado_cliente');
 
-                if(t.estado === '1_recibir') boxBotones.innerHTML += crearBtn('Enviar a S.T.', sigAccionClase, '2_envio_st');
-                if(t.estado === '3_diagnosticado') {
-                    boxBotones.innerHTML += crearBtn('Fue Reparado', 'bg-emerald-600 text-white hover:bg-emerald-700', '4_reparado'); 
-                    boxBotones.innerHTML += crearBtn('Pérdida Total', 'bg-red-600 text-white hover:bg-red-700', '5_sin_reparacion'); 
-                }
-                if(t.estado === '5_sin_reparacion') boxBotones.innerHTML += crearBtn('Entregar a Asesor', sigAccionClase, '6_entregado_asesor');
-                if(t.estado === '6_entregado_asesor') boxBotones.innerHTML += crearBtn('Cerrar Ticket (Entregado)', sigAccionClase, '7_entregado_cliente');
+                const divF = document.getElementById('det_fotos_div'); divF.innerHTML="";
+                if(t.fotos?.length) { t.fotos.forEach(u=>divF.innerHTML+=crearMediaHTML(u)); document.getElementById('det_galeria').classList.remove('hidden'); } else document.getElementById('det_galeria').classList.add('hidden');
 
-                const divFotos = document.getElementById('det_fotos_div');
-                divFotos.innerHTML = "";
-                if(t.fotos && t.fotos.length > 0) {
-                    t.fotos.forEach(url => divFotos.innerHTML += crearMediaHTML(url));
-                    document.getElementById('det_galeria').classList.remove('hidden');
-                } else document.getElementById('det_galeria').classList.add('hidden');
-
-                const formPostRep = document.getElementById('form_post_reparacion');
-                const viewPostRep = document.getElementById('view_post_reparacion');
-                formPostRep.classList.add('hidden'); viewPostRep.classList.add('hidden');
-                document.getElementById('txtObservacionesReparacion').value = ''; 
-                document.getElementById('preview-archivos-reparacion').innerHTML = ''; 
-
-                if (t.estado === '4_reparado') formPostRep.classList.remove('hidden');
-                else if (t.observacionesReparacion) {
-                    document.getElementById('det_obs_reparacion').textContent = t.observacionesReparacion;
-                    const divFotosRep = document.getElementById('det_fotos_reparacion_div');
-                    divFotosRep.innerHTML = "";
-                    if(t.fotosReparacion && t.fotosReparacion.length > 0) {
-                        t.fotosReparacion.forEach(url => divFotosRep.innerHTML += crearMediaHTML(url));
-                        document.getElementById('det_galeria_reparacion').classList.remove('hidden');
-                    } else document.getElementById('det_galeria_reparacion').classList.add('hidden');
-                    viewPostRep.classList.remove('hidden'); 
-                }
+                const fP = document.getElementById('form_post_reparacion'), vP = document.getElementById('view_post_reparacion');
+                fP.classList.add('hidden'); vP.classList.add('hidden'); document.getElementById('txtObservacionesReparacion').value=''; document.getElementById('preview-archivos-reparacion').innerHTML='';
+                if(t.estado==='4_reparado') fP.classList.remove('hidden');
+                else if(t.observacionesReparacion) { document.getElementById('det_obs_reparacion').textContent = t.observacionesReparacion; const dFR = document.getElementById('det_fotos_reparacion_div'); dFR.innerHTML=""; if(t.fotosReparacion?.length) { t.fotosReparacion.forEach(u=>dFR.innerHTML+=crearMediaHTML(u)); document.getElementById('det_galeria_reparacion').classList.remove('hidden'); } else document.getElementById('det_galeria_reparacion').classList.add('hidden'); vP.classList.remove('hidden'); }
+                
                 document.getElementById('modalDetalle').classList.remove('hidden');
             };
 
-            window.cambiarEstado = async (id, nuevoEstado) => { await ticketsRef.doc(id).update({ estado: nuevoEstado }); document.getElementById('modalDetalle').classList.add('hidden'); };
-            window.guardarInformeTecnico = async () => {
-                const texto = document.getElementById('txtDiagnostico').value;
-                if(!texto) return alert("Escribe el informe.");
-                await ticketsRef.doc(currentTicketIdAbierto).update({ diagnostico: texto, estado: '3_diagnosticado' });
-                document.getElementById('modalDetalle').classList.add('hidden'); 
-            };
-            window.guardarPostReparacion = async () => {
-                const btnSave = document.getElementById('btnGuardarPostReparacion');
-                const txtObs = document.getElementById('txtObservacionesReparacion').value;
-                const filesPost = document.getElementById('f_fotos_reparacion').files;
-                if(!txtObs) return alert("Ingresa las observaciones finales.");
-                btnSave.textContent = "Procesando..."; btnSave.disabled = true;
-                try {
-                    let fotosUrls = [];
-                    if (filesPost.length > 0) {
-                        for (let file of filesPost) {
-                            const fileRef = storage.ref(`evidencias_post_reparacion/${currentTicketIdAbierto}/${file.name}`);
-                            await fileRef.put(file); fotosUrls.push(await fileRef.getDownloadURL());
-                        }
-                    }
-                    await ticketsRef.doc(currentTicketIdAbierto).update({ observacionesReparacion: txtObs, fotosReparacion: fotosUrls, estado: '6_entregado_asesor' });
-                    document.getElementById('modalDetalle').classList.add('hidden'); 
-                } catch (error) { alert("Error al guardar."); } 
-                finally { btnSave.textContent = "Guardar Evidencia Final y Entregar a Asesor"; btnSave.disabled = false; }
-            };
+            window.cambiarEstado = async (id, st) => { await ticketsRef.doc(id).update({estado:st}); document.getElementById('modalDetalle').classList.add('hidden'); };
+            window.guardarInformeTecnico = async () => { const t=document.getElementById('txtDiagnostico').value; if(!t)return; await ticketsRef.doc(currentTicketIdAbierto).update({diagnostico:t,estado:'3_diagnosticado'}); document.getElementById('modalDetalle').classList.add('hidden'); };
+            window.guardarPostReparacion = async () => { const txt=document.getElementById('txtObservacionesReparacion').value; if(!txt)return; document.getElementById('btnGuardarPostReparacion').disabled=true; let u=[]; for(let f of document.getElementById('f_fotos_reparacion').files){const r=storage.ref(`ep/${currentTicketIdAbierto}/${f.name}`); await r.put(f); u.push(await r.getDownloadURL());} await ticketsRef.doc(currentTicketIdAbierto).update({observacionesReparacion:txt, fotosReparacion:u, estado:'6_entregado_asesor'}); document.getElementById('modalDetalle').classList.add('hidden'); document.getElementById('btnGuardarPostReparacion').disabled=false; };
 
-
-            // ================= MÓDULO: ANALYTICS =================
+            // ANALYTICS
             function renderizarGraficos() {
-                if(ticketsGlobal.length === 0) return;
-                
+                if(!ticketsGlobal.length) return;
                 document.getElementById('kpiTotalTickets').textContent = ticketsGlobal.length;
-
-                let countsProd = {};
-                ticketsGlobal.forEach(t => {
-                    let refClean = t.referencia.split(' - ')[0]; 
-                    countsProd[refClean] = (countsProd[refClean] || 0) + 1; 
-                });
-                let sortProd = Object.keys(countsProd).sort((a,b) => countsProd[b] - countsProd[a]).slice(0, 5); 
-                
-                if(chartProds) chartProds.destroy();
-                chartProds = new Chart(document.getElementById('chartProductos'), {
-                    type: 'bar',
-                    data: { labels: sortProd, datasets: [{ label: 'Tickets de Garantía', data: sortProd.map(k => countsProd[k]), backgroundColor: '#0f172a', borderRadius: 8 }] },
-                    options: { 
-                        responsive: true, 
-                        plugins: { legend: { display: false } },
-                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } 
-                    }
-                });
-
-                let countsSedes = {};
-                ticketsGlobal.forEach(t => countsSedes[t.sede] = (countsSedes[t.sede] || 0) + 1);
-                let sortSedes = Object.keys(countsSedes).sort((a,b) => countsSedes[b] - countsSedes[a]).slice(0, 5); 
-                
-                if(chartSedes) chartSedes.destroy();
-                chartSedes = new Chart(document.getElementById('chartSedes'), {
-                    type: 'doughnut',
-                    data: { labels: sortSedes, datasets: [{ data: sortSedes.map(k => countsSedes[k]), backgroundColor: ['#0f172a', '#334155', '#475569', '#94a3b8', '#cbd5e1'], borderWidth: 0 }] },
-                    options: { responsive: true, cutout: '70%', plugins: { legend: { position: 'right' } } }
-                });
-
-                let countsEst = {};
-                ticketsGlobal.forEach(t => countsEst[t.estado] = (countsEst[t.estado] || 0) + 1);
-                
-                if(chartEst) chartEst.destroy();
-                chartEst = new Chart(document.getElementById('chartEstados'), {
-                    type: 'polarArea',
-                    data: { 
-                        labels: ESTADOS.map(e => e.nombre), 
-                        datasets: [{ data: ESTADOS.map(e => countsEst[e.id] || 0), backgroundColor: ESTADOS.map(e => e.colorChart), borderWidth: 0 }] 
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
-                });
+                let cP={}; ticketsGlobal.forEach(t => { let r=t.referencia.split(' - ')[0]; cP[r]=(cP[r]||0)+1; }); let sP=Object.keys(cP).sort((a,b)=>cP[b]-cP[a]).slice(0,5);
+                if(chartProds) chartProds.destroy(); chartProds=new Chart(document.getElementById('chartProductos'),{type:'bar',data:{labels:sP,datasets:[{data:sP.map(k=>cP[k]),backgroundColor:'#0f172a',borderRadius:8}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}});
+                let cS={}; ticketsGlobal.forEach(t => cS[t.sede]=(cS[t.sede]||0)+1); let sS=Object.keys(cS).sort((a,b)=>cS[b]-cS[a]).slice(0,5);
+                if(chartSedes) chartSedes.destroy(); chartSedes=new Chart(document.getElementById('chartSedes'),{type:'doughnut',data:{labels:sS,datasets:[{data:sS.map(k=>cS[k]),backgroundColor:['#0f172a','#334155','#475569','#94a3b8','#cbd5e1'],borderWidth:0}]},options:{cutout:'70%',plugins:{legend:{position:'right'}}}});
+                let cE={}; ticketsGlobal.forEach(t => cE[t.estado]=(cE[t.estado]||0)+1);
+                if(chartEst) chartEst.destroy(); chartEst=new Chart(document.getElementById('chartEstados'),{type:'polarArea',data:{labels:ESTADOS.map(e=>e.nombre),datasets:[{data:ESTADOS.map(e=>cE[e.id]||0),backgroundColor:ESTADOS.map(e=>e.colorChart),borderWidth:0}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'right'}}}});
             }
-
         });
     </script>
 </body>
