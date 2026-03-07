@@ -9,7 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         ::-webkit-scrollbar { height: 8px; width: 8px; }
@@ -17,95 +17,178 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .dashed-box { background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%23CBD5E1' stroke-width='2' stroke-dasharray='8%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); border-radius: 12px; }
+        .nav-btn.active { background-color: #1e293b; color: white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden text-slate-900 bg-[#f8fafc]">
 
     <aside class="w-20 bg-[#0f172a] flex flex-col items-center py-6 border-r border-slate-800 shrink-0 z-20 shadow-2xl">
-        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-10 shadow-lg shadow-black/30 border border-slate-800">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-10 shadow-lg shadow-black/30 border border-slate-800 shrink-0">
             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
         </div>
-        <nav class="flex flex-col gap-6 text-slate-400 w-full px-4">
-            <button class="p-3 bg-slate-800 text-white rounded-xl w-full flex justify-center shadow-md"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></button>
-            <button onclick="alert('Módulo de Clientes: En construcción')" class="p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></button>
-            <button onclick="alert('Módulo de Reportes: En construcción')" class="p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg></button>
+        <nav class="flex flex-col gap-6 text-slate-400 w-full px-4" id="mainNav">
+            <button onclick="switchView('kanban')" id="btnNav_kanban" class="nav-btn active p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Tablero de Gestión"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></button>
+            <button onclick="switchView('analytics')" id="btnNav_analytics" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Métricas y Gráficos"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg></button>
+            <button onclick="switchView('directorio')" id="btnNav_directorio" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Directorio Sedes/Asesores"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></button>
+            <button onclick="switchView('inventario')" id="btnNav_inventario" class="nav-btn p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Gestión de Inventario"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg></button>
         </nav>
-        <button id="logoutBtn" class="mt-auto p-3 text-slate-400 hover:text-red-400 transition-colors" title="Cerrar Sesión"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></button>
+        <button id="logoutBtn" class="mt-auto p-3 text-slate-400 hover:text-slate-100 transition-colors" title="Cerrar Sesión"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></button>
     </aside>
 
-    <main class="flex-1 flex flex-col min-w-0 relative z-10">
-        <header class="h-[76px] bg-white px-8 flex items-center justify-between border-b border-slate-200 shrink-0 shadow-sm">
+    <div class="flex-1 flex flex-col min-w-0 relative z-10 overflow-hidden">
+        <header class="h-[76px] bg-white px-8 flex items-center justify-between border-b border-slate-200 shrink-0 shadow-sm z-20">
             <div class="flex items-center gap-10">
-                <h1 class="text-[16px] font-black tracking-widest text-slate-900 uppercase">Parabarberos S.A.S.</h1>
-                <div class="relative hidden md:block w-96">
+                <h1 class="text-[16px] font-black tracking-widest text-slate-900 uppercase shrink-0">Parabarberos S.A.S.</h1>
+                <div class="relative hidden md:block w-96 shrink" id="headerSearchBox">
                     <svg class="w-5 h-5 text-slate-400 absolute left-4 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <input type="text" id="searchInput" placeholder="Buscar por TICKET, Cliente, Cédula o Referencia..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-slate-900 focus:bg-white transition-colors">
+                    <input type="text" id="searchInput" placeholder="Buscar por TICKET, Cliente o Referencia..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-slate-900 focus:bg-white transition-colors">
                 </div>
             </div>
-            <div class="flex items-center gap-5 text-slate-400">
+            <div class="flex items-center gap-5 text-slate-400 shrink-0">
                 <div class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-700 ml-2 shadow-sm border border-slate-200" id="userInitial">A</div>
             </div>
         </header>
 
-        <div class="px-10 py-8 flex items-center justify-between shrink-0">
-            <h2 class="text-[32px] font-black text-slate-900 tracking-tight">Dashboard</h2>
-            <div class="flex gap-4">
-                <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-slate-100 shadow-sm cursor-pointer">
-                    <option value="interno">ST PARABARBEROS</option>
-                    <option value="proveedor">ST PROVEEDOR</option>
-                </select>
-                <button onclick="document.getElementById('modalNuevoTicket').classList.remove('hidden')" class="bg-[#0f172a] hover:bg-[#1e293b] transition-colors text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-slate-900/20 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    Nuevo Ticket
-                </button>
-            </div>
-        </div>
+        <div class="flex-1 relative overflow-y-auto bg-[#f8fafc]" id="app-container">
 
-        <div class="flex-1 overflow-x-auto overflow-y-hidden px-10 pb-8">
-            <div class="flex gap-6 h-full items-start min-w-max pb-4" id="kanbanBoard"></div>
+            <div id="view_kanban" class="view-section h-full flex flex-col">
+                <div class="px-10 py-8 flex items-center justify-between shrink-0">
+                    <h2 class="text-[32px] font-black text-slate-900 tracking-tight">Tablero de Gestión</h2>
+                    <div class="flex gap-4">
+                        <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-slate-100 shadow-sm cursor-pointer">
+                            <option value="interno">ST PARABARBEROS</option>
+                            <option value="proveedor">ST PROVEEDOR</option>
+                        </select>
+                        <button onclick="document.getElementById('modalNuevoTicket').classList.remove('hidden')" class="bg-slate-950 hover:bg-black transition-colors text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-slate-900/10 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>Nuevo Ticket
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-x-auto overflow-y-hidden px-10 pb-8">
+                    <div class="flex gap-6 h-full items-start min-w-max pb-4" id="kanbanBoard"></div>
+                </div>
+            </div>
+
+            <div id="view_analytics" class="view-section hidden p-10 min-h-full">
+                <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Métricas y Rendimiento</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm">
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Equipos con Más Garantías</h3>
+                        <canvas id="chartProductos"></canvas>
+                    </div>
+                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm">
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Estado General de Casos</h3>
+                        <div class="h-64 flex justify-center"><canvas id="chartEstados"></canvas></div>
+                    </div>
+                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm">
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Orígenes de Garantías (Sedes/Asesores)</h3>
+                        <canvas id="chartSedes"></canvas>
+                    </div>
+                    <div class="bg-slate-950 p-8 rounded-[24px] shadow-lg flex flex-col justify-center text-center">
+                        <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Total Histórico Procesado</h3>
+                        <p class="text-6xl font-black text-white" id="kpiTotalTickets">0</p>
+                        <p class="text-slate-400 mt-2 font-medium">Tickets de Garantía</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view_directorio" class="view-section hidden p-10 min-h-full">
+                <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Directorio Operativo</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm h-fit">
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Agregar Origen (Sede o Asesor)</h3>
+                        <form id="formSede" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Nombre del Punto o Asesor</label>
+                                <input type="text" id="n_sede" required placeholder="Ej: Punto de Venta Sur o Carlos Perez" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors">
+                            </div>
+                            <button type="submit" id="btnCrearSede" class="w-full py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl shadow-md transition-colors">Guardar en Directorio</button>
+                        </form>
+                        <hr class="my-8 border-slate-100">
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4">Lista Actual en Sistema</h3>
+                        <ul id="listaSedes" class="space-y-2 max-h-60 overflow-y-auto pr-2">
+                            </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view_inventario" class="view-section hidden p-10 min-h-full">
+                <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Catálogo de Productos</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm md:col-span-1 h-fit">
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4">Actualizar Catálogo (JSON)</h3>
+                        <p class="text-xs text-slate-500 mb-6 leading-relaxed">Sube un archivo .json con la lista de tus productos. Formato requerido: <br><code class="bg-slate-100 p-1 rounded font-bold text-slate-700">[{"idUnico": "VGR-01", "nombre": "Patillera"}]</code></p>
+                        <div class="dashed-box bg-slate-50 hover:bg-slate-100 transition-colors relative h-24 flex flex-col items-center justify-center cursor-pointer mb-4">
+                            <span class="text-sm text-slate-500 font-semibold pointer-events-none">Arrastra archivo JSON aquí</span>
+                            <input type="file" id="f_json_inventario" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        </div>
+                        <button onclick="procesarJSON()" id="btnProcesarJson" class="w-full py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl shadow-md transition-colors hidden">Procesar y Subir Inventario</button>
+                        <div id="json_status" class="mt-3 text-xs font-bold text-slate-600 text-center"></div>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm md:col-span-2">
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Productos Registrados (<span id="countProductos">0</span>)</h3>
+                        <div class="overflow-y-auto max-h-[500px]">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-xs font-black text-slate-400 uppercase tracking-widest">
+                                        <th class="pb-3 pl-2">ID Único</th>
+                                        <th class="pb-3">Nombre del Producto</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaProductos" class="text-sm font-semibold text-slate-800">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </main>
+    </div>
+
+    <datalist id="listaProductosAuto"></datalist>
 
     <div id="modalNuevoTicket" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all">
         <div class="bg-white rounded-[24px] shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-100">
-            <div class="px-10 pt-8 pb-4 relative border-b border-slate-100">
+            <div class="px-10 pt-8 pb-4 relative border-b border-slate-100 shrink-0">
                 <button onclick="document.getElementById('modalNuevoTicket').classList.add('hidden')" class="absolute top-8 right-8 text-slate-400 hover:text-red-500 transition-colors"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 <h2 class="text-2xl font-black text-slate-900">Crear Ticket de Garantía</h2>
                 <p class="text-sm text-slate-500 mt-1 font-medium">Ingresa los datos del equipo a recibir.</p>
             </div>
             
             <div class="px-10 py-6 overflow-y-auto flex-1 bg-slate-50/50">
-                <form id="formGarantia" class="space-y-8">
+                <form id="formGarantia" class="space-y-8 pb-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                             <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Datos del Cliente</h3>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Sede / Asesor</label>
-                                <select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 bg-white focus:border-slate-900 focus:outline-none cursor-pointer">
-                                    <option value="Punto de Venta Tuluá">Punto de Venta Tuluá</option>
-                                    <option value="Punto de Venta Cali Centro">Punto de Venta Cali Centro</option>
-                                    <option value="Punto de Venta Medellín">Punto de Venta Medellín</option>
-                                    <option value="Asesor Virtual">Asesor Virtual</option>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Sede / Asesor</label>
+                                <select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 bg-white focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
+                                    <option value="" disabled selected>Selecciona una opción...</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                             <h3 class="text-xs font-black text-slate-950 uppercase tracking-widest border-b border-slate-100 pb-2">Detalle del Producto</h3>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Referencia Producto</label><input type="text" id="t_referencia" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Falla Reportada</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none"></textarea></div>
-                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Taller Asignado</label>
-                                <select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-800 bg-slate-50 focus:border-slate-900 focus:outline-none cursor-pointer">
+                            <div>
+                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Referencia (Busca por ID o Nombre)</label>
+                                <input type="text" id="t_referencia" list="listaProductosAuto" autocomplete="off" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors" placeholder="Empieza a escribir...">
+                            </div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Falla Reportada</label><textarea id="t_falla" required rows="2" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></textarea></div>
+                            <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Taller Asignado</label>
+                                <select id="t_taller" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-800 bg-slate-50 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
                                     <option value="interno">Servicio Técnico PARABARBEROS</option>
                                     <option value="proveedor">Servicio Técnico del Proveedor</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase">Fotos/Videos (Opcional)</label>
+                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Fotos/Videos (Opcional)</label>
                                 <div class="dashed-box bg-slate-50 hover:bg-slate-100 transition-colors relative h-16 flex flex-col items-center justify-center cursor-pointer">
-                                    <span class="text-sm text-slate-500 font-semibold pointer-events-none">Haz clic o arrastra archivos aquí</span>
+                                    <span class="text-sm text-slate-500 font-semibold pointer-events-none">Haz clic o arrastra fotos aquí</span>
                                     <input type="file" id="t_fotos" multiple accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                                 </div>
                                 <div id="preview-archivos-nuevo" class="mt-3 flex flex-col gap-2"></div>
@@ -113,7 +196,7 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-end gap-4 pt-4">
+                    <div class="flex justify-end gap-4 pt-4 shrink-0">
                         <button type="button" onclick="document.getElementById('modalNuevoTicket').classList.add('hidden')" class="px-6 py-3 text-sm font-bold text-slate-600 hover:bg-slate-200 rounded-xl transition-colors">Cancelar</button>
                         <button type="submit" id="btnSubmit" class="px-8 py-3 text-sm font-bold text-white bg-slate-950 hover:bg-black rounded-xl transition-colors shadow-lg shadow-slate-900/10">Generar Ticket</button>
                     </div>
@@ -125,7 +208,6 @@
 
     <div id="modalDetalle" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[60] flex items-center justify-center p-4 transition-all">
         <div class="bg-white rounded-[24px] shadow-2xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden relative border border-slate-100">
-            
             <div class="px-10 py-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0 shadow-sm">
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Detalle de Gestión</p>
@@ -139,7 +221,6 @@
             
             <div class="flex-1 overflow-y-auto p-10 md:p-14 bg-white">
                 <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Información Completa del Caso</h3>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                     <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
                         <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Nombre del Cliente</span><div class="text-base font-bold text-slate-950 break-words" id="det_nombre">-</div></div>
@@ -156,12 +237,12 @@
                     </div>
                 </div>
 
-                <div id="det_galeria" class="hidden mb-12">
-                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-5">Evidencias Fotográficas al Recibir</h3>
+                <div id="det_galeria" class="hidden mb-12 border border-slate-200 p-7 rounded-2xl bg-slate-50/50 shadow-sm">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6 border-b border-slate-200 pb-3">Evidencias de Recepción</h3>
                     <div class="flex flex-wrap gap-5" id="det_fotos_div"></div>
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-12">
                     <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-5">Dictamen de Servicio Técnico</h3>
                     <textarea id="txtDiagnostico" rows="4" class="w-full border border-slate-300 rounded-2xl p-6 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm transition-colors leading-relaxed" placeholder="Escribe aquí el informe de servicio técnico detallado..."></textarea>
                     <div id="btnSaveDiagDiv" class="hidden mt-5 flex justify-end">
@@ -169,38 +250,32 @@
                     </div>
                 </div>
 
-                <div id="form_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10">
-                    <h3 class="text-sm font-black text-emerald-700 uppercase tracking-widest mb-6 border-l-4 border-emerald-500 pl-3">Registro Obligatorio de Entrega</h3>
-                    <div class="bg-emerald-50/50 p-7 rounded-2xl border border-emerald-100 space-y-6">
+                <div id="form_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10 pb-6">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Registro Obligatorio de Entrega (Técnico)</h3>
+                    <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div>
-                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase">Observaciones: ¿Cómo quedó la máquina?</label>
-                            <textarea id="txtObservacionesReparacion" rows="3" class="w-full border border-slate-300 rounded-xl p-5 text-sm font-medium text-slate-900 focus:outline-none focus:border-emerald-500 shadow-sm leading-relaxed" placeholder="Ej: Máquina calibrada, lubricada y funcionando sin ruidos extraños..."></textarea>
+                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase tracking-wide">Observaciones Finales: ¿Cómo quedó la máquina?</label>
+                            <textarea id="txtObservacionesReparacion" rows="3" class="w-full border border-slate-300 rounded-xl p-5 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm leading-relaxed" placeholder="Ej: Máquina calibrada y funcionando sin ruidos..."></textarea>
                         </div>
                         <div>
-                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase">Evidencias Finales (Fotos/Videos)</label>
-                            <div class="dashed-box bg-white hover:bg-slate-50 transition-colors relative h-16 flex flex-col items-center justify-center cursor-pointer">
+                            <label class="block text-xs font-black text-slate-600 mb-2 uppercase tracking-wide">Evidencias Finales de Funcionamiento</label>
+                            <div class="dashed-box bg-white hover:bg-slate-100 transition-colors relative h-16 flex flex-col items-center justify-center cursor-pointer">
                                 <span class="text-sm text-slate-500 font-semibold pointer-events-none">Haz clic o arrastra fotos/videos finales aquí</span>
                                 <input type="file" id="f_fotos_reparacion" multiple accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             </div>
                             <div id="preview-archivos-reparacion" class="mt-3 flex flex-col gap-2"></div>
                         </div>
                         <div class="flex justify-end pt-2">
-                            <button onclick="guardarPostReparacion()" id="btnGuardarPostReparacion" class="bg-slate-950 hover:bg-black text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg transition-colors">Guardar Evidencia y Entregar a Asesor</button>
+                            <button onclick="guardarPostReparacion()" id="btnGuardarPostReparacion" class="bg-slate-950 hover:bg-black text-white text-sm font-bold px-8 py-3 rounded-xl shadow-lg transition-colors">Guardar Evidencia Final y Entregar</button>
                         </div>
                     </div>
                 </div>
 
-                <div id="view_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10">
-                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Evidencias Post-Reparación</h3>
-                    <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
-                        <div class="flex flex-col">
-                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Observaciones Finales</span>
-                            <div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed" id="det_obs_reparacion">-</div>
-                        </div>
-                        <div id="det_galeria_reparacion" class="hidden mt-4">
-                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-3 block">Archivos Adjuntos</span>
-                            <div class="flex flex-wrap gap-5" id="det_fotos_reparacion_div"></div>
-                        </div>
+                <div id="view_post_reparacion" class="hidden mt-12 border-t border-slate-200 pt-10 pb-6">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Evidencias Post-Reparación y Entrega</h3>
+                    <div class="border border-slate-200 rounded-2xl p-8 bg-slate-50/50 space-y-6 shadow-sm">
+                        <div class="flex flex-col"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Observaciones Finales del Técnico</span><div class="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap leading-relaxed bg-white p-5 rounded-xl border border-slate-100 shadow-inner" id="det_obs_reparacion">-</div></div>
+                        <div id="det_galeria_reparacion" class="hidden mt-6 border-t border-slate-100 pt-6"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-4 block">Archivos Adjuntos Finales</span><div class="flex flex-wrap gap-5" id="det_fotos_reparacion_div"></div></div>
                     </div>
                 </div>
 
@@ -210,6 +285,9 @@
 
 
     <script>
+        // CONFIGURACIÓN DE FIREBASE Y NAVEGACIÓN
+        let chartProds, chartEst, chartSedes; // Variables globales para gráficos
+
         document.addEventListener('DOMContentLoaded', () => {
             const firebaseConfig = {
                 apiKey: "AIzaSyD3-LS_bVWfNFgf2DL0ol8PO7P_EW8IBMc",
@@ -226,19 +304,21 @@
             const db = firebase.firestore();
             const storage = firebase.storage();
             const ticketsRef = db.collection('tickets');
+            const sedesRef = db.collection('sedes');
+            const productosRef = db.collection('productos');
             const counterRef = db.collection('metadata').doc('ticketCounter');
 
             let ticketsGlobal = [];
             let currentTicketIdAbierto = null;
 
             const ESTADOS = [
-                { id: '1_recibir', nombre: 'RECEPCIÓN' },
-                { id: '2_envio_st', nombre: 'ENVIADOS A S.T.' },
-                { id: '3_diagnosticado', nombre: 'DIAGNOSTICADOS' },
-                { id: '4_reparado', nombre: 'REPARADOS' },
-                { id: '5_sin_reparacion', nombre: 'PÉRDIDA / SIN ARREGLO' },
-                { id: '6_entregado_asesor', nombre: 'ENTREGA ASESOR' },
-                { id: '7_entregado_cliente', nombre: 'ENTREGADOS' }
+                { id: '1_recibir', nombre: 'RECEPCIÓN', colorChart: '#94a3b8' },
+                { id: '2_envio_st', nombre: 'ENVIADOS S.T.', colorChart: '#cbd5e1' },
+                { id: '3_diagnosticado', nombre: 'DIAGNOSTICADOS', colorChart: '#e2e8f0' },
+                { id: '4_reparado', nombre: 'REPARADOS', colorChart: '#10b981' },
+                { id: '5_sin_reparacion', nombre: 'PÉRDIDA', colorChart: '#ef4444' },
+                { id: '6_entregado_asesor', nombre: 'ENTREGA ASESOR', colorChart: '#334155' },
+                { id: '7_entregado_cliente', nombre: 'ENTREGADOS', colorChart: '#0f172a' }
             ];
 
             auth.onAuthStateChanged(user => {
@@ -247,6 +327,131 @@
             });
             document.getElementById('logoutBtn').onclick = () => auth.signOut();
 
+            // ================= NAVEGACIÓN (SINGLE PAGE APP) =================
+            window.switchView = (viewName) => {
+                // Ocultar todas las vistas
+                document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+                // Quitar estilos activos del menú
+                document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+                
+                // Mostrar vista seleccionada y activar botón
+                document.getElementById('view_' + viewName).classList.remove('hidden');
+                document.getElementById('btnNav_' + viewName).classList.add('active');
+
+                // Si se abre analytics, redibujar gráficos para evitar bugs de tamaño
+                if(viewName === 'analytics') renderizarGraficos();
+            };
+
+
+            // ================= MÓDULO: DIRECTORIO (SEDES Y ASESORES) =================
+            document.getElementById('formSede').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nombre = document.getElementById('n_sede').value.trim();
+                const btn = document.getElementById('btnCrearSede');
+                if(!nombre) return;
+                
+                btn.textContent = "Guardando..."; btn.disabled = true;
+                try {
+                    await sedesRef.add({ nombre: nombre, creadoEn: firebase.firestore.FieldValue.serverTimestamp() });
+                    document.getElementById('formSede').reset();
+                } catch(error) { alert("Error al guardar."); }
+                btn.textContent = "Guardar en Directorio"; btn.disabled = false;
+            });
+
+            // Escuchar sedes para lista visual y dropdown de Nuevo Ticket
+            sedesRef.orderBy('nombre').onSnapshot(snapshot => {
+                const listaUl = document.getElementById('listaSedes');
+                const selectSede = document.getElementById('t_sede');
+                listaUl.innerHTML = '';
+                selectSede.innerHTML = '<option value="" disabled selected>Selecciona una opción...</option>';
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    listaUl.innerHTML += `<li class="text-sm font-semibold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center">${data.nombre} <button onclick="eliminarSede('${doc.id}')" class="text-red-400 hover:text-red-600">✕</button></li>`;
+                    selectSede.innerHTML += `<option value="${data.nombre}">${data.nombre}</option>`;
+                });
+            });
+
+            window.eliminarSede = async (id) => {
+                if(confirm("¿Seguro que deseas eliminar este registro del directorio?")) {
+                    await sedesRef.doc(id).delete();
+                }
+            };
+
+
+            // ================= MÓDULO: INVENTARIO JSON =================
+            let jsonCargado = null;
+            document.getElementById('f_json_inventario').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        jsonCargado = JSON.parse(e.target.result);
+                        document.getElementById('json_status').innerHTML = `✅ Archivo leído. Contiene <span class="text-indigo-600">${jsonCargado.length}</span> productos.`;
+                        document.getElementById('btnProcesarJson').classList.remove('hidden');
+                    } catch(err) {
+                        document.getElementById('json_status').innerHTML = "❌ Error: El archivo no es un JSON válido.";
+                        document.getElementById('btnProcesarJson').classList.add('hidden');
+                    }
+                };
+                reader.readAsText(file);
+            });
+
+            window.procesarJSON = async () => {
+                if(!jsonCargado || !Array.isArray(jsonCargado)) return;
+                const btn = document.getElementById('btnProcesarJson');
+                btn.textContent = "Procesando..."; btn.disabled = true;
+
+                try {
+                    // Firebase Batch (Lote de máximo 500)
+                    let batch = db.batch();
+                    let count = 0;
+                    for (let item of jsonCargado) {
+                        const idUnico = item.idUnico || item.id || item.referencia;
+                        const nombre = item.nombre || item.descripcion;
+                        if(idUnico && nombre) {
+                            let docRef = productosRef.doc(String(idUnico));
+                            batch.set(docRef, { idUnico: String(idUnico), nombre: nombre });
+                            count++;
+                            if (count % 400 === 0) { await batch.commit(); batch = db.batch(); } // Prevenir límite
+                        }
+                    }
+                    if(count % 400 !== 0) await batch.commit();
+                    
+                    alert("Inventario subido correctamente.");
+                    document.getElementById('btnProcesarJson').classList.add('hidden');
+                    document.getElementById('json_status').innerHTML = "";
+                } catch(err) {
+                    alert("Error subiendo a base de datos.");
+                    console.log(err);
+                }
+                btn.textContent = "Procesar y Subir Inventario"; btn.disabled = false;
+            };
+
+            // Escuchar inventario para Tabla y Autocompletado (Datalist)
+            productosRef.onSnapshot(snapshot => {
+                const tbody = document.getElementById('tablaProductos');
+                const datalist = document.getElementById('listaProductosAuto');
+                document.getElementById('countProductos').textContent = snapshot.size;
+                
+                tbody.innerHTML = '';
+                datalist.innerHTML = '';
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const textoMostrar = `${data.idUnico} - ${data.nombre}`;
+                    
+                    // Llenar tabla
+                    tbody.innerHTML += `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors"><td class="py-3 pl-2 font-bold">${data.idUnico}</td><td class="py-3 text-slate-600">${data.nombre}</td></tr>`;
+                    
+                    // Llenar datalist para "Nuevo Ticket"
+                    datalist.innerHTML += `<option value="${textoMostrar}">`;
+                });
+            });
+
+
+            // ================= MÓDULO: KANBAN BOARD (Flujo Principal) =================
             function dibujarColumnas() {
                 const board = document.getElementById('kanbanBoard');
                 board.innerHTML = ESTADOS.map(col => `
@@ -258,31 +463,26 @@
             }
             dibujarColumnas();
 
-            // PREVISUALIZACIÓN DE ARCHIVOS SELECCIONADOS
+            // Previsualización multimedia
             const handleFilePreview = (inputId, containerId) => {
                 document.getElementById(inputId).addEventListener('change', function() {
                     const container = document.getElementById(containerId);
-                    container.innerHTML = '';
-                    Array.from(this.files).forEach(file => {
-                        let icon = file.type.startsWith('video') ? '🎥' : '📷';
-                        container.innerHTML += `<div class="text-[11px] bg-slate-100 text-slate-700 px-3 py-2 rounded-lg font-bold truncate border border-slate-200">${icon} ${file.name}</div>`;
-                    });
+                    container.innerHTML = ''; 
+                    if (this.files && this.files.length > 0) {
+                        Array.from(this.files).forEach(file => {
+                            const isVideo = file.type.startsWith('video/');
+                            container.innerHTML += `<div class="text-[12px] bg-slate-900 text-slate-100 px-4 py-2.5 rounded-xl font-semibold flex items-center gap-3 border border-slate-700"><span class="text-lg">${isVideo ? '🎥' : '📷'}</span><div class="flex flex-col truncate"><span class="truncate font-bold">${file.name}</span><span class="text-[10px] text-slate-400 tracking-wide uppercase">${isVideo?'Video':'Imagen'}</span></div></div>`;
+                        });
+                    }
                 });
             };
             handleFilePreview('t_fotos', 'preview-archivos-nuevo');
             handleFilePreview('f_fotos_reparacion', 'preview-archivos-reparacion');
 
-            // CREADOR DE TARJETAS MULTIMEDIA (Fotos vs Videos)
             const crearMediaHTML = (url) => {
-                const isVideo = url.toLowerCase().includes('.mp4') || url.toLowerCase().includes('.mov') || url.toLowerCase().includes('.webm');
-                if (isVideo) {
-                    return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-900 border border-slate-200 overflow-hidden relative hover:opacity-80 transition-opacity shadow-sm flex items-center justify-center">
-                                <span class="absolute text-4xl">▶️</span>
-                                <video src="${url}" class="w-full h-full object-cover opacity-50"></video>
-                            </a>`;
-                } else {
-                    return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-100 border border-slate-200 bg-cover bg-center hover:opacity-80 transition-opacity shadow-sm" style="background-image: url('${url}')"></a>`;
-                }
+                const isVideo = url.toLowerCase().includes('.mp4') || url.toLowerCase().includes('.mov') || url.toLowerCase().includes('.webm') || url.includes('video%2F');
+                if (isVideo) return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-950 border border-slate-700 overflow-hidden relative hover:opacity-80 transition-opacity shadow-md flex items-center justify-center group"><span class="absolute text-4xl z-10 group-hover:scale-110 transition-transform">▶️</span><video src="${url}" class="w-full h-full object-cover opacity-60" muted autoplay loop></video></a>`;
+                else return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-100 border border-slate-200 bg-cover bg-center hover:opacity-80 transition-opacity shadow-sm flex items-center justify-center" style="background-image: url('${url}')"></a>`;
             };
 
             async function getNextTicketId() {
@@ -294,17 +494,14 @@
                 });
             }
 
-            // CREAR TICKET NUEVO
             document.getElementById('formGarantia').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const btnSubmit = document.getElementById('btnSubmit');
                 btnSubmit.textContent = "Procesando..."; btnSubmit.disabled = true;
-
                 try {
                     const ticketId = await getNextTicketId();
                     const files = document.getElementById('t_fotos').files;
                     let fotosUrls = [];
-
                     if (files.length > 0) {
                         for (let file of files) {
                             const fileRef = storage.ref(`evidencias/${ticketId}/${file.name}`);
@@ -312,28 +509,22 @@
                             fotosUrls.push(await fileRef.getDownloadURL());
                         }
                     }
-
                     await ticketsRef.doc(ticketId).set({
                         id: ticketId, estado: '1_recibir', taller: document.getElementById('t_taller').value,
                         cedula: document.getElementById('t_cedula').value, telefono: document.getElementById('t_telefono').value,
                         nombre: document.getElementById('t_nombre').value, sede: document.getElementById('t_sede').value,
                         referencia: document.getElementById('t_referencia').value, falla: document.getElementById('t_falla').value,
                         diagnostico: "", fotos: fotosUrls,
-                        observacionesReparacion: "", fotosReparacion: [], // Nuevos campos preparados
+                        observacionesReparacion: "", fotosReparacion: [], 
                         creadoEn: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    
                     document.getElementById('formGarantia').reset();
-                    document.getElementById('preview-archivos-nuevo').innerHTML = ''; // Limpiar lista visual
+                    document.getElementById('preview-archivos-nuevo').innerHTML = '';
                     document.getElementById('modalNuevoTicket').classList.add('hidden');
-                } catch (error) {
-                    alert("Ocurrió un error. Revisa que Firestore esté habilitado en Modo de Prueba.");
-                } finally {
-                    btnSubmit.textContent = "Generar Ticket"; btnSubmit.disabled = false;
-                }
+                } catch (error) { alert("Error al guardar en Firestore."); }
+                finally { btnSubmit.textContent = "Generar Ticket"; btnSubmit.disabled = false; }
             });
 
-            // TABLERO
             document.getElementById('filtroTaller').addEventListener('change', renderizarTarjetas);
             document.getElementById('searchInput').addEventListener('input', renderizarTarjetas);
 
@@ -341,6 +532,7 @@
                 ticketsGlobal = [];
                 snapshot.forEach(doc => ticketsGlobal.push(doc.data()));
                 renderizarTarjetas();
+                if(!document.getElementById('view_analytics').classList.contains('hidden')) renderizarGraficos(); // Refrescar gráficos si está visible
             });
 
             function renderizarTarjetas() {
@@ -351,13 +543,15 @@
                 ticketsGlobal.forEach(t => {
                     const coincideBusqueda = t.id.toLowerCase().includes(searchVal) || t.referencia.toLowerCase().includes(searchVal) || t.nombre.toLowerCase().includes(searchVal) || t.cedula.includes(searchVal);
                     if (t.taller === tallerSeleccionado && coincideBusqueda && document.getElementById(`col-${t.estado}`)) {
-                        const diagTexto = t.diagnostico ? t.diagnostico : 'Esperando revisión técnica detallada...';
+                        const diagTexto = t.diagnostico ? t.diagnostico : 'Esperando revisión...';
+                        const mediaCountText = (t.fotos && t.fotos.some(url => url.toLowerCase().includes('.mp4'))) ? `🎥 ${t.fotos.length}` : `📸 ${t.fotos?t.fotos.length:0}`;
                         document.getElementById(`col-${t.estado}`).innerHTML += `
-                            <div onclick="verDetalle('${t.id}')" class="bg-white p-7 rounded-[22px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-xl hover:border-slate-900 transition-all relative group">
+                            <div onclick="verDetalle('${t.id}')" class="bg-white p-7 rounded-[22px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-xl hover:border-slate-950 transition-all relative group">
                                 <h4 class="font-black text-slate-950 text-xl mb-4 tracking-tight">${t.id}</h4>
-                                <div class="space-y-2.5 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5">
+                                <div class="space-y-2.5 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5 relative">
                                     <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Ref:</span> <span class="font-extrabold text-slate-900 text-right break-words w-4/5 leading-tight">${t.referencia}</span></p>
                                     <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Sede:</span> <span class="font-semibold text-slate-800 text-right break-words w-4/5">${t.sede}</span></p>
+                                    ${t.fotos && t.fotos.length > 0 ? `<div class="absolute -bottom-3 right-0 text-[10px] font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200 shadow-inner">${mediaCountText}</div>` : ''}
                                 </div>
                                 <p class="text-[12px] text-slate-500 font-medium italic line-clamp-2 leading-relaxed">${diagTexto}</p>
                             </div>`;
@@ -365,13 +559,11 @@
                 });
             }
 
-            // VISTA DETALLE Y GESTIÓN
             window.verDetalle = (id) => {
                 const t = ticketsGlobal.find(x => x.id === id);
                 if(!t) return;
                 currentTicketIdAbierto = id;
 
-                // 1. Datos fijos
                 document.getElementById('det_id').textContent = t.id;
                 document.getElementById('det_cedula').textContent = t.cedula;
                 document.getElementById('det_telefono').textContent = t.telefono;
@@ -380,7 +572,6 @@
                 document.getElementById('det_referencia').textContent = t.referencia;
                 document.getElementById('det_falla').textContent = t.falla;
 
-                // 2. Diagnóstico Técnico
                 const txtDiag = document.getElementById('txtDiagnostico');
                 const btnSaveDiag = document.getElementById('btnSaveDiagDiv');
                 txtDiag.value = t.diagnostico || "";
@@ -397,22 +588,19 @@
                     btnSaveDiag.classList.add('hidden');
                 }
 
-                // 3. Botones Superiores Dinámicos
                 const boxBotones = document.getElementById('det_actions_top');
                 boxBotones.innerHTML = '';
                 const crearBtn = (texto, clase, sigEstado) => `<button onclick="cambiarEstado('${t.id}', '${sigEstado}')" class="px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all ${clase}">${texto}</button>`;
-                const btnDark = "bg-slate-950 text-white hover:bg-black";
+                const sigAccionClase = "bg-slate-950 text-white hover:bg-black";
 
-                if(t.estado === '1_recibir') boxBotones.innerHTML += crearBtn('Enviar a S.T.', btnDark, '2_envio_st');
+                if(t.estado === '1_recibir') boxBotones.innerHTML += crearBtn('Enviar a S.T.', sigAccionClase, '2_envio_st');
                 if(t.estado === '3_diagnosticado') {
-                    boxBotones.innerHTML += crearBtn('Marcar Reparado', 'bg-emerald-600 text-white hover:bg-emerald-700', '4_reparado');
-                    boxBotones.innerHTML += crearBtn('Pérdida Total', 'bg-red-600 text-white hover:bg-red-700', '5_sin_reparacion');
+                    boxBotones.innerHTML += crearBtn('Fue Reparado', 'bg-emerald-600 text-white hover:bg-emerald-700', '4_reparado'); 
+                    boxBotones.innerHTML += crearBtn('Pérdida Total', 'bg-red-600 text-white hover:bg-red-700', '5_sin_reparacion'); 
                 }
-                // Nota: Si está en 4_reparado, NO hay botón superior, debe llenar el form de abajo.
-                if(t.estado === '5_sin_reparacion') boxBotones.innerHTML += crearBtn('Entregar a Asesor', btnDark, '6_entregado_asesor');
-                if(t.estado === '6_entregado_asesor') boxBotones.innerHTML += crearBtn('Cerrar Ticket (Entregado)', btnDark, '7_entregado_cliente');
+                if(t.estado === '5_sin_reparacion') boxBotones.innerHTML += crearBtn('Entregar a Asesor', sigAccionClase, '6_entregado_asesor');
+                if(t.estado === '6_entregado_asesor') boxBotones.innerHTML += crearBtn('Cerrar Ticket (Entregado)', sigAccionClase, '7_entregado_cliente');
 
-                // 4. Galerías Iniciales (Detecta Video y Foto)
                 const divFotos = document.getElementById('det_fotos_div');
                 divFotos.innerHTML = "";
                 if(t.fotos && t.fotos.length > 0) {
@@ -420,21 +608,13 @@
                     document.getElementById('det_galeria').classList.remove('hidden');
                 } else document.getElementById('det_galeria').classList.add('hidden');
 
-                // 5. CONTROL POST-REPARACIÓN
                 const formPostRep = document.getElementById('form_post_reparacion');
                 const viewPostRep = document.getElementById('view_post_reparacion');
-                
-                // Reiniciar ambas vistas por defecto
-                formPostRep.classList.add('hidden');
-                viewPostRep.classList.add('hidden');
-                document.getElementById('txtObservacionesReparacion').value = '';
-                document.getElementById('preview-archivos-reparacion').innerHTML = '';
+                formPostRep.classList.add('hidden'); viewPostRep.classList.add('hidden');
+                document.getElementById('txtObservacionesReparacion').value = ''; 
+                document.getElementById('preview-archivos-reparacion').innerHTML = ''; 
 
-                // Si está en reparado, le obligamos a llenar el formulario para pasarlo a Entregado Asesor
-                if (t.estado === '4_reparado') {
-                    formPostRep.classList.remove('hidden');
-                } 
-                // Si ya avanzó más allá de reparado (y tiene observaciones), mostramos la lectura
+                if (t.estado === '4_reparado') formPostRep.classList.remove('hidden');
                 else if (t.observacionesReparacion) {
                     document.getElementById('det_obs_reparacion').textContent = t.observacionesReparacion;
                     const divFotosRep = document.getElementById('det_fotos_reparacion_div');
@@ -443,59 +623,86 @@
                         t.fotosReparacion.forEach(url => divFotosRep.innerHTML += crearMediaHTML(url));
                         document.getElementById('det_galeria_reparacion').classList.remove('hidden');
                     } else document.getElementById('det_galeria_reparacion').classList.add('hidden');
-                    
-                    viewPostRep.classList.remove('hidden');
+                    viewPostRep.classList.remove('hidden'); 
                 }
-
                 document.getElementById('modalDetalle').classList.remove('hidden');
             };
 
-            // ACCIONES DB
-            window.cambiarEstado = async (id, nuevoEstado) => {
-                await ticketsRef.doc(id).update({ estado: nuevoEstado });
-                document.getElementById('modalDetalle').classList.add('hidden'); 
-            };
-
+            window.cambiarEstado = async (id, nuevoEstado) => { await ticketsRef.doc(id).update({ estado: nuevoEstado }); document.getElementById('modalDetalle').classList.add('hidden'); };
             window.guardarInformeTecnico = async () => {
                 const texto = document.getElementById('txtDiagnostico').value;
-                if(!texto) return alert("Por favor, escribe el informe técnico detallado antes de guardar.");
+                if(!texto) return alert("Escribe el informe.");
                 await ticketsRef.doc(currentTicketIdAbierto).update({ diagnostico: texto, estado: '3_diagnosticado' });
                 document.getElementById('modalDetalle').classList.add('hidden'); 
             };
-
-            // NUEVA FUNCIÓN: GUARDAR EVIDENCIAS FINALES Y AVANZAR
             window.guardarPostReparacion = async () => {
-                const btn = document.getElementById('btnGuardarPostReparacion');
-                const txt = document.getElementById('txtObservacionesReparacion').value;
-                const files = document.getElementById('f_fotos_reparacion').files;
-
-                if(!txt) return alert("Por favor, ingresa las observaciones detalladas de cómo quedó la máquina.");
-                
-                btn.textContent = "Procesando..."; btn.disabled = true;
-
+                const btnSave = document.getElementById('btnGuardarPostReparacion');
+                const txtObs = document.getElementById('txtObservacionesReparacion').value;
+                const filesPost = document.getElementById('f_fotos_reparacion').files;
+                if(!txtObs) return alert("Ingresa las observaciones finales.");
+                btnSave.textContent = "Procesando..."; btnSave.disabled = true;
                 try {
                     let fotosUrls = [];
-                    if (files.length > 0) {
-                        for (let file of files) {
+                    if (filesPost.length > 0) {
+                        for (let file of filesPost) {
                             const fileRef = storage.ref(`evidencias_post_reparacion/${currentTicketIdAbierto}/${file.name}`);
-                            await fileRef.put(file);
-                            fotosUrls.push(await fileRef.getDownloadURL());
+                            await fileRef.put(file); fotosUrls.push(await fileRef.getDownloadURL());
                         }
                     }
-
-                    await ticketsRef.doc(currentTicketIdAbierto).update({ 
-                        observacionesReparacion: txt,
-                        fotosReparacion: fotosUrls,
-                        estado: '6_entregado_asesor' // Lo avanza directo a la siguiente columna
-                    });
-                    
+                    await ticketsRef.doc(currentTicketIdAbierto).update({ observacionesReparacion: txtObs, fotosReparacion: fotosUrls, estado: '6_entregado_asesor' });
                     document.getElementById('modalDetalle').classList.add('hidden'); 
-                } catch (error) {
-                    alert("Ocurrió un error al guardar las evidencias finales.");
-                } finally {
-                    btn.textContent = "Guardar Evidencia y Entregar a Asesor"; btn.disabled = false;
-                }
+                } catch (error) { alert("Error al guardar."); } 
+                finally { btnSave.textContent = "Guardar Evidencia Final y Entregar a Asesor"; btnSave.disabled = false; }
             };
+
+
+            // ================= MÓDULO: ANALYTICS (GRÁFICOS CHART.JS) =================
+            function renderizarGraficos() {
+                if(ticketsGlobal.length === 0) return;
+                
+                document.getElementById('kpiTotalTickets').textContent = ticketsGlobal.length;
+
+                // 1. Productos Problemáticos (Extraer nombre antes del guion si viene del inventario)
+                let countsProd = {};
+                ticketsGlobal.forEach(t => {
+                    let refClean = t.referencia.split(' - ')[0]; // Para que agrupe bien si trae el nombre del inventario
+                    countsProd[refClean] = (countsProd[refClean] || 0) + 1; 
+                });
+                let sortProd = Object.keys(countsProd).sort((a,b) => countsProd[b] - countsProd[a]).slice(0, 5); // Top 5
+                
+                if(chartProds) chartProds.destroy();
+                chartProds = new Chart(document.getElementById('chartProductos'), {
+                    type: 'bar',
+                    data: { labels: sortProd, datasets: [{ label: 'Tickets', data: sortProd.map(k => countsProd[k]), backgroundColor: '#0f172a', borderRadius: 8 }] },
+                    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                });
+
+                // 2. Orígenes (Sedes/Asesores)
+                let countsSedes = {};
+                ticketsGlobal.forEach(t => countsSedes[t.sede] = (countsSedes[t.sede] || 0) + 1);
+                let sortSedes = Object.keys(countsSedes).sort((a,b) => countsSedes[b] - countsSedes[a]).slice(0, 5); // Top 5
+                
+                if(chartSedes) chartSedes.destroy();
+                chartSedes = new Chart(document.getElementById('chartSedes'), {
+                    type: 'doughnut',
+                    data: { labels: sortSedes, datasets: [{ data: sortSedes.map(k => countsSedes[k]), backgroundColor: ['#0f172a', '#334155', '#475569', '#94a3b8', '#cbd5e1'], borderWidth: 0 }] },
+                    options: { responsive: true, cutout: '70%', plugins: { legend: { position: 'right' } } }
+                });
+
+                // 3. Estado General
+                let countsEst = {};
+                ticketsGlobal.forEach(t => countsEst[t.estado] = (countsEst[t.estado] || 0) + 1);
+                
+                if(chartEst) chartEst.destroy();
+                chartEst = new Chart(document.getElementById('chartEstados'), {
+                    type: 'polarArea',
+                    data: { 
+                        labels: ESTADOS.map(e => e.nombre), 
+                        datasets: [{ data: ESTADOS.map(e => countsEst[e.id] || 0), backgroundColor: ESTADOS.map(e => e.colorChart) }] 
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+                });
+            }
 
         });
     </script>
