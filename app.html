@@ -674,9 +674,16 @@
                 chartProds = new Chart(document.getElementById('chartProductos'), {
                     type: 'bar',
                     data: { labels: sortProd, datasets: [{ label: 'Tickets', data: sortProd.map(k => countsProd[k]), backgroundColor: '#0f172a', borderRadius: 8 }] },
-                    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                    options: { 
+                        responsive: true, 
+                        scales: { 
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { stepSize: 1, precision: 0 } // Esto elimina los decimales
+                            } 
+                        } 
+                    }
                 });
-
                 // 2. Orígenes (Sedes/Asesores)
                 let countsSedes = {};
                 ticketsGlobal.forEach(t => countsSedes[t.sede] = (countsSedes[t.sede] || 0) + 1);
@@ -708,3 +715,4 @@
     </script>
 </body>
 </html>
+
