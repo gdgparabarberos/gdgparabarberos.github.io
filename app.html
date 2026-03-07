@@ -43,7 +43,7 @@
     <div class="flex-1 flex flex-col min-w-0 relative z-10 overflow-hidden">
         <header class="h-[76px] bg-white px-8 flex items-center justify-between border-b border-slate-200 shrink-0 shadow-sm z-20">
             <div class="flex items-center gap-10">
-                <h1 class="text-[16px] font-black tracking-widest text-slate-900 uppercase shrink-0">GESTIÓN DE GARANTÍAS PARABARBEROS</h1>
+                <h1 class="text-[16px] font-black tracking-widest text-slate-900 uppercase shrink-0">Parabarberos S.A.S.</h1>
                 <div class="relative hidden md:block w-96 shrink" id="headerSearchBox">
                     <svg class="w-5 h-5 text-slate-400 absolute left-4 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     <input type="text" id="searchInput" placeholder="Buscar producto o ticket en Kanban..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-slate-900 focus:bg-white transition-colors">
@@ -132,7 +132,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tbodyHistorial" class="text-sm font-medium text-slate-800 divide-y divide-slate-100">
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -241,7 +241,7 @@
             
             <div class="flex-1 overflow-y-auto p-10 md:p-14 bg-white">
                 
-                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Información del Caso</h3>
+                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Información Completa del Caso</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                     <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50 space-y-5 shadow-sm">
@@ -327,6 +327,14 @@
                     </div>
                 </div>
 
+                <div class="mt-12 border-t border-slate-200 pt-10 pb-6">
+                    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Auditoría y Trazabilidad</h3>
+                    <div class="bg-slate-50/50 p-8 rounded-2xl border border-slate-200 shadow-sm">
+                        <div id="det_timeline" class="space-y-0">
+                            </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -368,7 +376,7 @@
                 { id: '7_entregado_cliente', nombre: 'ENTREGADOS', colorChart: '#0f172a' }
             ];
 
-            // SESIÓN & MENÚ AVATAR
+            // SESIÓN
             auth.onAuthStateChanged(user => {
                 if (!user) window.location.href = 'index.html';
                 else {
@@ -382,11 +390,30 @@
             document.addEventListener('click', (e) => { if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) userDropdown.classList.add('hidden'); });
             document.getElementById('dropdownLogoutBtn').onclick = () => auth.signOut();
 
-            // FUNCIÓN FORMATEAR FECHA (Solo Fecha, sin horas ni minutos)
+            // FORMATEOS FECHA
             function formatearFecha(timestamp) {
                 if(!timestamp) return 'Sin fecha';
-                const d = timestamp.toDate();
-                return d.toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric' });
+                return timestamp.toDate().toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+            function formatearFechaHora(timestamp) {
+                if(!timestamp) return 'Sin fecha';
+                return timestamp.toDate().toLocaleString('es-CO', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            }
+            
+            // CÁLCULO SEMÁFORO (DÍAS EN ESTADO)
+            function calcularDiasEnEstado(t) {
+                if (!t.creadoEn) return 0;
+                let fechaBase = t.creadoEn.toDate();
+                if (t.historialEventos && t.historialEventos.length > 0) {
+                    const eventos = [...t.historialEventos].reverse();
+                    const eventoActual = eventos.find(e => e.estado === t.estado);
+                    if (eventoActual && eventoActual.fecha) {
+                        fechaBase = eventoActual.fecha.toDate();
+                    }
+                }
+                const hoy = new Date();
+                const diffTime = Math.abs(hoy - fechaBase);
+                return Math.floor(diffTime / (1000 * 60 * 60 * 24));
             }
 
             // NAVEGACIÓN
@@ -401,39 +428,27 @@
                 if(viewName === 'historial') renderizarTablaHistorial();
             };
 
-            // ABRIR MODAL Y PONER FECHA ACTUAL
             window.abrirModalNuevoTicket = () => {
                 document.getElementById('modalNuevoTicket').classList.remove('hidden');
                 const offset = new Date().getTimezoneOffset() * 60000;
-                const localISODate = (new Date(Date.now() - offset)).toISOString().slice(0, 10);
-                document.getElementById('t_fecha_creacion').value = localISODate;
+                document.getElementById('t_fecha_creacion').value = (new Date(Date.now() - offset)).toISOString().slice(0, 10);
             };
 
-            // INICIALIZAR DESPLEGABLES DEL HISTORIAL
             const selectHEstado = document.getElementById('h_estado');
             ESTADOS.forEach(e => selectHEstado.innerHTML += `<option value="${e.id}">${e.nombre}</option>`);
 
             // DIRECTORIO
             document.getElementById('formSede').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const btn = document.getElementById('btnCrearSede');
-                btn.disabled = true;
+                const btn = document.getElementById('btnCrearSede'); btn.disabled = true;
                 await sedesRef.add({ nombre: document.getElementById('n_sede').value.trim(), creadoEn: firebase.firestore.FieldValue.serverTimestamp() });
-                document.getElementById('formSede').reset();
-                btn.disabled = false;
+                document.getElementById('formSede').reset(); btn.disabled = false;
             });
 
             sedesRef.orderBy('nombre').onSnapshot(snapshot => {
                 const listaUl = document.getElementById('listaSedes');
-                const sKanban = document.getElementById('filtroSedeKanban');
-                const sNuevo = document.getElementById('t_sede');
-                const sHistorial = document.getElementById('h_sede');
-                
-                listaUl.innerHTML = '';
-                sNuevo.innerHTML = '<option value="" disabled selected>Selecciona una opción...</option>';
-                sKanban.innerHTML = '<option value="">Todas las Sedes</option>';
-                sHistorial.innerHTML = '<option value="">Todas las Sedes</option>';
-
+                const sKanban = document.getElementById('filtroSedeKanban'), sNuevo = document.getElementById('t_sede'), sHistorial = document.getElementById('h_sede');
+                listaUl.innerHTML = ''; sNuevo.innerHTML = '<option value="" disabled selected>Selecciona una opción...</option>'; sKanban.innerHTML = '<option value="">Todas las Sedes</option>'; sHistorial.innerHTML = '<option value="">Todas las Sedes</option>';
                 snapshot.forEach(doc => {
                     const d = doc.data().nombre;
                     listaUl.innerHTML += `<li class="text-sm font-semibold text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center">${d} <button onclick="sedesRef.doc('${doc.id}').delete()" class="text-red-400">✕</button></li>`;
@@ -452,8 +467,7 @@
                         document.getElementById('btnProcesarJson').classList.remove('hidden');
                         document.getElementById('json_status').textContent = `JSON Válido. ${jsonCargado.length} productos.`;
                     } catch(err) { alert("Error JSON"); }
-                };
-                reader.readAsText(e.target.files[0]);
+                }; reader.readAsText(e.target.files[0]);
             });
 
             window.procesarJSON = async () => {
@@ -467,8 +481,7 @@
                         if (++count % 400 === 0) { batches.push(currentBatch.commit()); currentBatch = db.batch(); }
                     }
                 }
-                batches.push(currentBatch.commit()); 
-                await Promise.all(batches); 
+                batches.push(currentBatch.commit()); await Promise.all(batches); 
                 alert("Inventario subido!"); btn.textContent = "Subir Inventario"; btn.disabled = false; document.getElementById('f_json_inventario').value = "";
             };
 
@@ -480,8 +493,7 @@
                     tablaHTML += `<tr class="border-b"><td class="py-3 pl-2 font-bold">${d.idUnico}</td><td class="py-3 text-slate-600">${d.nombre}</td></tr>`;
                     datalistHTML += `<option value="${d.idUnico} - ${d.nombre}">`;
                 });
-                document.getElementById('tablaProductos').innerHTML = tablaHTML;
-                document.getElementById('listaProductosAuto').innerHTML = datalistHTML;
+                document.getElementById('tablaProductos').innerHTML = tablaHTML; document.getElementById('listaProductosAuto').innerHTML = datalistHTML;
             });
 
 
@@ -497,58 +509,31 @@
             }
             dibujarColumnas();
 
-            // PREVISUALIZADOR Y RENDERIZADOR MULTIMEDIA ARREGLADO
             const handleFilePreview = (inputId, containerId) => {
                 document.getElementById(inputId).addEventListener('change', function() {
-                    const container = document.getElementById(containerId);
-                    container.innerHTML = ''; 
+                    const container = document.getElementById(containerId); container.innerHTML = ''; 
                     if (this.files && this.files.length > 0) {
                         Array.from(this.files).forEach(file => {
                             const isVideo = file.type.startsWith('video/');
-                            container.innerHTML += `
-                                <div class="text-[12px] bg-slate-900 text-slate-100 px-4 py-2.5 rounded-xl font-semibold flex items-center gap-3 border border-slate-700 shadow-md">
-                                    <span class="text-lg">${isVideo ? '🎥' : '📷'}</span>
-                                    <div class="flex flex-col truncate">
-                                        <span class="truncate font-bold">${file.name}</span>
-                                        <span class="text-[10px] text-slate-400 tracking-wide uppercase">${isVideo?'Video':'Imagen'}</span>
-                                    </div>
-                                </div>`;
+                            container.innerHTML += `<div class="text-[12px] bg-slate-900 text-slate-100 px-4 py-2.5 rounded-xl font-semibold flex items-center gap-3 border border-slate-700 shadow-md"><span class="text-lg">${isVideo ? '🎥' : '📷'}</span><div class="flex flex-col truncate"><span class="truncate font-bold">${file.name}</span><span class="text-[10px] text-slate-400 tracking-wide uppercase">${isVideo?'Video':'Imagen'}</span></div></div>`;
                         });
                     }
                 });
             };
-            handleFilePreview('t_fotos', 'preview-archivos-nuevo');
-            handleFilePreview('f_fotos_reparacion', 'preview-archivos-reparacion');
+            handleFilePreview('t_fotos', 'preview-archivos-nuevo'); handleFilePreview('f_fotos_reparacion', 'preview-archivos-reparacion');
 
             const crearMediaHTML = (url) => {
-                const isVideo = url.toLowerCase().includes('.mp4') || url.toLowerCase().includes('.mov') || url.toLowerCase().includes('.webm') || url.includes('video%2F');
-                if (isVideo) {
-                    return `
-                        <a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-950 border border-slate-700 overflow-hidden relative hover:opacity-80 transition-opacity shadow-md flex items-center justify-center group">
-                            <span class="absolute text-4xl z-10 group-hover:scale-110 transition-transform">▶️</span>
-                            <video src="${url}" class="w-full h-full object-cover opacity-60" muted autoplay loop></video>
-                        </a>`;
-                } else {
-                    return `
-                        <a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-100 border border-slate-200 bg-cover bg-center hover:opacity-80 transition-opacity shadow-sm flex items-center justify-center" style="background-image: url('${url}')"></a>`;
-                }
+                const isVideo = url.toLowerCase().match(/\.(mp4|mov|webm)$|video%2F/);
+                if (isVideo) return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-950 border border-slate-700 overflow-hidden relative hover:opacity-80 transition-opacity shadow-md flex items-center justify-center group"><span class="absolute text-4xl z-10 group-hover:scale-110 transition-transform">▶️</span><video src="${url}" class="w-full h-full object-cover opacity-60" muted autoplay loop></video></a>`;
+                else return `<a href="${url}" target="_blank" class="shrink-0 block w-32 h-32 rounded-2xl bg-slate-100 border border-slate-200 bg-cover bg-center hover:opacity-80 transition-opacity shadow-sm flex items-center justify-center" style="background-image: url('${url}')"></a>`;
             };
-
-            async function getNextTicketId() {
-                return await db.runTransaction(async (transaction) => {
-                    const doc = await transaction.get(counterRef);
-                    let current = doc.exists ? (doc.data().count || 0) : 0;
-                    transaction.set(counterRef, { count: current + 1 }, { merge: true });
-                    return `TICKET ${current + 1}`;
-                });
-            }
 
             document.getElementById('formGarantia').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const btn = document.getElementById('btnSubmit'); btn.disabled = true;
-                
                 const fechaInput = document.getElementById('t_fecha_creacion').value;
                 const fechaCustom = new Date(fechaInput + 'T12:00:00'); 
+                const userEmail = auth.currentUser ? auth.currentUser.email : 'Desconocido';
 
                 try {
                     let c = 0; const doc = await db.runTransaction(async t => { const ref = await t.get(counterRef); c = ref.exists ? (ref.data().count||0) : 0; t.set(counterRef, {count:c+1}, {merge:true}); return c; });
@@ -556,20 +541,13 @@
                     for(let f of document.getElementById('t_fotos').files) { const r = storage.ref(`e/${id}/${f.name}`); await r.put(f); urls.push(await r.getDownloadURL()); }
                     
                     await ticketsRef.doc(id).set({ 
-                        id, 
-                        estado: '1_recibir', 
-                        taller: document.getElementById('t_taller').value, 
-                        cedula: document.getElementById('t_cedula').value, 
-                        telefono: document.getElementById('t_telefono').value, 
-                        nombre: document.getElementById('t_nombre').value, 
-                        sede: document.getElementById('t_sede').value, 
-                        referencia: document.getElementById('t_referencia').value, 
-                        falla: document.getElementById('t_falla').value, 
-                        diagnostico: "", 
-                        fotos: urls, 
-                        observacionesReparacion: "", 
-                        fotosReparacion: [], 
-                        creadoEn: firebase.firestore.Timestamp.fromDate(fechaCustom) 
+                        id, estado: '1_recibir', taller: document.getElementById('t_taller').value, 
+                        cedula: document.getElementById('t_cedula').value, telefono: document.getElementById('t_telefono').value, 
+                        nombre: document.getElementById('t_nombre').value, sede: document.getElementById('t_sede').value, 
+                        referencia: document.getElementById('t_referencia').value, falla: document.getElementById('t_falla').value, 
+                        diagnostico: "", fotos: urls, observacionesReparacion: "", fotosReparacion: [], 
+                        creadoEn: firebase.firestore.Timestamp.fromDate(fechaCustom),
+                        historialEventos: [{ estado: '1_recibir', fecha: firebase.firestore.Timestamp.fromDate(fechaCustom), usuario: userEmail }]
                     });
                     document.getElementById('formGarantia').reset(); document.getElementById('preview-archivos-nuevo').innerHTML=''; document.getElementById('modalNuevoTicket').classList.add('hidden');
                 } catch(e) { alert("Error"); } finally { btn.disabled = false; }
@@ -600,15 +578,35 @@
                         const tieneVideo = t.fotos && t.fotos.some(url => url.toLowerCase().includes('.mp4') || url.toLowerCase().includes('.mov'));
                         const mediaCountText = (tieneVideo ? '🎥 ' : '📸 ') + (t.fotos ? t.fotos.length : 0);
 
+                        // LÓGICA DE SEMÁFORO (SLA)
+                        let borderClass = "border-slate-100"; 
+                        let slaBadge = "";
+                        if (t.estado !== '7_entregado_cliente') {
+                            const dias = calcularDiasEnEstado(t);
+                            if (dias >= 6) {
+                                borderClass = "border-l-4 border-l-red-500 border-y-slate-100 border-r-slate-100";
+                                slaBadge = `<span class="flex items-center gap-1 text-[10px] font-black text-red-600 bg-red-50 px-2 py-0.5 rounded-md border border-red-100"><span class="animate-pulse">🔴</span> ${dias} DÍAS</span>`;
+                            } else if (dias >= 3) {
+                                borderClass = "border-l-4 border-l-amber-400 border-y-slate-100 border-r-slate-100";
+                                slaBadge = `<span class="flex items-center gap-1 text-[10px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">🟡 ${dias} DÍAS</span>`;
+                            } else {
+                                borderClass = "border-slate-100";
+                                slaBadge = `<span class="flex items-center gap-1 text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">🟢 ${dias} días</span>`;
+                            }
+                        }
+
                         document.getElementById(`col-${t.estado}`).innerHTML += `
-                            <div onclick="verDetalle('${t.id}')" class="bg-white p-7 rounded-[22px] shadow-sm border border-slate-100 cursor-pointer hover:shadow-xl hover:border-slate-950 transition-all relative group">
-                                <h4 class="font-black text-slate-950 text-xl mb-4 tracking-tight">${t.id}</h4>
+                            <div onclick="verDetalle('${t.id}')" class="bg-white p-7 rounded-[22px] shadow-sm border ${borderClass} cursor-pointer hover:shadow-xl hover:border-slate-950 transition-all relative group">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h4 class="font-black text-slate-950 text-xl tracking-tight">${t.id}</h4>
+                                    ${slaBadge}
+                                </div>
                                 <div class="space-y-2.5 text-[13px] text-slate-600 mb-4 border-b border-slate-100 pb-5 relative">
                                     <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Ref:</span> <span class="font-extrabold text-slate-900 text-right break-words w-4/5 leading-tight">${t.referencia}</span></p>
                                     <p class="flex justify-between items-start"><span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest mt-1">Sede:</span> <span class="font-semibold text-slate-800 text-right break-words w-4/5">${t.sede}</span></p>
                                     ${t.fotos && t.fotos.length > 0 ? `<div class="absolute -bottom-3 right-0 text-[10px] font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200 shadow-inner">${mediaCountText}</div>` : ''}
                                 </div>
-                                <p class="text-[12px] text-slate-500 font-medium italic line-clamp-2 leading-relaxed">${t.diagnostico || 'Esperando revisión técnica detallada...'}</p>
+                                <p class="text-[12px] text-slate-500 font-medium italic line-clamp-2 leading-relaxed">${t.diagnostico || 'Esperando revisión técnica...'}</p>
                             </div>`;
                     }
                 });
@@ -618,49 +616,25 @@
             ['h_search', 'h_sede', 'h_estado', 'h_fecha_ini', 'h_fecha_fin'].forEach(id => document.getElementById(id).addEventListener('input', renderizarTablaHistorial));
             
             function renderizarTablaHistorial() {
-                const s = document.getElementById('h_search').value.toLowerCase();
-                const sede = document.getElementById('h_sede').value;
-                const est = document.getElementById('h_estado').value;
-                const fIni = document.getElementById('h_fecha_ini').value;
-                const fFin = document.getElementById('h_fecha_fin').value;
-
+                const s = document.getElementById('h_search').value.toLowerCase(), sede = document.getElementById('h_sede').value, est = document.getElementById('h_estado').value, fIni = document.getElementById('h_fecha_ini').value, fFin = document.getElementById('h_fecha_fin').value;
                 let html = '';
                 ticketsGlobal.forEach(t => {
-                    let pS = s==='' || t.id.toLowerCase().includes(s) || t.referencia.toLowerCase().includes(s);
-                    let pSede = sede==='' || t.sede === sede;
-                    let pEst = est==='' || t.estado === est;
-                    let pF = true;
+                    let pS = s==='' || t.id.toLowerCase().includes(s) || t.referencia.toLowerCase().includes(s); let pSede = sede==='' || t.sede === sede; let pEst = est==='' || t.estado === est; let pF = true;
                     if((fIni||fFin) && t.creadoEn) {
                         const d = t.creadoEn.toDate(); d.setHours(0,0,0,0);
                         if(fIni && d < new Date(fIni+'T00:00:00')) pF=false;
                         if(fFin && d > new Date(fFin+'T00:00:00')) pF=false;
                     }
-
                     if(pS && pSede && pEst && pF) {
                         const nEst = ESTADOS.find(e=>e.id===t.estado)?.nombre || t.estado;
-                        html += `<tr class="hover:bg-slate-50 cursor-pointer transition-colors" onclick="verDetalle('${t.id}')">
-                            <td class="p-4 pl-6 font-black text-slate-900">${t.id}</td>
-                            <td class="p-4 text-slate-500">${formatearFecha(t.creadoEn)}</td>
-                            <td class="p-4 font-bold text-slate-800">${t.referencia.split(' - ')[0]}</td>
-                            <td class="p-4 text-slate-600">${t.sede}</td>
-                            <td class="p-4"><span class="bg-slate-100 text-slate-800 text-[10px] font-black px-3 py-1 rounded-full uppercase">${nEst}</span></td>
-                        </tr>`;
+                        html += `<tr class="hover:bg-slate-50 cursor-pointer transition-colors" onclick="verDetalle('${t.id}')"><td class="p-4 pl-6 font-black text-slate-900">${t.id}</td><td class="p-4 text-slate-500">${formatearFecha(t.creadoEn)}</td><td class="p-4 font-bold text-slate-800">${t.referencia.split(' - ')[0]}</td><td class="p-4 text-slate-600">${t.sede}</td><td class="p-4"><span class="bg-slate-100 text-slate-800 text-[10px] font-black px-3 py-1 rounded-full uppercase">${nEst}</span></td></tr>`;
                     }
                 });
                 document.getElementById('tbodyHistorial').innerHTML = html;
             }
 
-            // Exportaciones
-            window.exportarExcel = () => {
-                const wb = XLSX.utils.table_to_book(document.getElementById('tablaHistorialExportar'), {sheet:"Tickets"});
-                XLSX.writeFile(wb, "Historial_Garantias.xlsx");
-            };
-            window.exportarPDF = () => {
-                const { jsPDF } = window.jspdf; const doc = new jsPDF();
-                doc.setFontSize(16); doc.text("Historial de Tickets - PARABARBEROS", 14, 15);
-                doc.autoTable({ html: '#tablaHistorialExportar', startY: 20, theme: 'grid', headStyles: { fillColor: [15, 23, 42] } });
-                doc.save('Historial_Garantias.pdf');
-            };
+            window.exportarExcel = () => { XLSX.writeFile(XLSX.utils.table_to_book(document.getElementById('tablaHistorialExportar'), {sheet:"Tickets"}), "Historial_Garantias.xlsx"); };
+            window.exportarPDF = () => { const doc = new window.jspdf.jsPDF(); doc.setFontSize(16); doc.text("Historial de Tickets", 14, 15); doc.autoTable({ html: '#tablaHistorialExportar', startY: 20, theme: 'grid', headStyles: { fillColor: [15, 23, 42] } }); doc.save('Historial_Garantias.pdf'); };
 
             // MODAL ACCIONES Y VISTA DETALLE
             window.verDetalle = (id) => {
@@ -668,24 +642,14 @@
                 if(!t) return; 
                 currentTicketIdAbierto = id;
                 
-                document.getElementById('det_id').textContent = t.id; 
-                document.getElementById('det_cedula').textContent = t.cedula; 
-                document.getElementById('det_telefono').textContent = t.telefono; 
-                document.getElementById('det_nombre').textContent = t.nombre; 
-                document.getElementById('det_sede').textContent = t.sede; 
-                document.getElementById('det_referencia').textContent = t.referencia; 
-                document.getElementById('det_falla').textContent = t.falla;
+                document.getElementById('det_id').textContent = t.id; document.getElementById('det_cedula').textContent = t.cedula; document.getElementById('det_telefono').textContent = t.telefono; document.getElementById('det_nombre').textContent = t.nombre; document.getElementById('det_sede').textContent = t.sede; document.getElementById('det_referencia').textContent = t.referencia; document.getElementById('det_falla').textContent = t.falla;
                 
                 const txtD = document.getElementById('txtDiagnostico'), btnD = document.getElementById('btnSaveDiagDiv');
                 txtD.value = t.diagnostico||"";
                 if(t.estado === '2_envio_st'){ 
-                    txtD.readOnly=false; 
-                    txtD.className="w-full border border-slate-300 rounded-2xl p-6 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm transition-colors leading-relaxed bg-white"; 
-                    btnD.classList.remove('hidden'); 
+                    txtD.readOnly=false; txtD.className="w-full border border-slate-300 rounded-2xl p-6 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-950 shadow-sm transition-colors leading-relaxed bg-white"; btnD.classList.remove('hidden'); 
                 } else { 
-                    txtD.readOnly=true; 
-                    txtD.className="w-full border border-slate-200 rounded-2xl p-6 text-sm font-medium text-slate-500 bg-slate-50 shadow-sm leading-relaxed"; 
-                    btnD.classList.add('hidden'); 
+                    txtD.readOnly=true; txtD.className="w-full border border-slate-200 rounded-2xl p-6 text-sm font-medium text-slate-500 bg-slate-50 shadow-sm leading-relaxed"; btnD.classList.add('hidden'); 
                 }
 
                 const bTop = document.getElementById('det_actions_top'); 
@@ -696,69 +660,64 @@
                 if(t.estado==='1_recibir') bTop.innerHTML+=cB('Enviar a S.T.', btnDark, '2_envio_st');
                 if(t.estado==='3_diagnosticado') { 
                     bTop.innerHTML+=cB('Fue Reparado','bg-emerald-600 text-white hover:bg-emerald-700','4_reparado'); 
-                    
-                    // BOTÓN CERRAR CASO PERDIDO CORREGIDO (Salta a ENTREGADOS)
-                    bTop.innerHTML+=cB('Cerrar Ticket (Caso Perdido)','bg-red-600 text-white hover:bg-red-700','7_entregado_cliente'); 
+                    bTop.innerHTML+=cB('Cerrar Ticket (Pérdida)','bg-red-600 text-white hover:bg-red-700','7_entregado_cliente'); 
                 }
-                if(t.estado==='4_reparado') {
-                    // No hay botón acá porque exige llenar el form de abajo
-                }
+                if(t.estado==='5_sin_reparacion') bTop.innerHTML+=cB('Entregar a Asesor', btnDark, '6_entregado_asesor');
                 if(t.estado==='6_entregado_asesor') bTop.innerHTML+=cB('Cerrar Ticket (Entregado)', btnDark, '7_entregado_cliente');
 
-                // RENDERIZAR GALERÍAS ARREGLADO
-                const divFotos = document.getElementById('det_fotos_div');
-                divFotos.innerHTML = "";
-                if(t.fotos && t.fotos.length > 0) {
-                    t.fotos.forEach(url => {
-                        divFotos.innerHTML += crearMediaHTML(url);
-                    });
-                    document.getElementById('det_galeria').classList.remove('hidden');
-                } else {
-                    document.getElementById('det_galeria').classList.add('hidden');
-                }
+                // RENDERIZAR GALERÍAS
+                const divFotos = document.getElementById('det_fotos_div'); divFotos.innerHTML = "";
+                if(t.fotos && t.fotos.length > 0) { t.fotos.forEach(url => divFotos.innerHTML += crearMediaHTML(url)); document.getElementById('det_galeria').classList.remove('hidden'); } 
+                else document.getElementById('det_galeria').classList.add('hidden');
 
-                const formPostRep = document.getElementById('form_post_reparacion');
-                const viewPostRep = document.getElementById('view_post_reparacion');
+                const formPostRep = document.getElementById('form_post_reparacion'), viewPostRep = document.getElementById('view_post_reparacion');
+                formPostRep.classList.add('hidden'); viewPostRep.classList.add('hidden'); 
+                document.getElementById('txtObservacionesReparacion').value=''; document.getElementById('preview-archivos-reparacion').innerHTML='';
                 
-                formPostRep.classList.add('hidden'); 
-                viewPostRep.classList.add('hidden'); 
-                document.getElementById('txtObservacionesReparacion').value=''; 
-                document.getElementById('preview-archivos-reparacion').innerHTML='';
-                
-                if(t.estado==='4_reparado') {
-                    formPostRep.classList.remove('hidden');
-                }
+                if(t.estado==='4_reparado') formPostRep.classList.remove('hidden');
                 else if(t.observacionesReparacion) { 
                     document.getElementById('det_obs_reparacion').textContent = t.observacionesReparacion; 
-                    const divFotosRep = document.getElementById('det_fotos_reparacion_div'); 
-                    divFotosRep.innerHTML=""; 
-                    if(t.fotosReparacion && t.fotosReparacion.length > 0) { 
-                        t.fotosReparacion.forEach(url => divFotosRep.innerHTML += crearMediaHTML(url)); 
-                        document.getElementById('det_galeria_reparacion').classList.remove('hidden'); 
-                    } else {
-                        document.getElementById('det_galeria_reparacion').classList.add('hidden'); 
-                    }
+                    const divFotosRep = document.getElementById('det_fotos_reparacion_div'); divFotosRep.innerHTML=""; 
+                    if(t.fotosReparacion && t.fotosReparacion.length > 0) { t.fotosReparacion.forEach(url => divFotosRep.innerHTML += crearMediaHTML(url)); document.getElementById('det_galeria_reparacion').classList.remove('hidden'); } 
+                    else document.getElementById('det_galeria_reparacion').classList.add('hidden'); 
                     viewPostRep.classList.remove('hidden'); 
                 }
+
+                // AUDITORÍA
+                const tL = document.getElementById('det_timeline'); tL.innerHTML = '';
+                if(t.historialEventos && t.historialEventos.length > 0) {
+                    t.historialEventos.forEach(ev => {
+                        const nomEst = ESTADOS.find(e => e.id === ev.estado)?.nombre || ev.estado;
+                        const fStr = ev.fecha ? formatearFechaHora(ev.fecha) : 'Fecha desconocida';
+                        tL.innerHTML += `<div class="relative pl-6 border-l-2 border-slate-200 pb-6 last:pb-0"><div class="absolute w-3 h-3 bg-slate-950 rounded-full -left-[7px] top-1 ring-4 ring-slate-50"></div><p class="text-[12px] font-black text-slate-900 uppercase tracking-wide leading-none">${nomEst}</p><p class="text-[11px] font-medium text-slate-500 mt-2">${fStr} <span class="mx-1">•</span> Por: <span class="font-bold text-slate-700">${ev.usuario}</span></p></div>`;
+                    });
+                } else { tL.innerHTML = '<p class="text-sm font-medium text-slate-500 italic">No hay registros de auditoría para este ticket.</p>'; }
                 
                 document.getElementById('modalDetalle').classList.remove('hidden');
             };
 
-            window.cambiarEstado = async (id, st) => { await ticketsRef.doc(id).update({estado:st}); document.getElementById('modalDetalle').classList.add('hidden'); };
-            window.guardarInformeTecnico = async () => { const t=document.getElementById('txtDiagnostico').value; if(!t)return; await ticketsRef.doc(currentTicketIdAbierto).update({diagnostico:t,estado:'3_diagnosticado'}); document.getElementById('modalDetalle').classList.add('hidden'); };
+            window.cambiarEstado = async (id, st) => { 
+                const userEmail = auth.currentUser ? auth.currentUser.email : 'Desconocido';
+                await ticketsRef.doc(id).update({ estado: st, historialEventos: firebase.firestore.FieldValue.arrayUnion({ estado: st, fecha: new Date(), usuario: userEmail }) }); 
+                document.getElementById('modalDetalle').classList.add('hidden'); 
+            };
+
+            window.guardarInformeTecnico = async () => { 
+                const txt = document.getElementById('txtDiagnostico').value; if(!txt) return alert("Escribe el informe.");
+                const userEmail = auth.currentUser ? auth.currentUser.email : 'Desconocido';
+                await ticketsRef.doc(currentTicketIdAbierto).update({ diagnostico: txt, estado: '3_diagnosticado', historialEventos: firebase.firestore.FieldValue.arrayUnion({ estado: '3_diagnosticado', fecha: new Date(), usuario: userEmail }) }); 
+                document.getElementById('modalDetalle').classList.add('hidden'); 
+            };
+
             window.guardarPostReparacion = async () => { 
-                const txt = document.getElementById('txtObservacionesReparacion').value; 
-                if(!txt) return alert("Ingresa las observaciones finales."); 
-                const btn = document.getElementById('btnGuardarPostReparacion');
-                btn.textContent = "Guardando..."; btn.disabled=true; 
-                let urls = []; 
+                const txt = document.getElementById('txtObservacionesReparacion').value; if(!txt) return alert("Ingresa las observaciones finales."); 
+                const btn = document.getElementById('btnGuardarPostReparacion'); btn.textContent = "Guardando..."; btn.disabled=true; 
+                let urls = []; const userEmail = auth.currentUser ? auth.currentUser.email : 'Desconocido';
                 try {
                     for(let f of document.getElementById('f_fotos_reparacion').files){
-                        const r = storage.ref(`ep/${currentTicketIdAbierto}/${f.name}`); 
-                        await r.put(f); 
-                        urls.push(await r.getDownloadURL());
+                        const r = storage.ref(`ep/${currentTicketIdAbierto}/${f.name}`); await r.put(f); urls.push(await r.getDownloadURL());
                     } 
-                    await ticketsRef.doc(currentTicketIdAbierto).update({observacionesReparacion:txt, fotosReparacion:urls, estado:'6_entregado_asesor'}); 
+                    await ticketsRef.doc(currentTicketIdAbierto).update({ observacionesReparacion: txt, fotosReparacion: urls, estado: '6_entregado_asesor', historialEventos: firebase.firestore.FieldValue.arrayUnion({ estado: '6_entregado_asesor', fecha: new Date(), usuario: userEmail }) }); 
                     document.getElementById('modalDetalle').classList.add('hidden'); 
                 } catch(e) { alert("Error al guardar evidencias finales."); }
                 btn.textContent = "Guardar Evidencia Final y Entregar a Asesor"; btn.disabled=false; 
@@ -779,5 +738,3 @@
     </script>
 </body>
 </html>
-
-
