@@ -4,37 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Garantías PARABARBEROS</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-font-smoothing: antialiased; }
     </style>
 </head>
-<body class="flex items-center justify-center h-screen bg-slate-50 text-slate-800">
+<body class="flex items-center justify-center h-screen bg-slate-50 text-slate-900">
 
-    <div class="w-full max-w-md p-10 bg-white rounded-[24px] shadow-xl border border-slate-100">
+    <div class="w-full max-w-md p-10 bg-white rounded-[24px] shadow-2xl border border-slate-200">
         <div class="text-center mb-10">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 mb-6 border border-indigo-100">
-                <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-            </div>
-            <h1 class="text-[26px] font-bold text-slate-900 tracking-tight">GARANTÍAS</h1>
-            <p class="text-sm text-slate-500 mt-1 font-medium tracking-widest uppercase">Parabarberos S.A.S.</p>
+            <img src="logo.jpg" alt="Logo Parabarberos" class="h-32 mx-auto mb-4 object-contain pointer-events-none" style="mix-blend-mode: multiply;">
+            <p class="text-sm text-slate-500 font-bold tracking-widest uppercase">Portal de Control Interno</p>
         </div>
         
-        <form id="loginForm" class="space-y-5">
+        <form id="loginForm" class="space-y-6">
             <div>
-                <label for="email" class="block text-sm font-semibold text-slate-700 mb-1.5">Correo Electrónico</label>
-                <input type="email" id="email" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="analista@parabarberos.com">
+                <label for="email" class="block text-xs font-black text-slate-500 mb-2 uppercase tracking-wide">Correo Electrónico</label>
+                <input type="email" id="email" required class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 transition-all" placeholder="analista@parabarberos.com">
             </div>
             <div>
-                <label for="password" class="block text-sm font-semibold text-slate-700 mb-1.5">Contraseña</label>
-                <input type="password" id="password" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="••••••••">
+                <label for="password" class="block text-xs font-black text-slate-500 mb-2 uppercase tracking-wide">Contraseña</label>
+                <input type="password" id="password" required class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-900 transition-all" placeholder="••••••••">
             </div>
-            <div id="errorMessage" class="text-red-500 text-sm text-center font-medium h-5"></div>
+            <div id="errorMessage" class="text-red-500 text-sm text-center font-bold h-5"></div>
             
-            <button type="submit" id="btnIngresar" class="w-full py-3.5 px-4 bg-[#1e1b4b] hover:bg-[#312e81] text-white font-semibold rounded-xl shadow-lg shadow-indigo-900/10 transition-colors mt-4">
+            <button type="submit" id="btnIngresar" class="w-full py-4 px-4 bg-slate-950 hover:bg-black text-white font-bold rounded-xl shadow-lg shadow-slate-900/10 transition-colors mt-2">
                 Ingresar al Sistema
             </button>
         </form>
@@ -42,7 +40,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // TU CONFIGURACIÓN DE FIREBASE (Garantías)
             const firebaseConfig = {
                 apiKey: "AIzaSyD3-LS_bVWfNFgf2DL0ol8PO7P_EW8IBMc",
                 authDomain: "bdd-garantias.firebaseapp.com",
@@ -59,11 +56,8 @@
             const errorMessage = document.getElementById('errorMessage');
             const btnIngresar = document.getElementById('btnIngresar');
 
-            // Si ya está logueado, redirige automático al app
             auth.onAuthStateChanged(user => {
-                if (user) {
-                    window.location.href = 'app.html';
-                }
+                if (user) window.location.href = 'app.html';
             });
 
             loginForm.addEventListener('submit', (e) => {
@@ -72,17 +66,14 @@
                 const password = document.getElementById('password').value;
                 
                 errorMessage.textContent = 'Verificando...';
-                errorMessage.className = 'text-indigo-500 text-sm text-center font-medium h-5';
+                errorMessage.className = 'text-slate-500 text-sm text-center font-bold h-5';
                 btnIngresar.disabled = true;
 
                 auth.signInWithEmailAndPassword(email, password)
-                    .then(() => {
-                        window.location.href = 'app.html';
-                    })
+                    .then(() => window.location.href = 'app.html')
                     .catch((error) => {
-                        console.error("Error Auth:", error);
-                        errorMessage.className = 'text-red-500 text-sm text-center font-medium h-5';
-                        errorMessage.textContent = 'Credenciales incorrectas. Inténtalo de nuevo.';
+                        errorMessage.className = 'text-red-600 text-sm text-center font-bold h-5';
+                        errorMessage.textContent = 'Credenciales incorrectas.';
                         btnIngresar.disabled = false;
                     });
             });
