@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<head>ENVIADOS A SERVICIO TÉCNICO
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Garantías PARABARBEROS</title>
-    <link rel="icon" href="logo.jpg?v=2">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
@@ -29,9 +29,7 @@
 <body class="flex h-screen overflow-hidden text-slate-900 bg-[#f8fafc]">
 
     <aside class="w-20 bg-[#0f172a] flex flex-col items-center py-6 border-r border-slate-800 shrink-0 z-20 shadow-2xl relative">
-        
         <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-10 shadow-lg shadow-black/30 border border-slate-800 shrink-0 overflow-hidden">
-            <img src="logo.jpg" alt="Logo" class="w-10 h-10 object-contain" style="filter: invert(1); mix-blend-mode: screen;" title="Parabarberos">
         </div>
         
         <nav class="flex flex-col gap-6 text-slate-400 w-full px-4" id="mainNav">
@@ -45,10 +43,11 @@
 
     <div class="flex-1 flex flex-col min-w-0 relative z-10 overflow-hidden">
         <header class="h-[76px] bg-white px-8 flex items-center justify-between border-b border-slate-200 shrink-0 shadow-sm z-20">
-            <div class="flex items-center gap-10">
-                <img src="logo.jpg" alt="Parabarberos S.A.S." class="h-12 object-contain shrink-0" style="mix-blend-mode: multiply;">
+            <div class="flex items-center gap-6">
+                <img src="logo.jpg" alt="Logo Parabarberos" class="h-10 object-contain shrink-0 pointer-events-none" style="mix-blend-mode: multiply;">
+                <h1 class="text-[16px] font-black tracking-widest text-slate-900 uppercase shrink-0">Parabarberos S.A.S.</h1>
                 
-                <div class="relative hidden md:block w-96 shrink" id="headerSearchBox">
+                <div class="relative hidden md:block w-96 shrink ml-4" id="headerSearchBox">
                     <svg class="w-5 h-5 text-slate-400 absolute left-4 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     <input type="text" id="searchInput" placeholder="Buscar producto o ticket en Kanban..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-slate-900 focus:bg-white transition-colors">
                 </div>
@@ -85,8 +84,8 @@
                     <div class="flex flex-wrap gap-3 items-center bg-slate-50 p-3 rounded-[16px] border border-slate-100">
                         <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-2">Filtros rápidos:</span>
                         <select id="filtroTaller" class="bg-white border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-4 py-2 outline-none cursor-pointer shadow-sm">
-                            <option value="interno">TALLER PARABARBEROS</option>
-                            <option value="proveedor">TALLER PROVEEDOR</option>
+                            <option value="interno">SERVICIO TÉCNICO PARABARBEROS</option>
+                            <option value="proveedor">SERVICIO TÉCNICO PROVEEDOR</option>
                         </select>
                         <select id="filtroSedeKanban" class="bg-white border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-4 py-2 outline-none cursor-pointer shadow-sm max-w-[200px]">
                             <option value="">Todas las Sedes</option>
@@ -143,7 +142,7 @@
             </div>
 
             <div id="view_analytics" class="view-section hidden p-10 min-h-full">
-                <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Métricas y Rendimiento</h2>
+                <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Métricas y Gráficos</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm flex flex-col"><h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6 shrink-0">Equipos con Más Garantías</h3><div class="h-64 w-full relative"><canvas id="chartProductos"></canvas></div></div>
                     <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm flex flex-col"><h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6 shrink-0">Estado General de Casos</h3><div class="h-64 w-full relative flex justify-center"><canvas id="chartEstados"></canvas></div></div>
@@ -169,7 +168,7 @@
             </div>
 
             <div id="view_inventario" class="view-section hidden p-10 min-h-full">
-                <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Catálogo de Productos</h2>
+                <h2 class="text-[32px] font-black text-slate-900 tracking-tight mb-8">Cargue de Inventario de Productos</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-white p-8 rounded-[24px] border border-slate-200 shadow-sm md:col-span-1 h-fit">
                         <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4">Subir JSON</h3>
@@ -204,6 +203,12 @@
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Cédula</label><input type="number" id="t_cedula" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Nombre Completo</label><input type="text" id="t_nombre" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Teléfono</label><input type="number" id="t_telefono" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"></div>
+                            
+                            <div>
+                                <label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Número de Factura</label>
+                                <input type="text" id="t_factura" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors" placeholder="Ej: FAC-1020">
+                            </div>
+
                             <div><label class="block text-xs font-black text-slate-500 mb-1.5 uppercase tracking-wide">Sede / Asesor</label>
                                 <select id="t_sede" required class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold bg-white focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer">
                                     <option value="" disabled selected>Selecciona...</option></select></div>
@@ -263,9 +268,16 @@
                                 <div class="text-sm font-bold text-slate-800 break-words" id="det_telefono">-</div>
                             </div>
                         </div>
-                        <div class="flex flex-col border-t border-slate-200 pt-5">
-                            <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Punto de Venta / Asesor</span>
-                            <div class="text-sm font-bold text-slate-800 break-words" id="det_sede">-</div>
+                        
+                        <div class="grid grid-cols-2 gap-5 border-t border-slate-200 pt-5">
+                            <div class="flex flex-col">
+                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">Punto de Venta / Asesor</span>
+                                <div class="text-sm font-bold text-slate-800 break-words" id="det_sede">-</div>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-wide mb-1.5">N° Factura</span>
+                                <div class="text-sm font-bold text-slate-800 break-words" id="det_factura">-</div>
+                            </div>
                         </div>
                     </div>
 
@@ -380,7 +392,7 @@
 
             const ESTADOS = [
                 { id: '1_recibir', nombre: 'RECEPCIÓN', colorChart: '#94a3b8' },
-                { id: '2_envio_st', nombre: 'ENVIADOS S.T.', colorChart: '#cbd5e1' },
+                { id: '2_envio_st', nombre: 'ENVIADOS A SERVICIO TÉCNICO', colorChart: '#cbd5e1' },
                 { id: '3_diagnosticado', nombre: 'DIAGNOSTICADOS', colorChart: '#e2e8f0' },
                 { id: '4_reparado', nombre: 'REPARADOS', colorChart: '#10b981' }, 
                 { id: '5_sin_reparacion', nombre: 'PÉRDIDA', colorChart: '#ef4444' }, 
@@ -570,6 +582,7 @@
                         id, estado: '1_recibir', taller: document.getElementById('t_taller').value, 
                         cedula: document.getElementById('t_cedula').value, telefono: document.getElementById('t_telefono').value, 
                         nombre: document.getElementById('t_nombre').value, sede: document.getElementById('t_sede').value, 
+                        factura: document.getElementById('t_factura').value, // NUEVO CAMPO GUARDADO
                         referencia: document.getElementById('t_referencia').value, falla: document.getElementById('t_falla').value, 
                         diagnostico: "", fotos: urls, observacionesReparacion: "", fotosReparacion: [], 
                         creadoEn: firebase.firestore.Timestamp.fromDate(fechaCustom),
@@ -674,7 +687,14 @@
                 if(!t) return; 
                 currentTicketIdAbierto = id;
                 
-                document.getElementById('det_id').textContent = t.id; document.getElementById('det_cedula').textContent = t.cedula; document.getElementById('det_telefono').textContent = t.telefono; document.getElementById('det_nombre').textContent = t.nombre; document.getElementById('det_sede').textContent = t.sede; document.getElementById('det_referencia').textContent = t.referencia; document.getElementById('det_falla').textContent = t.falla;
+                document.getElementById('det_id').textContent = t.id; 
+                document.getElementById('det_cedula').textContent = t.cedula; 
+                document.getElementById('det_telefono').textContent = t.telefono; 
+                document.getElementById('det_nombre').textContent = t.nombre; 
+                document.getElementById('det_sede').textContent = t.sede; 
+                document.getElementById('det_factura').textContent = t.factura || 'No registrada'; // NUEVO CAMPO MOSTRADO
+                document.getElementById('det_referencia').textContent = t.referencia; 
+                document.getElementById('det_falla').textContent = t.falla;
                 
                 const txtD = document.getElementById('txtDiagnostico'), btnD = document.getElementById('btnSaveDiagDiv');
                 txtD.value = t.diagnostico||"";
