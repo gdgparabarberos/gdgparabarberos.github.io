@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Garantías PARABARBEROS</title>
-    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="icon" href="logo.jpg?v=2">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
@@ -29,7 +29,10 @@
 <body class="flex h-screen overflow-hidden text-slate-900 bg-[#f8fafc]">
 
     <aside class="w-20 bg-[#0f172a] flex flex-col items-center py-6 border-r border-slate-800 shrink-0 z-20 shadow-2xl relative">
-        <img src="logo.jpg" alt="Logo" class="w-16 mx-auto mb-8 object-contain cursor-pointer opacity-90 hover:opacity-100 transition-opacity" style="filter: invert(1); mix-blend-mode: screen;" title="Parabarberos">
+        
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-10 shadow-lg shadow-black/30 border border-slate-800 shrink-0 overflow-hidden">
+            <img src="logo.jpg" alt="Logo" class="w-10 h-10 object-contain" style="filter: invert(1); mix-blend-mode: screen;" title="Parabarberos">
+        </div>
         
         <nav class="flex flex-col gap-6 text-slate-400 w-full px-4" id="mainNav">
             <button onclick="switchView('kanban')" id="btnNav_kanban" class="nav-btn active p-3 hover:bg-slate-800 hover:text-white rounded-xl w-full flex justify-center transition-all" title="Tablero Kanban"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></button>
@@ -42,11 +45,10 @@
 
     <div class="flex-1 flex flex-col min-w-0 relative z-10 overflow-hidden">
         <header class="h-[76px] bg-white px-8 flex items-center justify-between border-b border-slate-200 shrink-0 shadow-sm z-20">
-            <div class="flex items-center gap-6">
-                <img src="logo.jpg" alt="Logo Parabarberos" class="h-10 object-contain shrink-0 pointer-events-none" style="mix-blend-mode: multiply;">
-                <h1 class="text-[16px] font-black tracking-widest text-slate-900 uppercase shrink-0">Parabarberos S.A.S.</h1>
+            <div class="flex items-center gap-10">
+                <img src="logo.jpg" alt="Parabarberos S.A.S." class="h-12 object-contain shrink-0" style="mix-blend-mode: multiply;">
                 
-                <div class="relative hidden md:block w-96 shrink ml-4" id="headerSearchBox">
+                <div class="relative hidden md:block w-96 shrink" id="headerSearchBox">
                     <svg class="w-5 h-5 text-slate-400 absolute left-4 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     <input type="text" id="searchInput" placeholder="Buscar producto o ticket en Kanban..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium focus:outline-none focus:border-slate-900 focus:bg-white transition-colors">
                 </div>
